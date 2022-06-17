@@ -13,16 +13,16 @@ function verifyToken(token) {
 
 async function authenticate(req,res,next){
     //If we have received the bearer token in the header;
-    // console.log(req.headers.cookie)
-    const bearerToken = req.headers.cookie;
-
+     
+    try{
+        //getting the bearer token from the response cookies 
+    const bearerToken = req.headers.authorization;
     //If not we will throw an error
     if(!bearerToken || !bearerToken.startsWith('Bearer ')) return res.status(400).send("Please provide a bearer token");
 
     //else we will extract the user from the token
 
     const token = bearerToken.split(' ')[1];
-    try{
         const {user} = await verifyToken(token)
 
         req.user = user

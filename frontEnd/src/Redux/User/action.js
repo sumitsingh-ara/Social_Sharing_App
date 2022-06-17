@@ -8,7 +8,7 @@ export const userDetailsSuccess = (payload) => {
   };
 };
 
-export const userDataLoading = () => (dispatch) => {
+export const userDataLoading = () => {
   return {
     type: types.USER_DETAILS_LOADING,
   };
@@ -22,10 +22,13 @@ export const userDetailsFailure = () => {
 
 export const fetchUserDetails = (token) => (dispatch) => {
   dispatch(userDataLoading());
-    console.log(token)
-  return Axios.get("http://localhost:7448/social/user/one")
-    .then((response) => {
-      console.log("Gotcha", response);
-    })
-    .catch((err) => console.log(err));
+  return Axios.get("http://localhost:7448/social/user/one",{
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).then((res)=>{
+    dispatch(userDetailsSuccess(res.data.user))
+  }).catch(()=>{
+    dispatch(userDetailsFailure())
+  })
 };

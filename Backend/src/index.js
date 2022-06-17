@@ -4,7 +4,10 @@ const cookieParser = require("cookie-parser");
 const passport = require("./configs/passport")
 app.use(cookieParser());
 app.use(express.json()); //integrating json into app
-
+const cors = require('cors');
+app.use(cors({
+    origin: ['http://localhost:3000']
+}));
 
 /////////////////////////////-----------------Google Auth------------------///////////
 app.use(passport.initialize());

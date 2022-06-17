@@ -35,7 +35,8 @@ export const authReducer =(state = initState, { type, payload })=>{
                 isAuth:false,
                 loading: false,
                 token:null,
-                error:false
+                error:false,
+                message:null
             }
         case types.REGISTER_LOADING:
             return{

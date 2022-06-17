@@ -19,6 +19,10 @@ const transporter = nodemailer.createTransport({ //syntax to integrate own gmail
 const newToken = (user) => {
     return jwt.sign({user}, process.env.JWT_SECRET_KEY);
 }
+router.get('/logout', (req, res) => {
+    res.clearCookie("Bearer ");
+    res.send("clear cookie")
+  })
 //Register 
 router.post('/register',async (req,res) => {
     let user;
@@ -53,9 +57,9 @@ router.post('/register',async (req,res) => {
                  //   console.log(info);
             }
          });
-         res.cookie('Bearer ', token, {maxAge: 9000000000, httpOnly: true, secure: true });
+         //res.cookie('Bearer ', token, {maxAge: 9000000000, httpOnly: false, secure: true });
         
-         res.append('Set-Cookie', 'Bearer ' + token );
+         res.cookie("Bearer ","Bearer "+token, {httpOnly: true});
         return res.status(200)
         .json({ message: msg,status:true,token:token });
     }catch(err){

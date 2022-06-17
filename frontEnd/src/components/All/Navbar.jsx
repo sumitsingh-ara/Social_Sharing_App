@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../Redux/Auth/action";
+import { serverLogout } from "../../Redux/Auth/action";
 export const Navbar = () => {
   const { isAuth } = useSelector((store) => store.auth);
+  const {name} = useSelector((store) => store.users)
   const dispatch = useDispatch();
   return (
     <>
       {!isAuth ? (
          <nav className="navbar navbar-expand-lg navbar-light bg-primary bg-gradient" style={{justifyContent:"space-evenly",position:"fixed",top:0,left:0,right:0,zIndex:100}}>
-          <Link className="navbar-brand btn btn-light" to="/">Home</Link>
-          <Link  className="navbar-brand  btn btn-light" to="/login">Login</Link>
+          <Link className="navbar-brand btn btn-warning" to="/">Home</Link>
+          <Link  className="navbar-brand  btn btn-success" to="/signup">Signup</Link>
          </nav>
       ) : (
         <nav className="navbar navbar-expand-lg navbar-light  bg-primary"  style={{position:"fixed",top:0,left:0,right:0,zIndex:100}}>
@@ -56,7 +57,7 @@ export const Navbar = () => {
                     data-bs-toggle="dropdown"
                    
                   >
-                    My Profile
+                    {isAuth?name?name.split(" ")[0]:"":"My Profile"}
                   </Link>
                   <ul
                     className="dropdown-menu"
@@ -74,8 +75,8 @@ export const Navbar = () => {
                       <hr className="dropdown-divider" />
                     </li>
                     <Link onClick={()=>{
-                      dispatch(logout())
-                    }} to="" className="dropdown-item">
+                      dispatch(serverLogout())
+                    }} to="/" className="dropdown-item">
                       {isAuth ? "Logout" : "Login"}
                     </Link>
                   </ul>
