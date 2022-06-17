@@ -7,7 +7,6 @@ import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 import {Provider} from "react-redux";
 import {store} from "./Redux/store"
-axios.defaults.baseURL="http://localhost:7449";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -40,6 +40,6 @@ app.get( '/auth/google/callback',
 
 const userController = require("./routes/user.routes");
 const authController = require("./routes/auth.routes");
-app.use("/blog",authController); //defult api to hit authController
-app.use("/blog/user",userController);//defult api to hit userController
+app.use("/social",authController); //defult api to hit authController
+app.use("/social/user",userController);//defult api to hit userController
 module.exports = app;

@@ -1,5 +1,15 @@
 import {Link} from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux";
+import {useEffect} from "react";
 export const Todos =() => {
+    const dispatch = useDispatch();
+    const {isAuth} = useSelector((store) => store.auth);
+    
+    useEffect(() => {
+        if(isAuth) {
+            dispatch(getUserDetails())
+        }
+    },[])
     return(
         <>
         <h1>Todos Main Page</h1>

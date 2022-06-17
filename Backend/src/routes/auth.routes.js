@@ -27,7 +27,7 @@ router.post('/register',async (req,res) => {
         user = await User.findOne({email: req.body.email})
 
         // if yes then we throw an error that email already exists
-        if (user) return res.status(400).send({message: "Please check your email and password"});
+        if (user) return res.status(400).send({message: "Account already exists"});
         
         // else we will create the user with the email and password 
         // but before saving the password we need to hash it
@@ -44,18 +44,19 @@ router.post('/register',async (req,res) => {
             from: process.env.USER, // sender address
             to: user.email, // list of receivers
             subject: 'Account Created Successfully', // Subject line
-            html: `<div> <h1>Hey ${user.username} Welcome to our Website XYZ`// plain text body
+            html: `<div> <h1>Hello ${user.name} Welcome to our Share Karo website`// plain text body
           };
           transporter.sendMail(mailOptions, function (err, info) {
             if(err)
               console.log(err)
-            else
-              console.log(info);
+            else{
+                 //   console.log(info);
+            }
          });
          res.cookie('access_token', token, {maxAge: 9000000000, httpOnly: true, secure: true });
          res.append('Set-Cookie', 'access_token=' + token + ';');
         return res.status(200)
-        .json({ message: msg,status:true });
+        .json({ message: msg,status:true,token:token });
     }catch(err){
         return res.status(500).send(err);
     }
@@ -102,7 +103,7 @@ router.post('/resetpassword',async(req,res)=>{
             id:user.id,
         }
         const token = jwt.sign(payload,secret,{expiresIn: '5m'});//creating token with the expire time of 5 minutes
-        const link= `http://localhost:7448/blog/reset-password/${user.id}/${token}`;
+        const link= `http://localhost:7448/social/reset-password/${user.id}/${token}`;
         const mailOptions = {
             from: process.env.USER, // sender address
             to: user.email, // list of receivers
@@ -112,8 +113,10 @@ router.post('/resetpassword',async(req,res)=>{
           transporter.sendMail(mailOptions, function (err, info) {
             if(err)
               console.log(err)
-            else
-              console.log(info);
+            else{
+                console.log(info);
+            }
+              
          });
         //console.log(link);
         return res.status(200).send("Password reset link has been sent to your email");

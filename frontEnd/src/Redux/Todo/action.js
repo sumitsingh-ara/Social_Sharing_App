@@ -20,7 +20,7 @@ const todoRequestSuccess =(payload) => {
 }
 export const fetchTodos = () => (dispatch) => {
     dispatch(todogetRequest());
-    return Axios.get("/todos")
+    return Axios.get("http://localhost:7449/todos")
     .then((res)=>dispatch(todoRequestSuccess(res.data)))
     .catch((err)=> dispatch(todoRequestFailure()))
 }
@@ -31,7 +31,7 @@ const todoPostRequestSuccess =()=>{
 }
 export const postTodos =(payload) =>(dispatch) => {
     dispatch(todogetRequest());
-    return Axios.post("/todos", payload)
+    return Axios.post("http://localhost:7449/todos", payload)
     .then((res)=> dispatch(todoPostRequestSuccess()))
     .catch((err)=> dispatch(todoRequestFailure()))
 }
