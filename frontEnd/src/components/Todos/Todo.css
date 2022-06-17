@@ -11,10 +11,13 @@
         width: 100%;
         display:grid;
         grid-template-columns: repeat(2,45%);
-        grid-gap: 5%;
+        grid-gap: 1%;
     }
     .todoFormContainer{
         width: 90%;
+    }
+    .mb-4{
+        margin-bottom:10px !important;
     }
 }
 @media screen and (max-width:400px){
@@ -22,7 +25,10 @@
         width: 100%;
         display:grid;
         grid-template-columns: repeat(1,95%);
-        grid-gap: 5%;
+        grid-gap: 1%;
+    }
+    .mb-4{
+        margin-bottom:10px !important;
     }
     .todoFormContainer{
         width: 100%;

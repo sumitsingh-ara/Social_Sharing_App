@@ -1,4 +1,4 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../Redux/Auth/action";
 export const Navbar = () => {
@@ -7,18 +7,18 @@ export const Navbar = () => {
   return (
     <>
       {!isAuth ? (
-         <nav className="navbar navbar-expand-lg navbar-light bg-primary bg-gradient" style={{justifyContent:"space-evenly"}}>
+         <nav className="navbar navbar-expand-lg navbar-light bg-primary bg-gradient" style={{justifyContent:"space-evenly",position:"fixed",top:0,left:0,right:0,zIndex:100}}>
           <Link className="navbar-brand btn btn-light" to="/">Home</Link>
           <Link  className="navbar-brand  btn btn-light" to="/login">Login</Link>
          </nav>
       ) : (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg navbar-light  bg-primary"  style={{position:"fixed",top:0,left:0,right:0,zIndex:100}}>
           <div className="container-fluid">
-            <Link to="/" className="navbar-brand">
+            <Link to="/" className="navbar-brand btn btn-light">
               Home
             </Link>
             <button
-              className="navbar-toggler"
+              className="navbar-toggler bg-light"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#navbarSupportedContent"
@@ -33,28 +33,28 @@ export const Navbar = () => {
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
+                <li className="nav-item ">
                   <Link
                     to="/todosList"
-                    className="nav-link active"
+                    className="nav-link active text-light"
                     aria-current="page"
                   >
                     Feeds
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/todosInput" className="nav-link active">
+                  <Link to="/todosInput" className="nav-link active text-light">
                     Create a new post
                   </Link>
                 </li>
                 <li className="nav-item dropdown">
                   <Link
                     to=""
-                    className="nav-link dropdown-toggle"
+                    className="nav-link dropdown-toggle text-light"
                     id="navbarDropdown"
                     role="button"
                     data-bs-toggle="dropdown"
-                    aria-expanded="false"
+                   
                   >
                     My Profile
                   </Link>
@@ -62,18 +62,20 @@ export const Navbar = () => {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    <Link to="" className="dropdown-item" aria-disabled="true">
-                      Somethig
+                    <Link to="" className="dropdown-item " aria-disabled="true">
+                      My followers
                     </Link>
                     <li>
                       <Link to="" className="dropdown-item">
-                        Another action
+                        Profile
                       </Link>
                     </li>
                     <li>
                       <hr className="dropdown-divider" />
                     </li>
-                    <Link to="" className="dropdown-item">
+                    <Link onClick={()=>{
+                      dispatch(logout())
+                    }} to="" className="dropdown-item">
                       {isAuth ? "Logout" : "Login"}
                     </Link>
                   </ul>
@@ -86,7 +88,7 @@ export const Navbar = () => {
                   placeholder="Search"
                   aria-label="Search"
                 />
-                <button className="btn btn-outline-success" type="submit">
+                <button className="btn btn-success" type="submit">
                   Search
                 </button>
               </div>
