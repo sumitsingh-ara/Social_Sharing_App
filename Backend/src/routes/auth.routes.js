@@ -53,8 +53,9 @@ router.post('/register',async (req,res) => {
                  //   console.log(info);
             }
          });
-         res.cookie('access_token', token, {maxAge: 9000000000, httpOnly: true, secure: true });
-         res.append('Set-Cookie', 'access_token=' + token + ';');
+         res.cookie('Bearer ', token, {maxAge: 9000000000, httpOnly: true, secure: true });
+        
+         res.append('Set-Cookie', 'Bearer ' + token );
         return res.status(200)
         .json({ message: msg,status:true,token:token });
     }catch(err){

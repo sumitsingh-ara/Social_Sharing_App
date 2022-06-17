@@ -74,6 +74,7 @@ router.delete('/delete',authenticate,async(req, res)=>{
 
 router.get("/one",authenticate,async(req,res) =>{
     try{
+        
         const user = await User.findById(req.user._id)
         if(!user) return res.status(400).send({message: "User not found"});
         const {password,...others} = req.user;
