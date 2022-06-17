@@ -6,10 +6,11 @@ import {
 } from "redux";
 import thunk from "redux-thunk";
 import { todosReducer } from "./Todo/reducer";
-
+import {authReducer} from "./Auth/reducer";
 
 const rootReducer = combineReducers({
     todos:todosReducer,
+    auth:authReducer
 })
 
 export const store = createStore(

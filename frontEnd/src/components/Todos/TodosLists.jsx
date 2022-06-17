@@ -27,7 +27,7 @@ export const TodosLists = () => {
       ) : (
         <div className="container-fluid text-center m-auto" id="todoList">
           {data.map((item) => (
-              <div className="card text-center mb-4">
+              <div key={item.id} className="card text-center mb-4">
                 <div className="card-header text-center text-uppercase">{item.title}</div>
                 <div className="card-body">
                   <h5 className="card-title">Special title treatment</h5>
