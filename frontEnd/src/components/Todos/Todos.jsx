@@ -4,10 +4,10 @@ import {useEffect} from "react";
 export const Todos =() => {
     const dispatch = useDispatch();
     const {isAuth} = useSelector((store) => store.auth);
-    
+
     useEffect(() => {
         if(isAuth) {
-            dispatch(getUserDetails())
+            // dispatch(getUserDetails())
         }
     },[])
     return(
