@@ -1,0 +1,30 @@
+#todoList{
+    display:grid;
+    grid-template-columns: repeat(3,30%);
+    justify-content: space-evenly;
+}
+.todoFormContainer{
+    width: 50%;
+}
+@media screen and (max-width:760px){
+    #todoList{
+        width: 100%;
+        display:grid;
+        grid-template-columns: repeat(2,45%);
+        grid-gap: 5%;
+    }
+    .todoFormContainer{
+        width: 90%;
+    }
+}
+@media screen and (max-width:400px){
+    #todoList{
+        width: 100%;
+        display:grid;
+        grid-template-columns: repeat(1,95%);
+        grid-gap: 5%;
+    }
+    .todoFormContainer{
+        width: 100%;
+    }
+}
