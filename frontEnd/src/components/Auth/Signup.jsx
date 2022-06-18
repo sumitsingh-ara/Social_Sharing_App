@@ -1,66 +1,48 @@
-import { Link,Navigate } from "react-router-dom";
-import {useState,useEffect} from "react";
-import {useSelector,useDispatch} from "react-redux";
-import {registerNew} from "../../Redux/Auth/action";
-import axios from "axios";
+import { Link, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { registerNew } from "../../Redux/Auth/action";
+import { checkUsername } from "../../Redux/Auth/action";
+import { resetAvaialableUsername } from "../../Redux/Auth/action";
 export const Signup = () => {
-  const [available,setAvailable] = useState(null);
   const dispatch = useDispatch();
-  const {isAuth,message} = useSelector((store) => store.auth)
-  const [formData,setFormData] = useState({
-    username:"",
-    name:"Sumit Singh",
-    email:"sumit47919@gmail.com",
-    password:"123456789",
-    profilePic:""
-  })
+  const { isAuth, message, available, loading } = useSelector(
+    (store) => store.auth
+  );
+  const [formData, setFormData] = useState({
+    username: "",
+    name: "Sumit Singh",
+    email: "sumit47919@gmail.com",
+    password: "123456789",
+    profilePic: "",
+  });
 
   useEffect(() => {
-    const checkUsername = () => {
-      var data = JSON.stringify({
-        "username": formData.username
-      });
-      
-      var config = {
-        method: 'post',
-        url: 'http://localhost:7448/social/checkUsername',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        data : data
-      };
-      
-      axios(config)
-      .then(function (response) {
-        if(response.data.status)setAvailable(true);
-        else setAvailable(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    if (formData.username.length >= 5) {
+      dispatch(
+        checkUsername({
+          username: formData.username,
+        })
+      );
     }
-    if(formData.username.length >=4){
-      checkUsername();
-    }
-    setAvailable(null)
-  }, [formData.username])
-  
+  }, [formData.username, dispatch]);
 
-
-  if(isAuth) {
-    return <Navigate to="/"></Navigate>
+  if (isAuth) {
+    return <Navigate to="/"></Navigate>;
   }
-  const handleChange=(e) => {
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
     });
-  }
-  const handleSubmit =(e) => {
+    if (formData.username.length <=5){
+      dispatch(resetAvaialableUsername());
+    }
+  };
+  const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(registerNew(formData));
-    
-  }
+    if (available === true) dispatch(registerNew(formData));
+  };
   return (
     <>
       <section className="vh-60">
@@ -77,23 +59,36 @@ export const Signup = () => {
                     <form onSubmit={handleSubmit}>
                       <div className="form-outline mb-2">
                         <input
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
+                          value={formData.username}
+                          onChange={handleChange}
+                          required
                           type="text"
                           placeholder="Choose a username"
                           id="username"
                           className="form-control form-control-lg"
                         />
                       </div>
-                      <div className="form-outline mb-2">
-                        {available===true?"Available":available===false?"Not available":""}
-                      </div>
+                      {loading ? (
+          <div class="spinner-grow" role="status">
+          </div>
+        ) : (
+          <div className="form-outline mb-2">
+            {formData.username.length < 5 && available === "less chars" ? (
+              <span>Username should be of 5 characters</span>
+            ) : available === true ? (
+              <span className="text-success">Available</span>
+            ) : available === false ? (
+              <span className="text-danger">Not available</span>
+            ) : (
+              ""
+            )}
+          </div>
+        )}
                       <div className="form-outline mb-2">
                         <input
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
+                          value={formData.name}
+                          onChange={handleChange}
+                          required
                           type="text"
                           placeholder="Enter your name here"
                           id="name"
@@ -103,9 +98,9 @@ export const Signup = () => {
 
                       <div className="form-outline mb-2">
                         <input
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
                           type="email"
                           id="email"
                           placeholder="Enter email address"
@@ -115,26 +110,23 @@ export const Signup = () => {
 
                       <div className="form-outline mb-2">
                         <input
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
+                          value={formData.password}
+                          onChange={handleChange}
+                          required
                           type="password"
                           placeholder="Enter password here"
                           id="password"
                           className="form-control form-control-lg"
                         />
                       </div>
-                      <div>
-                        {message}
-                      </div>
+                      <div>{message}</div>
                       <div className="d-flex justify-content-center">
                         <input
-                        onChange={handleChange}
+                          onChange={handleChange}
                           type="submit"
                           className="btn btn-success btn-block btn-lg gradient-custom-4 text-body mt-4 mb-4"
                           value="Register"
-                        >
-                        </input>
+                        ></input>
                       </div>
 
                       <p className="text-center text-muted mt-2 mb-0">

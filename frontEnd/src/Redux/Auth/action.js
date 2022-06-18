@@ -76,3 +76,40 @@ export const tryLogin = (payload) =>(dispatch)=> {
     });
 
 }
+
+
+//username actions;
+
+const userNameLoading = () => {
+  return{
+    type:types.USERNAME_LOADING
+  }
+}
+const userNameSuccess = (payload) => {
+  return {
+    type:types.USERNAME_SUCCESS,
+    payload
+  }
+}
+const userNameFailure = () => {
+  return {
+    type:types.USERNAME_FAILURE,
+    payload:false
+  }
+}
+export const resetAvaialableUsername = () => {
+  return{
+    type:types.RESET_AVAIALABLE_USERNAME
+  }
+}
+export const checkUsername = (payload)=>(dispatch)=>{
+  dispatch(userNameLoading());
+  return Axios.post("http://localhost:7448/social/checkUsername",payload)
+  .then(function (response) {
+    if (response.data.status) dispatch(userNameSuccess(true));
+    else dispatch(userNameSuccess(false));
+  })
+  .catch(function () {
+    dispatch(userNameFailure())
+  });
+}
