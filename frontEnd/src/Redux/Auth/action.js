@@ -44,3 +44,35 @@ export const registerNew = (payload) => (dispatch) => {
       dispatch(registerError(err.response.data.message));
     });
 };
+
+const loginLoading = () => {
+  return{
+    type:types.LOGIN_LOADING
+  }
+}
+const loginSuccess = (payload) => {
+  return{
+    type:types.LOGIN_SUCCESS,
+    payload
+  }
+}
+const loginFailure = (payload) => {
+  return {
+    type:types.LOGIN_FAILURE,
+    payload
+  }
+}
+export const tryLogin = (payload) =>(dispatch)=> {
+  dispatch(loginLoading())
+  return Axios.post("http://localhost:7448/social/login", payload)
+    .then((response) => {
+      console.log(response.data)
+      localStorage.setItem("isAuth", true);
+      localStorage.setItem("token", JSON.stringify(response.data.token));
+      dispatch(loginSuccess(response.data));
+    })
+    .catch((err) => {
+      dispatch(loginFailure(err.response.data.message));
+    });
+
+}

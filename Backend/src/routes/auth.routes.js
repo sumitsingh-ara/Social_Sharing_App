@@ -23,23 +23,34 @@ router.get('/logout', (req, res) => {
     res.clearCookie("Bearer ");
     res.send("clear cookie")
   })
+//checking the userName availability
+router.post('/checkUsername',async(req, res) => {
+    let userName
+    try{
+
+    }catch(err){
+        return res.status(500).send(err);
+    }
+})
 //Register 
 router.post('/register',async (req,res) => {
     let user;
     try{
+        //console.log(req.body)
         // First we check if user with same email already exists
         user = await User.findOne({email: req.body.email})
-
         // if yes then we throw an error that email already exists
         if (user) return res.status(400).send({message: "Account already exists"});
-        
+
+        user = await User.findOne({username:req.body.username})
+
+        if(user) return res.status(400).send({message: "Username already exists"});
         // else we will create the user with the email and password 
         // but before saving the password we need to hash it
         user = await User.create(req.body);
         
         // we will create a token
          const token = newToken(user)
-        
         // we will send the token to the frontend
         let msg ="Congratulations account successfully created";
         const {password,...others} = user._doc;//avoid sending password
@@ -58,7 +69,6 @@ router.post('/register',async (req,res) => {
             }
          });
          //res.cookie('Bearer ', token, {maxAge: 9000000000, httpOnly: false, secure: true });
-        
          res.cookie("Bearer ","Bearer "+token, {httpOnly: true});
         return res.status(200)
         .json({ message: msg,status:true,token:token });

@@ -1,7 +1,7 @@
 import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { registerNew } from "../../Redux/Auth/action";
+import { tryLogin } from "../../Redux/Auth/action";
 import "./Auth.css"
 export const Login = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export const Login = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(registerNew(formData));
+    dispatch(tryLogin(formData));
   };
   return (
     <>
