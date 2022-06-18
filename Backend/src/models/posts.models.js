@@ -3,9 +3,8 @@ const mongoose = require('mongoose');
 const PostSchema = new mongoose.Schema({
    title:{type:String,required:true,unique:true},
    description:{type:String,required:true},
-   photo:{type:String,required:false},
-   username:{type:String,required:true},
-   categories:{type:Array,required:false}
+   user:{type:mongoose.Schema.Types.ObjectId,ref:"users",required:true,unique:true,},
+   categories:[{type:String,required:true}]
 },{
     versionKey:false,
     timestamps:true
