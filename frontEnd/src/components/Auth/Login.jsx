@@ -47,6 +47,16 @@ export const Login = () => {
       setResetMessage(error.message)
     }
   };
+  const googleLogin =  async() => {
+     window.location.href = "http://localhost:7448/auth/google";
+    try{
+      let data = await fetch("http://localhost:7448/auth/google");
+        data = await data.json()
+        console.log(data)
+    }catch(error){
+      console.log(error)
+    }
+  }
   return<>
    {passwordBox ? 
     <section className="vh-60">
@@ -152,17 +162,19 @@ export const Login = () => {
                         className="btn btn-success btn-block btn-lg gradient-custom-4 text-body mt-4 m-4 mb-2"
                         value="Login"
                       ></input>
-                      <button className="btn btn-warning btn-block btn-lg gradient-custom-4 text-body mt-4 mb-2">
-                        Login with google
-                      </button>
                     </div>
+                    </form>
                     <p className="text-center text-muted mt-4 mb-4">
                       Don't have an account?{" "}
                       <Link to="/signup" className="fw-bold text-body">
                         <u>Signup here</u>
                       </Link>
                     </p>
-                  </form>
+                    <button onClick={()=>{
+                      if(!isAuth) return googleLogin();
+                    }} className="btn btn-warning btn-block btn-lg gradient-custom-4 text-body mt-4 mb-2">
+                        Login with google
+                      </button>
                 </div>
               </div>
             </div>

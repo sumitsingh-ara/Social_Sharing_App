@@ -6,6 +6,7 @@ import {TodosLists} from "../Todos/TodosLists";
 import {Signup} from "../Auth/Signup";
 import {Login} from "../Auth/Login";
 import {ResetPassword} from "../Auth/ResetPassword";
+import {GoogleRedirect} from "../Auth/GoogleRedirect";
 export const AllRoutes = () =>{
     return(
         <>
@@ -17,6 +18,7 @@ export const AllRoutes = () =>{
             <Route path='/todosInput' element={<TodosInput/>}></Route>
             <Route path='/todosList' element={<TodosLists/>}></Route>
             <Route path='/todoSingle/:id' element={<TodoSingle/>}></Route>
+            <Route path='/googleRedirect' element={<GoogleRedirect/>}></Route>
 
         </Routes>
         </>

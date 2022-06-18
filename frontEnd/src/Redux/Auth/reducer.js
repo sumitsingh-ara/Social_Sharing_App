@@ -12,6 +12,11 @@ const initState = {
 
 export const authReducer = (state = initState, { type, payload }) => {
   switch (type) {
+    case types.GOOGLE_LOGIN_SUCCESS:
+      return{
+        isAuth: true,
+        token:payload,
+      }
     case types.RESET_PASSWORD_LOADING:
       return{
         ...state,

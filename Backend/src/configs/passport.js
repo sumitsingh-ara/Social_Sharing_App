@@ -17,8 +17,9 @@ passport.use(new GoogleStrategy({
   },
   async function(request, accessToken, refreshToken, profile, done) {
       //console.log(profile);
+      //console.log(accessToken);
     const email = profile?._json?.email
-    const name = profile?._json?.name.split(" ")[0]+"???"+profile?._json?.name.split(" ")[1]
+    const name = profile?._json?.given_name+" "+profile?._json?.family_name;
     const username = profile?._json?.name.split(" ")[0]+nanoid(3);
 
     let user;

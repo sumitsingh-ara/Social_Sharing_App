@@ -1,6 +1,8 @@
-import {Link} from "react-router-dom";
+import {Link,useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
 export const Todos =() => {
+    const location = useLocation();
+    console.log(location.search.split("?")[1]);
     const {name} = useSelector((store) => store.users);
     return(
         <>
