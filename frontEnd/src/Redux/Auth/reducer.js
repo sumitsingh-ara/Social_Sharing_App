@@ -53,7 +53,7 @@ export const authReducer = (state = initState, { type, payload }) => {
         token: payload.token,
         loading: false,
         error: false,
-        message: payload.message,
+        message: "Redirecting to home page",
       };
     case types.LOGIN_FAILURE:
       return {
@@ -61,7 +61,7 @@ export const authReducer = (state = initState, { type, payload }) => {
         loading: false,
         error: true,
         token: null,
-        message: payload.message,
+        message: payload,
       };
     case types.LOGOUT:
       return {

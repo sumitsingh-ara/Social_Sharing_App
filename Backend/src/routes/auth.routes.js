@@ -89,7 +89,6 @@ router.post("/login",async(req,res)=>{
         // if it exists then we match the password
         let match = user.checkPassword(req.body.password);
         // if not match then we throw an error
-        
         if(!match) return res.status(400).send({message: "Wrong Credentials"});
         //we dont want to show password to user , so hiding the password using spread operator
         const {password,...others} =user._doc;

@@ -69,7 +69,7 @@ export const Signup = () => {
                         />
                       </div>
                       {loading ? (
-          <div class="spinner-grow" role="status">
+          <div className="spinner-grow" role="status">
           </div>
         ) : (
           <div className="form-outline mb-2">
@@ -119,7 +119,9 @@ export const Signup = () => {
                           className="form-control form-control-lg"
                         />
                       </div>
-                      <div>{message}</div>
+                      <div>
+                        {loading?<div className="spinner-grow" role="status">
+                         </div>:<span className="text-danger p2">{message?message:""}</span>}</div>
                       <div className="d-flex justify-content-center">
                         <input
                           onChange={handleChange}

@@ -5,7 +5,7 @@ import { tryLogin } from "../../Redux/Auth/action";
 import "./Auth.css"
 export const Login = () => {
   const dispatch = useDispatch();
-  const { isAuth, message } = useSelector((store) => store.auth);
+  const { isAuth, message,loading } = useSelector((store) => store.auth);
   const [formData, setFormData] = useState({
     email: "sumit47919@gmail.com",
     password: "123456789",
@@ -61,7 +61,9 @@ export const Login = () => {
                           className="form-control form-control-lg"
                         />
                       </div>
-                      <div>{message}</div>
+                      <div>
+                        {loading?<div className="spinner-grow" role="status">
+                         </div>:<span className="text-danger p2">{message==="Wrong Credentials"?message:""}</span>}</div>
                       <div className="d-flex justify-content-center">
                         <input
                           type="submit"
