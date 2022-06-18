@@ -152,7 +152,7 @@ router.get('/reset-password/:id/:token',async (req,res)=>{
 
         const payload = jwt.verify(token,secret);
         if(!payload) return res.status(400).send("Token Invalid");
-         res.redirect(`http://localhost:3000/${id}/${token}`);
+         res.redirect(`http://localhost:3000/resetPassword/${id}/${token}`);
     }catch(err){
         return res.status(500).send(err.message)
     }
