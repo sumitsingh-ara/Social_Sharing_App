@@ -7,7 +7,7 @@ export const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [passwordBox, setPasswordBox] = useState(false);
-  const [resetMessage, setResetMessage] = useState("");
+  const [resetMessage, setResetMessage] = useState(false);
   const { isAuth, message, loading } = useSelector((store) => store.auth);
   const [formData, setFormData] = useState({
     email: "sumit47919@gmail.com",
@@ -28,7 +28,7 @@ export const Login = () => {
     dispatch(tryLogin(formData));
   };
   const sendPassword = async () => {
-    console.log("sendo",resetEmail)
+    //console.log("sendo",resetEmail)
     let data
     try{
        data = await fetch("http://localhost:7448/social/resetpassword",{
@@ -74,10 +74,11 @@ export const Login = () => {
 
                     <div className="form-outline mb-4">
                       <button className="btn btn-primary" onClick={()=>{ 
+                        setResetMessage("")
                         sendPassword()
                       }}>Send Password</button>
                     </div>
-                    <div className="text-info h5">{resetMessage} <Link to={`https://mail.google.com/mail/u/0/#inbox`} target="_blank">Check Mail</Link></div>
+                    <div className="text-info h5">{resetMessage!==false?resetMessage!==""?resetMessage:<div className="spinner-grow" role="status"></div>:""} <Link to={`https://mail.google.com/mail/u/0/#inbox`} target="_blank">Check Mail</Link></div>
                  
                   <button className="btn btn-danger mt-3" onClick={()=>{
                     navigate(-1)

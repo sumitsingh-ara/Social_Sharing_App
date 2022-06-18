@@ -1,15 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useParams,Navigate } from "react-router-dom";
 import { useState } from "react";
 import {useSelector,useDispatch} from "react-redux";
 import {resetPasswordCall} from "../../Redux/Auth/action";
 export const ResetPassword = () => {
     const dispatch = useDispatch();
     const{id,token} = useParams();
-    const {loading,message,error} = useSelector((store) => store.auth)
-    console.log(id,token);
+    const {loading,message,error,isAuth} = useSelector((store) => store.auth)
+    //console.log(id,token);
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const payload ={
     user:{
@@ -21,7 +20,9 @@ export const ResetPassword = () => {
         password2: password2
     }
   }
-
+  if (isAuth) {
+    return <Navigate to="/"></Navigate>;
+  }
   return (
     <>
       <section className="vh-70 mobileViewResetPassword">

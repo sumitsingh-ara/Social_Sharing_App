@@ -173,7 +173,7 @@ router.post('/reset-password/:id/:token',async (req,res)=>{
         const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(req.body.password,salt);
         const newUser = await User.findByIdAndUpdate(id,{password:req.body.password},{new:true});
-        return res.status(400).send(newUser)
+        return res.status(200).send(newUser)
     }catch(err){
         return res.status(500).send(err)
     }

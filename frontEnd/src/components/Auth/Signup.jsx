@@ -1,9 +1,7 @@
 import { Link, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { registerNew } from "../../Redux/Auth/action";
-import { checkUsername } from "../../Redux/Auth/action";
-import { resetAvaialableUsername } from "../../Redux/Auth/action";
+import { registerNew,checkUsername,resetAvaialableUsername } from "../../Redux/Auth/action";
 export const Signup = () => {
   const dispatch = useDispatch();
   const { isAuth, message, available, loading } = useSelector(
@@ -25,7 +23,7 @@ export const Signup = () => {
         })
       );
     }
-  }, [formData.username, dispatch]);
+  }, [formData.username, dispatch,message]);
 
   if (isAuth) {
     return <Navigate to="/"></Navigate>;

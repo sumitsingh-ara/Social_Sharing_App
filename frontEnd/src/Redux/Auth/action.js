@@ -56,24 +56,25 @@ const loginSuccess = (payload) => {
     payload
   }
 }
-const loginFailure = (payload) => {
+const loginFailure = () => {
   return {
     type:types.LOGIN_FAILURE,
-    payload
   }
 }
 export const tryLogin = (payload) =>(dispatch)=> {
+  console.log(payload,"from reset password")
   dispatch(loginLoading())
   return Axios.post("http://localhost:7448/social/login", payload)
     .then((response) => {
-      // console.log(response.data)
+        // console.log(response.data,"eho success")
       localStorage.setItem("isAuth", true);
       localStorage.setItem("token", JSON.stringify(response.data.token));
       dispatch(loginSuccess(response.data));
+      window.location.href="http://localhost:3000/"
     })
     .catch((err) => {
-      // console.log(err)
-      dispatch(loginFailure(err.response.data));
+        // console.log(err,"error")
+      dispatch(loginFailure());
     });
 
 }
@@ -117,7 +118,7 @@ export const checkUsername = (payload)=>(dispatch)=>{
 
 //reset password
 
-export const resetPasswordLoading =() => {
+const resetPasswordLoading =() => {
   return{
     type:types.RESET_PASSWORD_LOADING
   }
@@ -127,7 +128,7 @@ export const resetPasswordSuccess=() => {
     type:types.RESET_PASSWORD_SUCCESS
   }
 }
-export const resetPasswordFailure=() => {
+const resetPasswordFailure=() => {
   return{
     type:types.RESET_PASSWORD_FAILURE
   }
@@ -137,11 +138,16 @@ export const resetPasswordCall =(payload) => (dispatch) => {
   dispatch(resetPasswordLoading());
   return Axios.post(`http://localhost:7448/social/reset-password/${payload.user.id}/${payload.user.token}`,payload.body)
   .then((response) => {
-    console.log(response.message);
+    console.log(response);
     dispatch(resetPasswordSuccess())
+    const payloa={
+      email:response.data.email,
+      password:payload.body.password
+    }
+    dispatch(tryLogin(payloa))
   })
   .catch((error) => {
-    console.log(error.response)
+    console.log(error)
     dispatch(resetPasswordFailure())
   })
 }

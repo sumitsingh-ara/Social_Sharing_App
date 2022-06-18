@@ -82,7 +82,7 @@ export const authReducer = (state = initState, { type, payload }) => {
         loading: false,
         error: true,
         token: null,
-        message: payload,
+        message: "Wrong Credentials",
       };
     case types.LOGOUT:
       return {
