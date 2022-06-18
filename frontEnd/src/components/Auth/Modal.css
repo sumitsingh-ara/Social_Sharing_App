@@ -1,0 +1,16 @@
+.containerModal{
+    border: 1px solid black;
+    width: 50vw;
+    height: 40vh;
+    position:fixed;
+    top:20vh;
+}
+@media screen and (max-width:450px){
+    .containerModal{
+        border: 1px solid black;
+        width: 80vw;
+        height: 70vh;
+        position:fixed;
+        top:20vh;
+    }
+}

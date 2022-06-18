@@ -106,6 +106,7 @@ router.post("/login",async(req,res)=>{
 //Forgot Password
 router.post('/resetpassword',async(req,res)=>{
     try{
+        console.log(req.body)
         // First we will check if user with same email already exists
         const user = await User.findOne({email: req.body.email});
         // if not exists we throw an error
@@ -130,13 +131,12 @@ router.post('/resetpassword',async(req,res)=>{
             if(err)
               console.log(err)
             else{
+
                 console.log(info);
             }
               
          });
-        //console.log(link);
-        return res.status(200).send("Password reset link has been sent to your email");
-
+        return res.status(200).send({message:"Password link sent to your mail successfully"});
     }catch(err){
         return res.status(500).send(err)
     }

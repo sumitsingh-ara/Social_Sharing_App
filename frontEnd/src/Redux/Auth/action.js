@@ -66,13 +66,13 @@ export const tryLogin = (payload) =>(dispatch)=> {
   dispatch(loginLoading())
   return Axios.post("http://localhost:7448/social/login", payload)
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       localStorage.setItem("isAuth", true);
       localStorage.setItem("token", JSON.stringify(response.data.token));
       dispatch(loginSuccess(response.data));
     })
     .catch((err) => {
-      console.log(err)
+      // console.log(err)
       dispatch(loginFailure(err.response.data));
     });
 
