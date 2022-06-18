@@ -2,18 +2,19 @@ import { useState } from "react";
 import { nanoid } from "nanoid";
 import { postTodos } from "../../Redux/Todo/action";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Navigate} from "react-router-dom";
 import "./Todo.css";
 export const TodosInput = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((store) => store.todos);
+  const { loading, error,isAuth } = useSelector((store) => store.auth);
+  const {id}= useSelector((store) => store.users)
   const [formData, setFormData] = useState({
-    title: "",
-    dated: new Date(),
-    id: nanoid(4),
-    description: "",
-    relatedTo: "",
+    title:"",
+   description:"",
+   user:id,
+   categories:"",
+   subCategory:""
   });
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,6 +38,11 @@ export const TodosInput = () => {
       [e.target.id]: e.target.value,
     });
   };
+
+  if(!isAuth) {
+    console.log("ANdar se")
+    return <Navigate to="/login"></Navigate>;
+  }
   return (
     <>
       <h1>Share your Knowledge</h1>
@@ -57,7 +63,7 @@ export const TodosInput = () => {
               className="form-control col-sm mb-3"
             />
             <select
-              value={formData.relatedTo}
+              value={formData.categories}
               onChange={handleChange}
               id="relatedTo"
               className="custom-select form-control  col-sm mb-3"
@@ -72,7 +78,7 @@ export const TodosInput = () => {
               <option value="html">HR Talks</option>
             </select>
             <select
-              value={formData.subTopic}
+              value={formData.subCategory}
               onChange={handleChange}
               id="subTopic"
               className="custom-select form-control  col-sm mb-3"
@@ -102,7 +108,7 @@ export const TodosInput = () => {
               maxLength="2000"
               placeholder="Enter description here max 2000 characters...."
             ></textarea>
-            <input type="submit" className="btn btn-success" value="Post data" />
+            <input type="submit" className="btn btn-success" value="Post Data" />
           </form>
         </div>
       )}

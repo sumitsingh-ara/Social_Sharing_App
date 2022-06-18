@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
+import {useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { serverLogout } from "../../Redux/Auth/action";
+import {fetchUserDetails} from "../../Redux/User/action";
 export const Navbar = () => {
-  const { isAuth } = useSelector((store) => store.auth);
+  const { isAuth,token } = useSelector((store) => store.auth);
   const {name} = useSelector((store) => store.users)
   const dispatch = useDispatch();
+  useEffect(() => {
+      if(isAuth) {
+          dispatch(fetchUserDetails(token))
+      }
+  },[dispatch,isAuth,token]);
   return (
     <>
       {!isAuth ? (
@@ -74,11 +81,11 @@ export const Navbar = () => {
                     <li>
                       <hr className="dropdown-divider" />
                     </li>
-                    <Link onClick={()=>{
+                    <button onClick={()=>{
                       dispatch(serverLogout())
-                    }} to="/" className="dropdown-item">
+                    }}className="dropdown-item">
                       {isAuth ? "Logout" : "Login"}
-                    </Link>
+                    </button>
                   </ul>
                 </li>
               </ul>
