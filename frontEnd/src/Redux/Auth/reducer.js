@@ -12,6 +12,27 @@ const initState = {
 
 export const authReducer = (state = initState, { type, payload }) => {
   switch (type) {
+    case types.RESET_PASSWORD_LOADING:
+      return{
+        ...state,
+        loading:true,
+        error: false,
+        message: null,
+      }
+      case types.RESET_PASSWORD_SUCCESS:
+        return {
+          ...state,
+          loading:false,
+          error: false,
+          message: null,
+        }
+      case types.RESET_PASSWORD_FAILURE:
+        return {
+          ...state,
+          loading:false,
+          error: true,
+          message: "Link Expired"
+        }
     case types.RESET_AVAIALABLE_USERNAME:
       return {
         loading: false,

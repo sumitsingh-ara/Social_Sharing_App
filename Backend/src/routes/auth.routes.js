@@ -167,15 +167,15 @@ router.post('/reset-password/:id/:token',async (req,res)=>{
         const secret = process.env.JWT_SECRET_KEY+user.password;//since this here we havent change the password yet;
 
         const payload = jwt.verify(token,secret);
-        if(!payload) return res.status(400).send("Token Invalid");
+        if(!payload) return res.status(400).send({message:"Token Invalid"});
         //validate password and password2 should match
-        if(password !=password2) return res.status(400).send("Invalid Password");
+        if(password !=password2) return res.status(400).send({message:"Invalid Password"});
         const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(req.body.password,salt);
         const newUser = await User.findByIdAndUpdate(id,{password:req.body.password},{new:true});
         return res.status(400).send(newUser)
     }catch(err){
-        return res.status(500).send(err.message)
+        return res.status(500).send(err)
     }
 })
 

@@ -73,7 +73,7 @@ export const Login = () => {
                     </div>
 
                     <div className="form-outline mb-4">
-                      <button onClick={()=>{ 
+                      <button className="btn btn-primary" onClick={()=>{ 
                         sendPassword()
                       }}>Send Password</button>
                     </div>

@@ -114,3 +114,34 @@ export const checkUsername = (payload)=>(dispatch)=>{
     dispatch(userNameFailure())
   });
 }
+
+//reset password
+
+export const resetPasswordLoading =() => {
+  return{
+    type:types.RESET_PASSWORD_LOADING
+  }
+}
+export const resetPasswordSuccess=() => {
+  return{
+    type:types.RESET_PASSWORD_SUCCESS
+  }
+}
+export const resetPasswordFailure=() => {
+  return{
+    type:types.RESET_PASSWORD_FAILURE
+  }
+}
+
+export const resetPasswordCall =(payload) => (dispatch) => {
+  dispatch(resetPasswordLoading());
+  return Axios.post(`http://localhost:7448/social/reset-password/${payload.user.id}/${payload.user.token}`,payload.body)
+  .then((response) => {
+    console.log(response.message);
+    dispatch(resetPasswordSuccess())
+  })
+  .catch((error) => {
+    console.log(error.response)
+    dispatch(resetPasswordFailure())
+  })
+}
