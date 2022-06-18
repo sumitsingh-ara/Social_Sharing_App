@@ -2,12 +2,13 @@ import { Link,Navigate } from "react-router-dom";
 import {useState,useEffect} from "react";
 import {useSelector,useDispatch} from "react-redux";
 import {registerNew} from "../../Redux/Auth/action";
+import axios from "axios";
 export const Signup = () => {
   const [available,setAvailable] = useState(null);
   const dispatch = useDispatch();
   const {isAuth,message} = useSelector((store) => store.auth)
   const [formData,setFormData] = useState({
-    username:"punisher",
+    username:"",
     name:"Sumit Singh",
     email:"sumit47919@gmail.com",
     password:"123456789",
@@ -15,8 +16,34 @@ export const Signup = () => {
   })
 
   useEffect(() => {
+    const checkUsername = () => {
+      var data = JSON.stringify({
+        "username": formData.username
+      });
+      
+      var config = {
+        method: 'post',
+        url: 'http://localhost:7448/social/checkUsername',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+      
+      axios(config)
+      .then(function (response) {
+        if(response.data.status)setAvailable(true);
+        else setAvailable(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    if(formData.username.length >=4){
+      checkUsername();
+    }
     setAvailable(null)
-  }, [])
+  }, [formData.username])
   
 
 

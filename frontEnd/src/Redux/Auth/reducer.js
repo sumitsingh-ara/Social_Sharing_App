@@ -6,7 +6,7 @@ const initState = {
     token: JSON.parse(localStorage.getItem("token")) || null,
     loading: false,
     error: false,
-    message: null
+    message: null,
 }
 
 export const authReducer =(state = initState, { type, payload })=>{

@@ -27,9 +27,11 @@ router.get('/logout', (req, res) => {
 router.post('/checkUsername',async(req, res) => {
     let userName
     try{
-
+        userName = await User.findOne({username:req.body.username});
+            if(userName) return res.status(200).send({status:false});
+        return res.status(200).send({status:true});
     }catch(err){
-        return res.status(500).send(err);
+        return res.status(500).send({message:"Galat"});
     }
 })
 //Register 
