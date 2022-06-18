@@ -81,9 +81,10 @@ export const tryLogin = (payload) =>(dispatch)=> {
 
 export const googleLoginSuccess = (token) => {
   localStorage.setItem("isAuth", true);
-  localStorage.setItem("token", JSON.stringify(token));
+  localStorage.setItem("token",token);
   return{
     type:types.GOOGLE_LOGIN_SUCCESS,
+    payload:token
   }
 }
 

@@ -16,6 +16,8 @@ export const authReducer = (state = initState, { type, payload }) => {
       return{
         isAuth: true,
         token:payload,
+        loading: false,
+        error: false,
       }
     case types.RESET_PASSWORD_LOADING:
       return{
