@@ -1,9 +1,9 @@
 import { Link, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { registerNew } from "../../Redux/Auth/action";
+import "./Auth.css"
 export const Login = () => {
-  const [available, setAvailable] = useState(null);
   const dispatch = useDispatch();
   const { isAuth, message } = useSelector((store) => store.auth);
   const [formData, setFormData] = useState({
@@ -28,17 +28,17 @@ export const Login = () => {
     <>
       <section className="vh-60">
         <div className="mask d-flex align-items-center h-100 gradient-custom-3">
-          <div className="container h-100">
+          <div className="container-fluid h-100">
             <div className="row d-flex justify-content-center align-items-center h-100">
               <div className="col-12 col-md-9 col-lg-7 col-xl-6">
                 <div className="card" style={{ borderRadius: "15px" }}>
                   <div className="card-body">
-                    <h2 className="text-uppercase text-center mb-2">
-                      Create an account
+                    <h2 className="text-uppercase h4 text-center mb-4">
+                      Login with email and password
                     </h2>
 
                     <form onSubmit={handleSubmit}>
-                      <div className="form-outline mb-2">
+                      <div className="form-outline mb-4">
                         <input
                           value={formData.email}
                           onChange={handleChange}
@@ -50,7 +50,7 @@ export const Login = () => {
                         />
                       </div>
 
-                      <div className="form-outline mb-2">
+                      <div className="form-outline mb-4">
                         <input
                           value={formData.password}
                           onChange={handleChange}
@@ -65,12 +65,12 @@ export const Login = () => {
                       <div className="d-flex justify-content-center">
                         <input
                           type="submit"
-                          className="btn btn-success btn-block btn-lg gradient-custom-4 text-body mt-4 mb-4"
+                          className="btn btn-success btn-block btn-lg gradient-custom-4 text-body mt-4 m-4 mb-2"
                           value="Login"
                         ></input>
+                         <button className="btn btn-warning btn-block btn-lg gradient-custom-4 text-body mt-4 mb-2">Login with google</button>
                       </div>
-
-                      <p className="text-center text-muted mt-2 mb-0">
+                      <p className="text-center text-muted mt-4 mb-4">
                         Don't have an account?{" "}
                         <Link to="/signup" className="fw-bold text-body">
                           <u>Signup here</u>

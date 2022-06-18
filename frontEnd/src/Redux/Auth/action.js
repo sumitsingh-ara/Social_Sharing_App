@@ -10,7 +10,6 @@ export const logout = () => {
 };
 export const serverLogout = () => (dispatch) => {
   dispatch(logout());
-
   return Axios.get("http://localhost:7448/social/logout")
     .then((res) => console.log(res))
     .catch((error) => console.log(error));

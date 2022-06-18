@@ -1,0 +1,7 @@
+@media screen and (max-width:400px) {
+    .d-flex{
+        display: grid !important;
+        grid-template-columns: 98% !important;
+    }
+    
+}
