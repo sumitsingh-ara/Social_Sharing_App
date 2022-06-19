@@ -3,6 +3,7 @@ import * as types from "./actionTypes";
 
 const initState ={
     id:null,
+    userName:null,
     name:null,
     profilePic:null,
     email:null,
@@ -22,6 +23,7 @@ export const usersReducer =(state = initState, { type, payload }) =>{
         case types.USER_DETAILS_SUCCESS:
             return{
                 id:payload._id,
+                userName:payload.username,
                 name:payload.name,
                 profile:payload.profilePic,
                 email:payload.email,
@@ -39,6 +41,7 @@ export const usersReducer =(state = initState, { type, payload }) =>{
         case types.DESTROY_USER_DETAILS:
             return {
                 id:null,
+                userName:null,
                 name:null,
                 profilePic:null,
                 email:null,

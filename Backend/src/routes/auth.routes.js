@@ -71,7 +71,7 @@ router.post('/register',async (req,res) => {
             }
          });
          //res.cookie('Bearer ', token, {maxAge: 9000000000, httpOnly: false, secure: true });
-         res.cookie("Bearer ","Bearer "+token, {httpOnly: true});
+        // res.cookie("Bearer ","Bearer "+token, {httpOnly: true});
         return res.status(200)
         .json({ message: msg,status:true,token:token });
     }catch(err){
@@ -95,8 +95,7 @@ router.post("/login",async(req,res)=>{
 
         const token = newToken(user) //if everything ok, sending json web token for the user;
         //saving the token into cookies using cookies-parser;
-        res.cookie('access_token', token, {maxAge: 9000000000, httpOnly: true, secure: true });
-        res.append('Set-Cookie', 'access_token=' + token + ';');
+        //res.cookie("Bearer ","Bearer "+token, {httpOnly: true});
         return res.status(200).json({ message: "Logged in successfully 😊 👌",status: true,token: token });
 
     }catch(err){
