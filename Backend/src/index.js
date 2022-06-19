@@ -44,7 +44,9 @@ app.get( '/auth/google/callback',
 const userController = require("./routes/user.routes");
 const authController = require("./routes/auth.routes");
 const postController = require('./routes/posts.routes');
-app.use("/social",authController); //defult api to hit authController
-app.use("/social/user",userController);//defult api to hit userController
-app.use("/social/post",postController); //defult api to hit postController
+const commentController = require('./routes/comments.routes');
+app.use("/social",authController); //defult api to hit authController;
+app.use("/social/user",userController);//defult api to hit userController;
+app.use("/social/post",postController); //defult api to hit postController;
+app.use("/social/comment",commentController);// default api to git commentController;
 module.exports = app;
