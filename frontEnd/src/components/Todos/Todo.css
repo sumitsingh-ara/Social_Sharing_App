@@ -114,3 +114,6 @@
     cursor: pointer;
 
 }
+.hover-on-like:hover{
+    color:rgb(58, 58, 238) !important;
+}
