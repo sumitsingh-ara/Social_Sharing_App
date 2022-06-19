@@ -2,17 +2,18 @@ import * as types from "./actionTypes";
 import Axios from "axios";
 import {destroyUserData} from "../User/action";
 export const logout = () => {
-  localStorage.setItem("isAuth", false);
-  localStorage.setItem("token", null);
+  // localStorage.setItem("isAuth", false);
+  // localStorage.setItem("token", null);
+  localStorage.clear();
   return {
     type: types.LOGOUT,
   };
 };
 export const serverLogout = () => (dispatch) => {
   dispatch(logout());
-  dispatch(destroyUserData())
+  dispatch(destroyUserData());
   return Axios.get("http://localhost:7448/social/logout")
-    .then((res) => console.log(res))
+    .then((res) =>"login Successfull")
     .catch((error) => console.log(error));
 };
 

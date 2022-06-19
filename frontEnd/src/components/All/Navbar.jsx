@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import {useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { serverLogout } from "../../Redux/Auth/action";
 import {fetchUserDetails} from "../../Redux/User/action";
 export const Navbar = () => {
   const { isAuth,token } = useSelector((store) => store.auth);
-
+  const navigate = useNavigate();
   const {name} = useSelector((store) => store.users)
   const dispatch = useDispatch();
   useEffect(() => {
@@ -83,8 +83,8 @@ export const Navbar = () => {
                       <hr className="dropdown-divider" />
                     </li>
                     <button onClick={()=>{
+                      navigate('/login',{replace:true})
                       dispatch(serverLogout())
-
                     }}className="dropdown-item">
                       {isAuth ? "Logout" : "Login"}
                     </button>
