@@ -6,6 +6,11 @@
 .todoFormContainer{
     width: 50%;
 }
+.descriptionView{
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+}
 @media screen and (max-width:760px){
     #todoList{
         width: 100%;

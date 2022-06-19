@@ -24,7 +24,7 @@ export const SingleUser = () => {
   
   return (
     <div className="frame">
-        {loading?<div className="spinner-grow" role="status">
+        {loading?<div className="spinner-grow mt-5" role="status">
   <span className="sr-only">Loading...</span>
 </div> : <>
       <input id="slider" className="customSlider" type="checkbox" />
