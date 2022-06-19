@@ -33,7 +33,7 @@ export const Signup = () => {
       ...formData,
       [e.target.id]: e.target.value,
     });
-    if (formData.username.length <=5){
+    if (formData.username.length <=4){
       dispatch(resetAvaialableUsername());
     }
   };

@@ -30,7 +30,7 @@ const todoPostRequestSuccess =()=>{
     }
 }
 export const postTodos =(payload) =>(dispatch) => {
-   // console.log(payload)
+    console.log(payload)
     dispatch(todogetRequest());
     return Axios.post("http://localhost:7448/social/post/newPost", payload)
     .then((res)=> dispatch(todoPostRequestSuccess()))

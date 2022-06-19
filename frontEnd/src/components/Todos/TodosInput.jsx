@@ -87,7 +87,6 @@ export const TodosInput = () => {
               onChange={handleChange}
               id="subCategory"
               className="custom-select form-control  col-sm mb-3"
-              required
               style={{
                 display: formData.categories === "Computer Science" ? "block" : "none",
               }}

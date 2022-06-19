@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { fetchTodos } from "../../Redux/Todo/action";
 import "./Todo.css";
 export const TodosLists = () => {
-  console.log(new Date())
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchTodos());
@@ -32,7 +31,7 @@ export const TodosLists = () => {
               <div key={item._id} className="card text-center mb-4">
                 <div className="card-header text-center text-uppercase">{item.categories}</div>
                 <div className="card-body">
-                  <h5 className="card-title">Special title treatment</h5>
+                  <h5 className="card-title">{item.title}</h5>
                   <p className="card-text">
                     {item.description}
                   </p>
