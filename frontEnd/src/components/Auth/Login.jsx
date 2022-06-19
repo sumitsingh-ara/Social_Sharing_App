@@ -163,10 +163,11 @@ export const Login = () => {
                         <u>Signup here</u>
                       </Link>
                     </p>
+                    
                     <button onClick={()=>{
                       if(!isAuth) return googleLogin();
-                    }} className="btn btn-warning btn-block btn-lg gradient-custom-4 text-body mt-4 mb-2">
-                        Login with google
+                    }} className="btn btn-outline-primary text-uppercase btn-block btn-lg gradient-custom-4 text-body mt-4 mb-2">
+                        <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Login with Google"/>Login with google
                       </button>
                 </div>
               </div>
