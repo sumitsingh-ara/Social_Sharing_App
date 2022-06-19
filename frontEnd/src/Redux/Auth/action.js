@@ -71,7 +71,7 @@ export const tryLogin = (payload) =>(dispatch)=> {
       localStorage.setItem("isAuth", true);
       localStorage.setItem("token", JSON.stringify(response.data.token));
       dispatch(loginSuccess(response.data));
-      window.location.href="http://localhost:3000/"
+      // window.location.href="http://localhost:3000/"
     })
     .catch((err) => {
         // console.log(err,"error")

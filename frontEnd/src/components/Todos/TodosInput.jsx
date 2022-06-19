@@ -109,8 +109,8 @@ export const TodosInput = () => {
               className="form-control mb-4"
               rows="8"
               cols={10}
-              maxLength="2000"
-              placeholder="Enter description here max 2000 characters...."
+              maxLength="10000"
+              placeholder="Enter description here max 10000 characters...."
             ></textarea>
             <input type="submit" className="btn btn-success" value="Post Data" />
           </form>

@@ -32,7 +32,7 @@ export const TodosLists = () => {
                 <div className="card-header text-center text-uppercase">{item.categories}</div>
                 <div className="card-body">
                   <h5 className="card-title">{item.title}</h5>
-                  <p className="card-text">
+                  <p className="card-text  text-truncate">
                     {item.description}
                   </p>
                   <Link
@@ -48,7 +48,7 @@ export const TodosLists = () => {
                    Delete Post
                   </button>:""}
                 </div>
-                <div className="card-footer text-muted">Created on {item.createdAt.split("T")[0].split("-").sort().join("-")} by <Link to={`user/${item.user.username}`}>{item.user.name.split(" ")[0]}</Link></div>
+                <div className="card-footer text-muted">Created on {item.createdAt.split("T")[0].split("-").sort().join("-")} by <Link to={`/user/${item.user.username}`}>{item.user.name.split(" ")[0]}</Link></div>
               </div>
             
           ))}

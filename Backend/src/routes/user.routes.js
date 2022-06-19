@@ -95,4 +95,17 @@ router.get("/all",async(req,res) =>{
         return res.status(400).send({message:"Something went wrong"})
     }
 })
+
+//Get a specific user details to show on page post written by whom---?..------------------------;
+router.get("/specificuser/:username",async(req,res)=>{
+    try{
+        let user = await User.findOne({username:req.params.username});
+        if(!user) return res.status(400).send({message:"User not available at the moment"});
+        const {password,_id,...others} = user._doc;
+        return res.status(200).send(others);
+        
+    }catch(err){
+        return res.status(500).send(err);
+    }
+})
 module.exports = router;
