@@ -12,13 +12,18 @@ export const TodosInput = () => {
   const [formData, setFormData] = useState({
     title:"",
    description:"",
-   user:id,
    categories:"",
    subCategory:""
   });
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(postTodos(formData));
+    if(formData.categories !== "Computer Science"){
+      setFormData({
+        ...formData,
+        subCategory:""
+      })
+    }
+    dispatch(postTodos({...formData,user:id}));
     setFormData({
       title: "",
       status: false,
@@ -37,10 +42,10 @@ export const TodosInput = () => {
       ...formData,
       [e.target.id]: e.target.value,
     });
+   
   };
 
   if(!isAuth) {
-    console.log("ANdar se")
     return <Navigate to="/login"></Navigate>;
   }
   return (
@@ -65,26 +70,26 @@ export const TodosInput = () => {
             <select
               value={formData.categories}
               onChange={handleChange}
-              id="relatedTo"
+              id="categories"
               className="custom-select form-control  col-sm mb-3"
               required
             >
               <option value="" disabled>
                 Select Category
               </option>
-              <option value="motivational">Motivational</option>
-              <option value="cs">Computer Science</option>
-              <option value="html">Jokes</option>
-              <option value="html">HR Talks</option>
+              <option value="Motivational">Motivational</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Jokes">Jokes</option>
+              <option value="HR talks">HR Talks</option>
             </select>
             <select
               value={formData.subCategory}
               onChange={handleChange}
-              id="subTopic"
+              id="subCategory"
               className="custom-select form-control  col-sm mb-3"
               required
               style={{
-                display: formData.relatedTo === "cs" ? "block" : "none",
+                display: formData.categories === "Computer Science" ? "block" : "none",
               }}
             >
               <option value="" disabled>

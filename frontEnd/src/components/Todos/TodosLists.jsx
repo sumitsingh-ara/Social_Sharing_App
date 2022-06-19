@@ -4,11 +4,13 @@ import { useEffect } from "react";
 import { fetchTodos } from "../../Redux/Todo/action";
 import "./Todo.css";
 export const TodosLists = () => {
+  console.log(new Date())
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchTodos());
   }, [dispatch]);
   const { loading, error, data } = useSelector((store) => store.todos);
+  const {userName} = useSelector((store) => store.users);
   return (
     <>
       <h1>Welcome to todo lists</h1>
@@ -27,22 +29,27 @@ export const TodosLists = () => {
       ) : (
         <div className="container-fluid text-center m-auto" id="todoList">
           {data.map((item) => (
-              <div key={item.id} className="card text-center mb-4">
-                <div className="card-header text-center text-uppercase">{item.title}</div>
+              <div key={item._id} className="card text-center mb-4">
+                <div className="card-header text-center text-uppercase">{item.categories}</div>
                 <div className="card-body">
                   <h5 className="card-title">Special title treatment</h5>
                   <p className="card-text">
-                    With supporting text below as a natural lead-in to
-                    additional content.
+                    {item.description}
                   </p>
                   <Link
-                    to={`/todoSingle/${item.id}`}
-                    className="btn btn-primary"
+                    to={`/todoSingle/${item._id}`}
+                    className="btn btn-primary m-1"
                   >
                     More Options
                   </Link>
+                  {userName===item.user.username?<button
+                    to={`/todoSingle/${item._id}`}
+                    className="btn btn-danger m-1"
+                  >
+                   Delete Post
+                  </button>:""}
                 </div>
-                <div className="card-footer text-muted">2 days ago</div>
+                <div className="card-footer text-muted">Created on {item.createdAt.split("T")[0].split("-").sort().join("-")} by <Link to={`user/${item.user.username}`}>{item.user.name.split(" ")[0]}</Link></div>
               </div>
             
           ))}

@@ -57,4 +57,5 @@ router.delete('/deletePost/:id/:userId',async(req,res) => {
         return res.status(500).send(err);
     }
 })
+
 module.exports = router;

@@ -16,7 +16,7 @@ export const Signup = () => {
   });
 
   useEffect(() => {
-    if (formData.username.length >= 5) {
+    if (formData.username.trim().length >= 5) {
       dispatch(
         checkUsername({
           username: formData.username,
@@ -43,7 +43,7 @@ export const Signup = () => {
   };
   return (
     <>
-      <section className="vh-60">
+      <section className="vh-80">
         <div className="mask d-flex align-items-center h-100 gradient-custom-3">
           <div className="container h-100">
             <div className="row d-flex justify-content-center align-items-center h-100">
@@ -59,9 +59,10 @@ export const Signup = () => {
                         <input
                           value={formData.username}
                           onChange={handleChange}
+                          pattern="[^\s]+"
                           required
                           type="text"
-                          placeholder="Choose a username"
+                          placeholder="username without spaces"
                           id="username"
                           className="form-control form-control-lg"
                         />
