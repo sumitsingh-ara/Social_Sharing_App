@@ -47,15 +47,8 @@ export const Login = () => {
       setResetMessage(error.message)
     }
   };
-  const googleLogin =  async() => {
+  const googleLogin = () => {
      window.location.href = "http://localhost:7448/auth/google";
-    try{
-      let data = await fetch("http://localhost:7448/auth/google");
-        data = await data.json()
-        console.log(data)
-    }catch(error){
-      console.log(error)
-    }
   }
   return<>
    {passwordBox ? 

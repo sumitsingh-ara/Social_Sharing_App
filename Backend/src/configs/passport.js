@@ -4,6 +4,17 @@ const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const {nanoid} = require('nanoid');
 const User = require("../models/users.models");
 const jwt = require("jsonwebtoken");
+const dotenv = require('dotenv');
+dotenv.config();
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({ //syntax to integrate own gmail with nodemailer to send emails;
+    service: 'gmail',
+    auth: {
+           user: process.env.USER,
+           pass: process.env.PASSWORD
+       }
+   });
 const newToken = (user) => {
   return jwt.sign({user}, process.env.JWT_SECRET_KEY);
 }
@@ -33,6 +44,19 @@ passport.use(new GoogleStrategy({
           name: name,
           password: nanoid(8)
         })
+        const mailOptions = {
+          from: process.env.USER, // sender address
+          to:email, // list of receivers
+          subject: 'Account Created Successfully', // Subject line
+          html: `<div> <h1>Hello ${name} Welcome to our Share Karo website`// plain text body
+        };
+        transporter.sendMail(mailOptions, function (err, info) {
+          if(err)
+            console.log(err)
+          else{
+               //   console.log(info);
+          }
+       });
       }
 
       const token = newToken(user);

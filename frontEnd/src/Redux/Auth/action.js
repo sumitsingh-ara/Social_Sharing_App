@@ -1,6 +1,6 @@
 import * as types from "./actionTypes";
 import Axios from "axios";
-
+import {destroyUserData} from "../User/action";
 export const logout = () => {
   localStorage.setItem("isAuth", false);
   localStorage.setItem("token", null);
@@ -10,6 +10,7 @@ export const logout = () => {
 };
 export const serverLogout = () => (dispatch) => {
   dispatch(logout());
+  dispatch(destroyUserData())
   return Axios.get("http://localhost:7448/social/logout")
     .then((res) => console.log(res))
     .catch((error) => console.log(error));
@@ -81,7 +82,7 @@ export const tryLogin = (payload) =>(dispatch)=> {
 
 export const googleLoginSuccess = (token) => {
   localStorage.setItem("isAuth", true);
-  localStorage.setItem("token",token);
+  localStorage.setItem("token",JSON.stringify(token));
   return{
     type:types.GOOGLE_LOGIN_SUCCESS,
     payload:token

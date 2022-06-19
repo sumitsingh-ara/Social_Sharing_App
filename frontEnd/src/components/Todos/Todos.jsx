@@ -1,20 +1,13 @@
-import {Link,useLocation,Navigate} from "react-router-dom";
-import {useSelector,useDispatch} from "react-redux";
-import {useEffect} from "react";
-import {googleLoginSuccess} from "../../Redux/Auth/action"
+import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
 export const Todos =() => {
-    const dispatch = useDispatch();
-    const location = useLocation();
-    const token =location.search.split("?")[1];
-    const {name} = useSelector((store) => store.users);
 
-    useEffect(() => {
-        if(token){
-            console.log("token")
-            dispatch(googleLoginSuccess(token));
-        }
-    }, [dispatch,token])
-    
+    const {name} = useSelector((store) => store.users);
+   
+
+    // if(isAuth){
+    //     return <Navigate replace to="/" />
+    // }
     return(
         <>
         <h1 className="h4 mt-0">Hello {name} to Share Karo </h1>

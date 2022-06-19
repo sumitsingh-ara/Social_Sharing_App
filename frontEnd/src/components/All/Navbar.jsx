@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import {useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { serverLogout } from "../../Redux/Auth/action";
-import {fetchUserDetails} from "../../Redux/User/action";
+import {fetchUserDetails,destroyUserData} from "../../Redux/User/action";
 export const Navbar = () => {
   const { isAuth,token } = useSelector((store) => store.auth);
   const {name} = useSelector((store) => store.users)

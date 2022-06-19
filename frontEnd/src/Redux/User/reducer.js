@@ -36,6 +36,16 @@ export const usersReducer =(state = initState, { type, payload }) =>{
                 error:true,
                 message:"Something is wrong with your network"
             }
+        case types.DESTROY_USER_DETAILS:
+            return {
+                id:null,
+                name:null,
+                profilePic:null,
+                email:null,
+                loading:true,
+                error:false,
+                message:null,
+            }
         default:
             return state
     }

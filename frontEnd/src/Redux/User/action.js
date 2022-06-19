@@ -1,25 +1,29 @@
 import * as types from "./actionTypes";
 import Axios from "axios";
 
-export const userDetailsSuccess = (payload) => {
+const userDetailsSuccess = (payload) => {
   return {
     type: types.USER_DETAILS_SUCCESS,
     payload,
   };
 };
 
-export const userDataLoading = () => {
+ const userDataLoading = () => {
   return {
     type: types.USER_DETAILS_LOADING,
   };
 };
 
-export const userDetailsFailure = () => {
+ const userDetailsFailure = () => {
   return {
     type: types.USER_DETAILS_FAILURE,
   };
 };
-
+export const destroyUserData = () => {
+  return{
+    type:types.DESTROY_USER_DETAILS
+  }
+}
 export const fetchUserDetails = (token) => (dispatch) => {
   dispatch(userDataLoading());
   return Axios.get("http://localhost:7448/social/user/one",{

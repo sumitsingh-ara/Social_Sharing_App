@@ -14,8 +14,9 @@ export const authReducer = (state = initState, { type, payload }) => {
   switch (type) {
     case types.GOOGLE_LOGIN_SUCCESS:
       return{
-        isAuth: true,
+        ...state,
         token:payload,
+        isAuth: true,
         loading: false,
         error: false,
       }

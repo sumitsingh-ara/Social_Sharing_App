@@ -34,7 +34,7 @@ app.get( '/auth/google/callback',
         failureRedirect: '/auth/google/failure'
 }), function(req, res) {
     const {user, token} = req.user;
-    return res.redirect(`http://localhost:3000/`+"?"+token);
+    return res.redirect(`http://localhost:3000/googleRedirect`+"?"+token);
 });
 
 
