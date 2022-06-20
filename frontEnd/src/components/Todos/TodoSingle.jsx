@@ -107,7 +107,7 @@ export const TodoSingle = () => {
                     <div className="buttons">
                       <span className="badge bg-white d-flex flex-row align-items-center">
                         <span className="text-primary">
-                          Comments {commentDisplay ? "ON" : "OFF"}
+                          Load Comments {commentDisplay ? "ON" : "OFF"}
                         </span>
                         <div className="form-check form-switch">
                           <input

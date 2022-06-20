@@ -8,7 +8,7 @@ const CommentSchema = new mongoose.Schema({
         user:{type:String,required:true},
         comment:{type:String,required:true},
         date:{type:Date,required:true},
-        uniqueId:{type:String,required:true,unique:true},
+        uniqueId:{type:String,required:true},
     }]
 },{
     versionKey:false,
