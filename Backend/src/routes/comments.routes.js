@@ -1,16 +1,14 @@
 const router = require("express").Router();
 const authenticate =require("../middlewares/authenticate");
 const Comment = require("../models/comments.models");
-
+const {nanoid} = require("nanoid");
 //make a new comment;
 
 router.post('/newcomment',authenticate,async(req,res)=>{
     if(req.user._id == req.body.user){
         try{
             //if(!req.body.comment) return res.status(400).send({message:"You can't make an empty comment"});
-
             let comment = await Comment.create(req.body);
-
             return res.status(200).send({message:"Commented Successfully",status:true})
           
         }catch(err){
@@ -58,4 +56,25 @@ router.patch('/singlecomment/update',authenticate,async(req,res)=>{
     }
 })
 
+
+router.post('/singlecomment/nestedcomment/:commentId/:userId',authenticate,async(req,res)=>{
+    try{
+        if(req.user.username != req.params.userId) return res.status(404).send({message:"Please login before comment",status:false})
+        let comment = await Comment.findById(req.params.commentId).lean().exec();
+        let deta ={
+            uniqueId:nanoid(8),
+            user: req.params.userId,
+            comment:req.body.comment,
+            date:new Date()
+        }
+        let commentUpdated = {
+            ...comment,
+            nestedcomments:[...comment.nestedcomments,deta]
+        }
+        comment = await Comment.findByIdAndUpdate(req.params.commentId,commentUpdated,{new:true}).lean().exec();
+        return res.status(200).send({message:"Success",comment:comment,status:true})
+    }catch(err){
+        return res.status(500).send(err)
+    }
+})
 module.exports = router;

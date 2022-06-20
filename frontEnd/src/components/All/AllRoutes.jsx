@@ -22,7 +22,7 @@ export const AllRoutes = () => {
         ></Route>
         <Route path="/todosInput" element={<TodosInput />}></Route>
         <Route path="/todosList" element={<TodosLists />}></Route>
-        <Route path="/todoSingle/:id" element={<TodoSingle />}></Route>
+        <Route path="/todoSingle/:postId" element={<TodoSingle />}></Route>
         <Route path="/googleRedirect" element={<GoogleRedirect />}></Route>
         <Route
           path="/user/:id"

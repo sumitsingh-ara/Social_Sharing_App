@@ -1,74 +1,58 @@
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Comments } from "./Comments";
-import {useSelector} from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import {getAllComments,makeNewComment} from "../../Redux/Comments/action";
 import "./Todo.css";
 export const TodoSingle = () => {
-    const {isAuth} = useSelector((store) => store.auth);
-    const navigate = useNavigate();
-  const { id } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [commentLoader, setCommentLoader] = useState(false);
+    const dispatch = useDispatch();
+  const { isAuth,token } = useSelector((store) => store.auth);
+  const {id} = useSelector((store) => store.users);
+  const {loading,data,count} = useSelector((store) => store.comments)
+  const navigate = useNavigate();
+  const { postId } = useParams();
+  const [loadings, setLoading] = useState(true);
   const [postData, setPostData] = useState();
-  const [allComments, setAllComments] = useState({
-    count: 0,
-    data: [],
-  });
+  const [commentDisplay, setCommentDisplay] = useState(true);
+  
   const [comment, setComment] = useState("");
   useEffect(() => {
     setLoading(true);
     const getPost = async () => {
       try {
         let data = await fetch(
-          `http://localhost:7448/social/post/singlePost/${id}`
+          `http://localhost:7448/social/post/singlePost/${postId}`
         );
         data = await data.json();
         setPostData(data.post);
         setLoading(false);
+        dispatch(getAllComments(postId))
       } catch (err) {
         console.log(err);
       }
     };
     getPost();
-  }, [id]);
-
-  //another use efeect to load the comments
-  useEffect(() => {
-    setCommentLoader(true);
-    const getComments = async () => {
-      try {
-        let data = await fetch(
-          `http://localhost:7448/social/comment/allcomments/${id}`
-        );
-        data = await data.json();
-        setAllComments({
-          count: data.count,
-          data: data.comments,
-        });
-       
-        setCommentLoader(false);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    if(!loading)getComments();
-  }, [comment,loading, id]);
-
+  }, [postId,dispatch]);
   //function to post the new comments;
-  const postComment = async () => {
-    if(!isAuth){
-       navigate('/login')
-        return;
+  const postComment =() => {
+    if (!isAuth) {
+      navigate("/login");
+      return;
     }
     if (comment.trim() === "") return;
-    try {
-    } catch (err) {
-      console.log(err);
+
+    let payload={
+        token,
+        id,
+        postId,
+        comment
     }
+    dispatch(makeNewComment(payload))
+    setComment("")
   };
   return (
     <>
-      {loading ? (
+      {loadings ? (
         <div className="spinner-grow mt-5" role="status">
           <span className="sr-only">Loading...</span>
         </div>
@@ -94,11 +78,17 @@ export const TodoSingle = () => {
                     <input
                       type="text"
                       className="form-control mr-3"
-                      placeholder="Add comment"
+                      placeholder="Add comment "
                       value={comment}
+                      onKeyDown={(e)=>{
+                        if(e.key ==="Enter"){
+                          postComment()
+                        }
+                      }}
                       onChange={(e) => {
                         setComment(e.target.value);
                       }}
+                      
                     />
                     <button
                       onClick={postComment}
@@ -109,16 +99,26 @@ export const TodoSingle = () => {
                     </button>
                   </div>
                   <div className="headings d-flex justify-content-between align-items-center mb-3">
-                    <h5>Comments({!commentLoader?allComments.count:"Fetching"})</h5>
+                    <h5>
+                      Comments({!loading ?count : "Fetching"}
+                      )
+                    </h5>
 
                     <div className="buttons">
                       <span className="badge bg-white d-flex flex-row align-items-center">
-                        <span className="text-primary">Comments "ON"</span>
+                        <span className="text-primary">
+                          Comments {commentDisplay ? "ON" : "OFF"}
+                        </span>
                         <div className="form-check form-switch">
                           <input
                             className="form-check-input"
                             type="checkbox"
                             id="flexSwitchCheckChecked"
+                            onClick={() => {
+                              setCommentDisplay(!commentDisplay);
+                            }}
+                            
+                            defaultChecked={commentDisplay}
                           />
                         </div>
                       </span>
@@ -128,14 +128,16 @@ export const TodoSingle = () => {
               </div>
             </div>
           </div>
-          {commentLoader ? (
+          {loading ? (
             <div className="spinner-grow mt-5" role="status">
               <span className="sr-only">Loading...</span>
             </div>
-          ) : (
-            allComments.data.map((comment) => (
+          ) : commentDisplay ? (
+            data.map((comment) => (
               <Comments key={comment._id} comment={comment} />
             ))
+          ) : (
+            ""
           )}
         </div>
       )}

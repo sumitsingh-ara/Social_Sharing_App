@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const Users = require("../models/users.models");
 const Post = require("../models/posts.models");
-
+const Comment = require("../models/comments.models");
+const authenticate =require("../middlewares/authenticate");
 //make a new post;
 
 router.post("/newPost", async (req, res) => {
@@ -45,17 +46,40 @@ router.get('/allPosts',async(req,res)=>{
     }
 })
 
-router.delete('/deletePost/:id/:userId',async(req,res) => {
+router.delete('/deletePost/:id',authenticate,async(req,res) => {
     try{
 
-        let post = await Post.findById(req.params.id).populate("user");
-        if(post.user.id !== req.params.userId) return res.status(400).send({message: "You are not the authorized person to delete the post"});
+        let post = await Post.findById(req.params.id).lean().exec();
+        if(post.user != req.user._id) return res.status(400).send({message: "You are not the authorized person to delete the post"});
 
         post = await Post.findByIdAndDelete(req.params.id);
+        const comment = await Comment.find({post:req.params.id}).lean().exec();//getting all the comments of that post, so when deleting a post, we will also delete all the comments done on that.
+        for(let i =0; i<comment.length; i++) {
+            await Comment.findByIdAndDelete(comment[i]._id)
+        }
         return res.status(200).send({message: "Post deleted successfully"});
     }catch(err) {
         return res.status(500).send(err);
     }
 })
 
+//liking a post 
+
+router.post('/specificPost/like/:postId/:likerId',async(req,res)=>{
+    try{
+        const post = await Post.findById(req.params.postId);
+        let deta ={
+            user:req.params.likerId
+        }
+        let modified = {
+            ...post,
+            likes:[...post.likes,deta]
+        }
+        let modifiedPost = await Post.findByIdAndUpdate(req.params.postId,modified,{new:true}).lean().exec();
+
+        return res.status(200).send({message:"Post liked successfully"})
+    }catch(err){
+        return res.status(500).send(err);
+    }
+})
 module.exports = router;

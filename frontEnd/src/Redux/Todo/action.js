@@ -38,3 +38,18 @@ export const postTodos =(payload) =>(dispatch) => {
 }
 
 
+export const deletePost =(payload) => (dispatch) =>{
+    dispatch(todogetRequest());
+      let config = {
+        method: 'delete',
+        url: `http://localhost:7448/social/post/deletePost/${payload.id}`,
+        headers: { 
+          'Authorization': "Bearer "+payload.token, 
+          'Content-Type': 'application/json'
+        }
+      };
+    return Axios(config).then(()=> dispatch(fetchTodos()))
+    .catch((err)=> dispatch(todoRequestFailure()))
+    
+}
+

@@ -91,7 +91,7 @@ export const Navbar = () => {
                   </ul>
                 </li>
               </ul>
-              <div className="d-flex">
+              <div className="d-flex" style={{display: "none"}}>
                 <input
                   className="form-control me-2"
                   type="search"

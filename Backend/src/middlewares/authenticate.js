@@ -15,6 +15,7 @@ async function authenticate(req,res,next){
     //If we have received the bearer token in the header;
      
     try{
+       // console.log(req.headers.authorization)
         //getting the bearer token from the response cookies 
     const bearerToken = req.headers.authorization;
     //If not we will throw an error

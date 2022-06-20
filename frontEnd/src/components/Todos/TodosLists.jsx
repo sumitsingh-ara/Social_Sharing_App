@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { fetchTodos } from "../../Redux/Todo/action";
+import { fetchTodos,deletePost } from "../../Redux/Todo/action";
 import "./Todo.css";
 export const TodosLists = () => {
   const dispatch = useDispatch();
@@ -10,6 +10,7 @@ export const TodosLists = () => {
   }, [dispatch]);
   const { loading, error, data } = useSelector((store) => store.todos);
   const { userName } = useSelector((store) => store.users);
+  const {token} = useSelector((store) => store.auth);
   return (
     <>
       <h1>Welcome to todo lists</h1>
@@ -45,6 +46,14 @@ export const TodosLists = () => {
                   <button
                     to={`/todoSingle/${item._id}`}
                     className="btn btn-danger m-1"
+                    onClick={()=>{
+                      const confirmBox = window.confirm("Delete post confirmation");
+                      if(!confirmBox) return;
+                      dispatch(deletePost({
+                        id:item._id,
+                        token: token
+                      }))
+                    }}
                   >
                     Delete Post
                   </button>

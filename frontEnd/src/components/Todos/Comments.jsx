@@ -1,8 +1,25 @@
 import "./Todo.css";
-import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useState} from "react";
+import {useSelector, useDispatch} from "react-redux";
+import {deleteComment,makeNestedNewCommentOnReply} from "../../Redux/Comments/action";
+import {Link,useParams} from "react-router-dom";
 export const Comments = ({comment}) => {
+  const dispatch = useDispatch();
+  const {postId} = useParams();
     const {userName} = useSelector((store) => store.users);
+    const {token} = useSelector((store) => store.auth);
+    const [nestedcomment,setNestedComment] = useState("testing purpose");
+    const handleDeleteComment =(commentId) => {
+      const confirmBox = window.confirm(
+        "Do you really want delete comment ?"
+      )
+      if(!confirmBox)return
+      dispatch(deleteComment({
+        token:token,
+        id:commentId,
+        postId:postId
+      }))
+    }
     const url="https://media1.giphy.com/media/Oj5w7lOaR5ieNpuBhn/giphy.gif?cid=ecf05e47tnn5gp3m9bsqxf6zdnubk6e51c2o50ao8vpryyhz&rid=giphy.gif&ct=g"
   return (
     <>
@@ -36,15 +53,24 @@ export const Comments = ({comment}) => {
 
               <div className="action d-flex justify-content-between mt-2 align-items-center">
                 <div className="reply px-4">
-                  {userName===comment.user.username?<small>Delete</small>:""}
+                  {userName===comment.user.username?<small onClick={()=>{
+                    handleDeleteComment(comment._id)
+                  }}>Delete</small>:""}
                   <span className="dots"></span>
-                  <small>Reply</small>
+                  <small onClick={()=>{
+                    dispatch(makeNestedNewCommentOnReply({
+                      id:userName,
+                      token:token,
+                      commentId:comment._id,
+                      comment:nestedcomment
+                    }))
+                  }}>Reply</small>
                   <span className="dots"></span>
                   {userName===comment.user.username?<small>Edit</small>:""}
                 </div>
                 <div className="icons align-items-center">
                   <i className="fa fa-star text-warning"></i>
-                  <i class="fa fa-light fa-thumbs-up text-secondary hover-on-like" ></i>
+                  <i className="fa fa-light fa-thumbs-up text-secondary hover-on-like" ></i>
                 </div>
               </div>
             </div>
