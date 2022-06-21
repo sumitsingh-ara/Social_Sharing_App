@@ -13,7 +13,7 @@ export const NestedComments = ({replies,comment}) => {
   const nestedReplies = useRef(null);
   const [nestedNestComment, setNestedNestComment] = useState("");
     const url =
-    "https://media1.giphy.com/media/Oj5w7lOaR5ieNpuBhn/giphy.gif?cid=ecf05e47tnn5gp3m9bsqxf6zdnubk6e51c2o50ao8vpryyhz&rid=giphy.gif&ct=g";
+    "https://c.tenor.com/ueth-WpGsukAAAAd/mee6-wii-chicken.gif";
     return(
         <div
         className="container mainCommentBoxNested"
@@ -28,7 +28,7 @@ export const NestedComments = ({replies,comment}) => {
               alt="profile"
             />
           </div>
-          <div> Commented by&nbsp;
+          <div style={{fontSize:"2vh"}}> Replied by&nbsp;
             <Link to={`/user/${replies.user}`}>
             {userName === replies.user?"you":replies.user}
             </Link>
@@ -37,7 +37,7 @@ export const NestedComments = ({replies,comment}) => {
           <div>2 hours ago</div>
         </div>
         {/* comment view */}
-        <div className="commentContainer mt-1">
+        <div className="commentContainer mt-1 text-center">
           {replies.comment}
         </div>
         {/* options buttons */}

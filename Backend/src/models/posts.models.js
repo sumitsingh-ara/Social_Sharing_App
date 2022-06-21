@@ -6,7 +6,8 @@ const PostSchema = new mongoose.Schema({
    user:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true},
    categories:{type:String,required:true},
    subCategory:{type:String,required:false},
-   likes:[{user:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true}}]
+   likes:[{user:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true}}],
+   views:{type:Number,default:0}
 },{
     versionKey:false,
     timestamps:true

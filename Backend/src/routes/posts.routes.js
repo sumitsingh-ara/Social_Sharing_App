@@ -27,11 +27,12 @@ router.get('/singlePost/:id',async(req,res)=>{
 
     try{
         let post = await Post.findById(req.params.id).populate("user",{ password: 0 ,_id:0,email:0});//getting the post alongwith userdata by using populate;
-
+            post = await Post.findByIdAndUpdate({_id:req.params.id},{views:post.views+1},{new:true}).lean().exec()
        if(!post) return res.status(400).send({message: "Post Not available"})
+        
         if(post) return res.status(200).send({post:post});//if post present sending data to frontend
     }catch(err){
-        return res.status(500).send({message:"Post Not found"});
+        return res.status(500).send(err);
     }
 })
 

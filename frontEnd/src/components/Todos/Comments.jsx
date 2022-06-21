@@ -34,7 +34,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
     );
   };
   const url =
-    "https://media1.giphy.com/media/Oj5w7lOaR5ieNpuBhn/giphy.gif?cid=ecf05e47tnn5gp3m9bsqxf6zdnubk6e51c2o50ao8vpryyhz&rid=giphy.gif&ct=g";
+    "https://c.tenor.com/ueth-WpGsukAAAAd/mee6-wii-chicken.gif";
   return (
     <>
       <div className="container mainCommentBox">
@@ -48,7 +48,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
               alt="profile"
             />
           </div>
-          <div>
+          <div style={{fontSize:"2vh"}}>
           Commented by&nbsp;
             <Link to={`/user/${comment.user.username}`}>
             {userName === comment.user.username?"you":comment.user.username}
@@ -57,7 +57,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
           <div>2 hours ago</div>
         </div>
         {/* comment view */}
-        <div className="commentContainer mt-1">{comment.comment}</div>
+        <div className="commentContainer mt-1 text-center">{comment.comment}</div>
         {/* options buttons */}
         <div className="commentOptioner">
           <div className="realOptionsComment reply px-2 ">
@@ -108,7 +108,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
               <i className="fa fa-light fa-thumbs-up hover-on-like px-2"></i>
             </small>
           </div>
-          <div className="badge align-items-center nestedDisplayChecker">
+          {comment.nestedcomments.length>0?<div className="badge align-items-center nestedDisplayChecker">
             <span className="text-primary">
               Load ({comment.nestedcomments.length}) Replies{" "}
               {nestedShow ? "ON" : "OFF"}
@@ -125,7 +125,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
                 defaultChecked={nestedShow}
               />
             </span>
-          </div>
+          </div>:""}
         </div>
         {/* reply or edit boxes */}
         {!editBox && !replyBox ? (

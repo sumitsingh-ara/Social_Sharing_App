@@ -1,21 +1,21 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Comments } from "./Comments";
-import { useSelector,useDispatch } from "react-redux";
-import {getAllComments,makeNewComment} from "../../Redux/Comments/action";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllComments, makeNewComment } from "../../Redux/Comments/action";
 import "./Todo.css";
 export const TodoSingle = () => {
-    const dispatch = useDispatch();
-  const { isAuth,token } = useSelector((store) => store.auth);
-  const {id} = useSelector((store) => store.users);
-  const {loading,data,count} = useSelector((store) => store.comments)
+  const dispatch = useDispatch();
+  const { isAuth, token } = useSelector((store) => store.auth);
+  const { id } = useSelector((store) => store.users);
+  const { loading, data, count } = useSelector((store) => store.comments);
   const navigate = useNavigate();
   const { postId } = useParams();
   const [loadings, setLoading] = useState(true);
   const [postData, setPostData] = useState();
   const [commentDisplay, setCommentDisplay] = useState(true);
   const [nestedShow, setNestedShow] = useState(false);
-  
+
   const [comment, setComment] = useState("");
   useEffect(() => {
     setLoading(true);
@@ -25,31 +25,32 @@ export const TodoSingle = () => {
           `http://localhost:7448/social/post/singlePost/${postId}`
         );
         data = await data.json();
+        console.log(data);
         setPostData(data.post);
-        setLoading(false);
-        dispatch(getAllComments(postId))
+       setLoading(false);
+       dispatch(getAllComments(postId));
       } catch (err) {
         console.log(err);
       }
     };
     getPost();
-  }, [postId,dispatch]);
+  }, [postId, dispatch]);
   //function to post the new comments;
-  const postComment =() => {
+  const postComment = () => {
     if (!isAuth) {
       navigate("/login");
       return;
     }
     if (comment.trim() === "") return;
 
-    let payload={
-        token,
-        id,
-        postId,
-        comment
-    }
-    dispatch(makeNewComment(payload))
-    setComment("")
+    let payload = {
+      token,
+      id,
+      postId,
+      comment,
+    };
+    dispatch(makeNewComment(payload));
+    setComment("");
   };
   return (
     <>
@@ -59,7 +60,20 @@ export const TodoSingle = () => {
         </div>
       ) : (
         <div className="container mt-5">
-          <h4 className="text-success">Tech Gyaan on {postData.categories}</h4>
+          <span className="floatRight">
+              <i
+                className="fa fa-eye text-warning text-small"
+                aria-hidden="true"
+              ></i>
+              {postData.views>=1000?`${(postData.views/1000).toFixed(2)}K`:postData.views}
+            </span>
+          <h4
+            className="text-success"
+            style={{ display: "flex", justifyContent: "space-evenly" }}
+          >
+            <span>Tech Gyaan on {postData.categories}</span>{" "}
+            
+          </h4>
           <div className="border p-2 m-1 m-m-4 descriptionView">
             <p className="m-1 h5 text-success">{postData.title}</p>
             <p> {postData.description}</p>
@@ -81,15 +95,14 @@ export const TodoSingle = () => {
                       className="form-control mr-3"
                       placeholder="Add comment "
                       value={comment}
-                      onKeyDown={(e)=>{
-                        if(e.key ==="Enter"){
-                          postComment()
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          postComment();
                         }
                       }}
                       onChange={(e) => {
                         setComment(e.target.value);
                       }}
-                      
                     />
                     <button
                       onClick={postComment}
@@ -99,11 +112,8 @@ export const TodoSingle = () => {
                       Comment
                     </button>
                   </div>
-                  <div className="headings d-flex justify-content-between align-items-center mb-3">
-                    <h5>
-                      Comments({!loading ?count : "Fetching"}
-                      )
-                    </h5>
+                  {count>0?<div className="headings d-flex justify-content-between align-items-center mb-3">
+                    <h5>Comments({!loading ? count : "Fetching"})</h5>
 
                     <div className="buttons">
                       <span className="badge bg-white d-flex flex-row align-items-center">
@@ -118,13 +128,12 @@ export const TodoSingle = () => {
                             onClick={() => {
                               setCommentDisplay(!commentDisplay);
                             }}
-                            
                             defaultChecked={commentDisplay}
                           />
                         </div>
                       </span>
                     </div>
-                  </div>
+                  </div>:""}
                 </div>
               </div>
             </div>
@@ -135,7 +144,12 @@ export const TodoSingle = () => {
             </div>
           ) : commentDisplay ? (
             data.map((comment) => (
-              <Comments nestedShow={nestedShow} setNestedShow={setNestedShow} key={comment._id} comment={comment} />
+              <Comments
+                nestedShow={nestedShow}
+                setNestedShow={setNestedShow}
+                key={comment._id}
+                comment={comment}
+              />
             ))
           ) : (
             ""
