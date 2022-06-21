@@ -75,7 +75,7 @@ export const makeNestedNewCommentOnReply = (payload) => (dispatch) => {
      data : data
   };
   
-  return Axios(config).then((res)=>console.log(res.data.comment)).catch((err)=>console.log(err));
+  return Axios(config).then((res)=>dispatch(getAllComments())).catch((err)=>console.log(err));
 }
 
 
