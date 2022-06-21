@@ -1,12 +1,13 @@
-import {Link,useNavigate} from "react-router-dom";
+import {Link,useNavigate,useParams} from "react-router-dom";
 import {useState,useRef} from "react";
 import {useSelector,useDispatch} from "react-redux";
 import {makeNestedNewCommentOnReply} from "../../Redux/Comments/action"
-export const NestedComments = ({replies,handleDeleteComment,comment}) => {
+export const NestedComments = ({replies,comment}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { userName } = useSelector((store) => store.users);
     const {token } = useSelector((store) => store.auth);
+    const {postId} = useParams();
     const [nestedReply, setNestedReply] = useState(false);
   const [nestedEdit, setNestedEdit] = useState(false);
   const nestedReplies = useRef(null);
@@ -45,7 +46,7 @@ export const NestedComments = ({replies,handleDeleteComment,comment}) => {
               <small>
                 <i
                   onClick={() => {
-                    handleDeleteComment(comment._id);
+                   console.log(comment._id,replies)
                   }}
                   className="fa fa-solid fa-trash px-2"
                 ></i>
@@ -108,12 +109,14 @@ export const NestedComments = ({replies,handleDeleteComment,comment}) => {
               {nestedReply ? (
                 <button
                   onClick={() => {
+                    if(!nestedNestComment.trim()) return;
                     dispatch(
                       makeNestedNewCommentOnReply({
                         id: userName,
                         token: token,
                         commentId: comment._id,
                         comment: nestedNestComment,
+                        postId: postId
                       })
                     );
                     setNestedNestComment("")

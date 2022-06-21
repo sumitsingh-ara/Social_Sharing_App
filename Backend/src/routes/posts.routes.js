@@ -53,10 +53,7 @@ router.delete('/deletePost/:id',authenticate,async(req,res) => {
         if(post.user != req.user._id) return res.status(400).send({message: "You are not the authorized person to delete the post"});
 
         post = await Post.findByIdAndDelete(req.params.id);
-        const comment = await Comment.find({post:req.params.id}).lean().exec();//getting all the comments of that post, so when deleting a post, we will also delete all the comments done on that.
-        for(let i =0; i<comment.length; i++) {
-            await Comment.findByIdAndDelete(comment[i]._id)
-        }
+        const comment = await Comment.deleteMany({post:req.params.id}).lean().exec();//getting all the comments of that post, so when deleting a post, we will also delete all the comments done on that.
         return res.status(200).send({message: "Post deleted successfully"});
     }catch(err) {
         return res.status(500).send(err);

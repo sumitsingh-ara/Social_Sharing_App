@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   deleteComment,
   makeNestedNewCommentOnReply,
+  editComment
 } from "../../Redux/Comments/action";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {NestedComments} from "./NestedComments";
@@ -150,6 +151,7 @@ export const Comments = ({ comment }) => {
                         token: token,
                         commentId: comment._id,
                         comment: nestedcomment,
+                        postId: postId
                       })
                     );
                     setNestedComment("")
@@ -160,7 +162,16 @@ export const Comments = ({ comment }) => {
                   Reply
                 </button>
               ) : (
-                <button className="btn btn-outline-secondary" type="button">
+                <button onClick={()=>{
+                  if(!nestedcomment.trim()) return;
+                  dispatch(editComment({
+                    token:token,
+                    commentId:comment._id,
+                    comment:nestedcomment,
+                    postId: postId
+                  }))
+                  setNestedComment("")
+                }} className="btn btn-outline-secondary" type="button">
                   Edit
                 </button>
               )}
@@ -171,7 +182,7 @@ export const Comments = ({ comment }) => {
         {/*--------------------------- nested comment component------------------------------------------------------------------------------------------------------------------------------------------------- nested comment component----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --------------------------- nested comment component----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------------------------------------------------------------------- */}
         {nestedShow
           ? comment.nestedcomments.map((replies) => (
-             <NestedComments {...comment} {...handleDeleteComment} key={replies.uniqueId} replies={replies} />
+             <NestedComments comment={comment} {...handleDeleteComment} key={replies.uniqueId} replies={replies} />
             ))
           : ""}
       </div>

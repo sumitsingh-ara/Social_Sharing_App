@@ -58,26 +58,27 @@ export const makeNewComment =(payload) => (dispatch) =>{
       });
 }
 
-export const makeNestedNewCommentOnReply = (payload) => (dispatch) => {
-  //dispatch(commentsLoading())
-   
+
+
+export const editComment =(payload) => (dispatch) => {
+  //console.log('editComment',payload)
   let data = JSON.stringify({
-     "comment": payload.comment,
-  });
+    "editedcomment": payload.comment,
+ });
 
-  let config = {
-    method: 'post',
-    url: `http://localhost:7448/social/comment/singlecomment/nestedcomment/${payload.commentId}/${payload.id}`,
-    headers: { 
-      'Authorization': "Bearer "+payload.token, 
-      'Content-Type': 'application/json'
-    },
-     data : data
-  };
+ let config = {
+   method: 'patch',
+   url: `http://localhost:7448/social/comment/singlecomment/update/${payload.commentId}`,
+   headers: { 
+     'Authorization': "Bearer "+payload.token, 
+     'Content-Type': 'application/json'
+   },
+    data : data
+ };
+ 
+ return Axios(config).then((res)=>dispatch(getAllComments(payload.postId))).catch((err)=>dispatch(commentsFailures()));
   
-  return Axios(config).then((res)=>dispatch(getAllComments())).catch((err)=>console.log(err));
 }
-
 
 export const deleteComment =(payload) => (dispatch) =>{
     dispatch(commentsLoading());
@@ -96,4 +97,25 @@ export const deleteComment =(payload) => (dispatch) =>{
       };
     return Axios(config).then(()=> dispatch(getAllComments(payload.postId)))
     .catch((err)=> dispatch(commentsFailures()));
+}
+
+///nested comments actions
+export const makeNestedNewCommentOnReply = (payload) => (dispatch) => {
+  //dispatch(commentsLoading())
+   console.log("Call kr rhe he",payload)
+  let data = JSON.stringify({
+     "comment": payload.comment,
+  });
+
+  let config = {
+    method: 'post',
+    url: `http://localhost:7448/social/comment/singlecomment/nestedcomment/${payload.commentId}/${payload.id}`,
+    headers: { 
+      'Authorization': "Bearer "+payload.token, 
+      'Content-Type': 'application/json'
+    },
+     data : data
+  };
+  
+  return Axios(config).then((res)=>dispatch(getAllComments(payload.postId))).catch((err)=>dispatch(commentsFailures()));
 }

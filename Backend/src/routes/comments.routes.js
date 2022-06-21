@@ -43,12 +43,15 @@ router.delete('/singlecomment/delete',authenticate,async(req,res)=>{
     }
 })
 
-router.patch('/singlecomment/update',authenticate,async(req,res)=>{
+router.patch('/singlecomment/update/:commentId',authenticate,async(req,res)=>{
+    console.log("jdjjd")
     try{
-        const comment = await Comment.findById(req.body.id).lean().exec();
+       
+        const comment = await Comment.findById(req.params.commentId).lean().exec();
+       
         if(req.user._id != comment.user) return res.status(400).send({message:"You are not authorised to edit this comment",status:false});
-
-        const commentupdate  = await Comment.findByIdAndUpdate(req.body.id,{comment:req.body.newcomment},{new:true}).lean().exec();
+            console.log(req.body,comment)
+        const commentupdate  = await Comment.findByIdAndUpdate(req.params.commentId,{comment:req.body.editedcomment},{new:true}).lean().exec();
 
         return res.status(200).send({message:"Updated Successfully",status:true,comment:commentupdate})
     }catch(err){
@@ -56,23 +59,26 @@ router.patch('/singlecomment/update',authenticate,async(req,res)=>{
     }
 })
 
-
+////////////////---------Replies on commnets -------------------Nested Comments--------------------------------
 router.post('/singlecomment/nestedcomment/:commentId/:userId',authenticate,async(req,res)=>{
     try{
         if(req.user.username != req.params.userId) return res.status(404).send({message:"Please login before comment",status:false})
-        let comment = await Comment.findById(req.params.commentId).lean().exec();
         let deta ={
             uniqueId:nanoid(8),
             user: req.params.userId,
             comment:req.body.comment,
             date:new Date()
         }
-        let commentUpdated = {
-            ...comment,
-            nestedcomments:[...comment.nestedcomments,deta]
-        }
-        comment = await Comment.findByIdAndUpdate(req.params.commentId,commentUpdated,{new:true}).lean().exec();
-        return res.status(200).send({message:"Success",comment:comment,status:true})
+       let pushReplies = await Comment.updateOne({_id:req.params.commentId},{$push:{nestedcomments:deta}},{new:true}).lean().exec()
+        return res.status(200).send({message:"Success",status:true})
+    }catch(err){
+        return res.status(500).send(err)
+    }
+})
+
+router.delete('/singlecomment/nestedcomment/:commentId/nestedcommentId',authenticate,async(req,res)=>{
+    try{
+        const comment = awa
     }catch(err){
         return res.status(500).send(err)
     }
