@@ -61,6 +61,20 @@ router.delete('/deletePost/:id',authenticate,async(req,res) => {
     }
 })
 
+router.patch('/singlePost/edit/:id',authenticate,async(req,res)=>{
+    try {
+        const post = await Post.findById(req.params.id).lean().exec();
+        //checking the user who have written this post is only want to make the chnanges;
+       
+        if(post.user != req.user._id) return res.status(404).send({message: "You are not authorized to edit this post"})
+        
+        let editedPost = await Post.findByIdAndUpdate({_id:req.params.id},{description:req.body.editedData},{new:true}).lean().exec()
+        //console.log(editedPost)
+        return res.status(200).send(editedPost);
+    }catch(err){
+        return res.status(500).send(err);
+    }
+})
 //liking a post 
 
 router.post('/specificPost/like/:postId/:likerId',async(req,res)=>{
