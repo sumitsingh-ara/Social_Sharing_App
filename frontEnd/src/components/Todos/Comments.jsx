@@ -49,8 +49,9 @@ export const Comments = ({ comment }) => {
             />
           </div>
           <div>
+          Commented by&nbsp;
             <Link to={`/user/${comment.user.username}`}>
-              {comment.user.name}
+            {userName === comment.user.username?"you":comment.user.username}
             </Link>
           </div>
           <div>2 hours ago</div>

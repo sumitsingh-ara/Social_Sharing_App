@@ -1,7 +1,7 @@
 import {Link,useNavigate,useParams} from "react-router-dom";
 import {useState,useRef} from "react";
 import {useSelector,useDispatch} from "react-redux";
-import {makeNestedNewCommentOnReply} from "../../Redux/Comments/action"
+import {makeNestedNewCommentOnReply,deleteNestedCommentReplies} from "../../Redux/Comments/action"
 export const NestedComments = ({replies,comment}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -28,10 +28,11 @@ export const NestedComments = ({replies,comment}) => {
               alt="profile"
             />
           </div>
-          <div>
+          <div> Commented by&nbsp;
             <Link to={`/user/${replies.user}`}>
-              {replies.user}
+            {userName === replies.user?"you":replies.user}
             </Link>
+           
           </div>
           <div>2 hours ago</div>
         </div>
@@ -46,7 +47,12 @@ export const NestedComments = ({replies,comment}) => {
               <small>
                 <i
                   onClick={() => {
-                   console.log(comment._id,replies)
+                   dispatch(deleteNestedCommentReplies({
+                    token:token,
+                    commentId:comment._id,
+                    repliedId:replies.uniqueId,
+                    postId:postId
+                   }))
                   }}
                   className="fa fa-solid fa-trash px-2"
                 ></i>

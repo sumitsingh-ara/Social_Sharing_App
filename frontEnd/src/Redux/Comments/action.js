@@ -61,7 +61,7 @@ export const makeNewComment =(payload) => (dispatch) =>{
 
 
 export const editComment =(payload) => (dispatch) => {
-  //console.log('editComment',payload)
+  dispatch(commentsLoading())
   let data = JSON.stringify({
     "editedcomment": payload.comment,
  });
@@ -101,8 +101,8 @@ export const deleteComment =(payload) => (dispatch) =>{
 
 ///nested comments actions
 export const makeNestedNewCommentOnReply = (payload) => (dispatch) => {
-  //dispatch(commentsLoading())
-   console.log("Call kr rhe he",payload)
+  dispatch(commentsLoading())
+   //console.log("Call kr rhe he",payload)
   let data = JSON.stringify({
      "comment": payload.comment,
   });
@@ -118,4 +118,19 @@ export const makeNestedNewCommentOnReply = (payload) => (dispatch) => {
   };
   
   return Axios(config).then((res)=>dispatch(getAllComments(payload.postId))).catch((err)=>dispatch(commentsFailures()));
+}
+
+
+export const deleteNestedCommentReplies =(payload) => (dispatch) => {
+  console.log(payload);
+ let config = {
+   method: 'delete',
+   url: `http://localhost:7448/social/comment/singlecomment/nestedcomment/delete/${payload.commentId}/${payload.repliedId}`,
+   headers: { 
+     'Authorization': "Bearer "+payload.token, 
+     'Content-Type': 'application/json'
+   },
+ };
+ 
+ return Axios(config).then((res)=>dispatch(getAllComments(payload.postId))).catch((err)=>dispatch(commentsFailures()));
 }
