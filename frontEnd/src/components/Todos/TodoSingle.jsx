@@ -14,6 +14,7 @@ export const TodoSingle = () => {
   const [loadings, setLoading] = useState(true);
   const [postData, setPostData] = useState();
   const [commentDisplay, setCommentDisplay] = useState(true);
+  const [nestedShow, setNestedShow] = useState(false);
   
   const [comment, setComment] = useState("");
   useEffect(() => {
@@ -134,7 +135,7 @@ export const TodoSingle = () => {
             </div>
           ) : commentDisplay ? (
             data.map((comment) => (
-              <Comments key={comment._id} comment={comment} />
+              <Comments nestedShow={nestedShow} setNestedShow={setNestedShow} key={comment._id} comment={comment} />
             ))
           ) : (
             ""

@@ -8,7 +8,7 @@ import {
 } from "../../Redux/Comments/action";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {NestedComments} from "./NestedComments";
-export const Comments = ({ comment }) => {
+export const Comments = ({ comment,nestedShow,setNestedShow }) => {
   const navigate = useNavigate();
   const reply = useRef(null);
  
@@ -20,7 +20,7 @@ export const Comments = ({ comment }) => {
   
   const [replyBox, setReplyBox] = useState(false);
   const [editBox, setEditBox] = useState(false);
-  const [nestedShow, setNestedShow] = useState(false);
+  
   
   const handleDeleteComment = (commentId) => {
     const confirmBox = window.confirm("Do you really want delete comment ?");
