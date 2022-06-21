@@ -1,4 +1,4 @@
-import { Link, Navigate,useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { tryLogin } from "../../Redux/Auth/action";
@@ -29,152 +29,200 @@ export const Login = () => {
   };
   const sendPassword = async () => {
     //console.log("sendo",resetEmail)
-    let data
-    try{
-       data = await fetch("http://localhost:7448/social/resetpassword",{
+    let data;
+    try {
+      data = await fetch("http://localhost:7448/social/resetpassword", {
         method: "POST",
-        headers:{
-          "Content-Type": "application/json"
+        headers: {
+          "Content-Type": "application/json",
         },
-        body:JSON.stringify({
-          "email":resetEmail
-        })
-      })
-      data = await data.json()
-      setResetMessage(data.message)
-    }catch(error){
+        body: JSON.stringify({
+          email: resetEmail,
+        }),
+      });
+      data = await data.json();
+      setResetMessage(data.message);
+    } catch (error) {
       //  console.log("Eror from sender",error)
-      setResetMessage(error.message)
+      setResetMessage(error.message);
     }
   };
   const googleLogin = () => {
-     window.location.href = "http://localhost:7448/auth/google";
-  }
-  return<>
-   {passwordBox ? 
-    <section className="vh-60">
-      <div className="mask d-flex align-items-center h-100 gradient-custom-3">
-        <div className="container-fluid h-100">
-          <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-              <div className="card" style={{ borderRadius: "15px" }}>
-                <div className="card-body">
-                  <h2 className="text-uppercase h4 text-center mb-4">
-                    Reset your password
-                  </h2>
-                    <div className="form-outline mb-4">
-                      <input
-                        value={resetEmail}
-                        onChange={(e) => {
-                          setResetEmail(e.target.value);
-                        }}
-                        required
-                        type="email"
-                        placeholder="Enter email here"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
+    window.location.href = "http://localhost:7448/auth/google";
+  };
+  return (
+    <>
+      {passwordBox ? (
+        <section className="vh-60">
+          <div className="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div className="container-fluid h-100">
+              <div className="row d-flex justify-content-center align-items-center h-100">
+                <div className="col-12 col-md-9 col-lg-7 col-xl-6">
+                  <div className="card" style={{ borderRadius: "15px" }}>
+                    <div className="card-body">
+                      <h2 className="text-uppercase h4 text-center mb-4">
+                        Reset your password
+                      </h2>
+                      <div className="form-outline mb-4">
+                        <input
+                          value={resetEmail}
+                          onChange={(e) => {
+                            setResetEmail(e.target.value);
+                          }}
+                          required
+                          type="email"
+                          placeholder="Enter email here"
+                          className="form-control form-control-lg"
+                        />
+                      </div>
 
-                    <div className="form-outline mb-4">
-                      <button className="btn btn-primary" onClick={()=>{ 
-                        setResetMessage("")
-                        sendPassword()
-                      }}>Send Password</button>
-                    </div>
-                    <div className="text-info h5">{resetMessage!==false?resetMessage!==""?resetMessage:<div className="spinner-grow" role="status"></div>:""} <Link to={`https://mail.google.com/mail/u/0/#inbox`} target="_blank">Check Mail</Link></div>
-                 
-                  <button className="btn btn-danger mt-3" onClick={()=>{
-                    navigate(-1)
-                  }} >
-                    GO Back
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-   : 
-    <section className="vh-60">
-      <div className="mask d-flex align-items-center h-100 gradient-custom-3">
-        <div className="container-fluid h-100">
-          <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-              <div className="card" style={{ borderRadius: "15px" }}>
-                <div className="card-body">
-                  <h2 className="text-uppercase h4 text-center mb-4">
-                    Login with email and password
-                  </h2>
-
-                  <form onSubmit={handleSubmit}>
-                    <div className="form-outline mb-4">
-                      <input
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        type="email"
-                        id="email"
-                        placeholder="Enter email address"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
-
-                    <div className="form-outline mb-4">
-                      <input
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                        type="password"
-                        placeholder="Enter password here"
-                        id="password"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
-                    <div>
-                      {loading ? (
-                        <div className="spinner-grow" role="status"></div>
-                      ) : (
-                        <span className="text-danger p2">
-                          {message === "Wrong Credentials" ? (
+                      <div className="form-outline mb-4">
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            setResetMessage("");
+                            sendPassword();
+                          }}
+                        >
+                          Send Password
+                        </button>
+                      </div>
+                      <div className="text-info h5">
+                        {resetMessage !== false ? (
+                          resetMessage !== "" ? (
                             <>
-                              {message}{" "}
-                              <button className="btn btn-danger" onClick={() =>{
-                                setPasswordBox(true)
-                              }}>Reset Password</button>
+                              {resetMessage ===
+                              "Password link sent to your mail successfully"
+                                ? resetMessage
+                                : "Wrong email provided"}{" "}
+                              <a
+                                href=" "
+                                target="_blank"
+                                onClick={() => {
+                                  window.open('https://mail.google.com/mail/u/0/#inbox', '_blank');
+                                  setResetMessage(false);
+                                }}
+                              >
+                                Check Mail
+                              </a>
                             </>
                           ) : (
-                            ""
-                          )}
-                        </span>
-                      )}
-                    </div>
-                    <div className="d-flex justify-content-center">
-                      <input
-                        type="submit"
-                        className="btn btn-success btn-block btn-lg gradient-custom-4 text-body mt-4 m-4 mb-2"
-                        value="Login"
-                      ></input>
-                    </div>
-                    </form>
-                    <p className="text-center text-muted mt-4 mb-4">
-                      Don't have an account?{" "}
-                      <Link to="/signup" className="fw-bold text-body">
-                        <u>Signup here</u>
-                      </Link>
-                    </p>
-                    
-                    <button onClick={()=>{
-                      if(!isAuth) return googleLogin();
-                    }} className="btn btn-outline-primary text-uppercase btn-block btn-lg gradient-custom-4 text-body mt-4 mb-2">
-                        <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Login with Google"/>Login with google
+                            <div className="spinner-grow" role="status"></div>
+                          )
+                        ) : (
+                          ""
+                        )}{" "}
+                      </div>
+
+                      <button
+                        className="btn btn-danger mt-3"
+                        onClick={() => {
+                          navigate(-1);
+                        }}
+                      >
+                        GO Back
                       </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-}</>
+        </section>
+      ) : (
+        <section className="vh-60">
+          <div className="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div className="container-fluid h-100">
+              <div className="row d-flex justify-content-center align-items-center h-100">
+                <div className="col-12 col-md-9 col-lg-7 col-xl-6">
+                  <div className="card" style={{ borderRadius: "15px" }}>
+                    <div className="card-body">
+                      <h2 className="text-uppercase h4 text-center mb-4">
+                        Login with email and password
+                      </h2>
+
+                      <form onSubmit={handleSubmit}>
+                        <div className="form-outline mb-4">
+                          <input
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            type="email"
+                            id="email"
+                            placeholder="Enter email address"
+                            className="form-control form-control-lg"
+                          />
+                        </div>
+
+                        <div className="form-outline mb-4">
+                          <input
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            type="password"
+                            placeholder="Enter password here"
+                            id="password"
+                            className="form-control form-control-lg"
+                          />
+                        </div>
+                        <div>
+                          {loading ? (
+                            <div className="spinner-grow" role="status"></div>
+                          ) : (
+                            <span className="text-danger p2">
+                              {message === "Wrong Credentials" ? (
+                                <>
+                                  {message}{" "}
+                                  <button
+                                    className="btn btn-danger"
+                                    onClick={() => {
+                                      setPasswordBox(true);
+                                    }}
+                                  >
+                                    Reset Password
+                                  </button>
+                                </>
+                              ) : (
+                                ""
+                              )}
+                            </span>
+                          )}
+                        </div>
+                        <div className="d-flex justify-content-center">
+                          <input
+                            type="submit"
+                            className="btn btn-success btn-block btn-lg gradient-custom-4 text-body mt-4 m-4 mb-2"
+                            value="Login"
+                          ></input>
+                        </div>
+                      </form>
+                      <p className="text-center text-muted mt-4 mb-4">
+                        Don't have an account?{" "}
+                        <Link to="/signup" className="fw-bold text-body">
+                          <u>Signup here</u>
+                        </Link>
+                      </p>
+
+                      <button
+                        onClick={() => {
+                          if (!isAuth) return googleLogin();
+                        }}
+                        className="btn btn-outline-primary text-uppercase btn-block btn-lg gradient-custom-4 text-body mt-4 mb-2"
+                      >
+                        <img
+                          src="https://img.icons8.com/color/16/000000/google-logo.png"
+                          alt="Login with Google"
+                        />
+                        Login with google
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+    </>
+  );
 };

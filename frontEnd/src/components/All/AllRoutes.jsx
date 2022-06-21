@@ -9,6 +9,7 @@ import { ResetPassword } from "../Auth/ResetPassword";
 import { GoogleRedirect } from "../Auth/GoogleRedirect";
 import { SingleUser } from "../User/SingleUser";
 import { PrivateComponents } from "./PrivateComponents";
+import {UserProfile} from "../User/UserProfile"
 export const AllRoutes = () => {
   return (
     <>
@@ -29,6 +30,14 @@ export const AllRoutes = () => {
           element={
             <PrivateComponents>
               <SingleUser />
+            </PrivateComponents>
+          }
+        ></Route>
+         <Route
+          path="/user/profile"
+          element={
+            <PrivateComponents>
+              <UserProfile />
             </PrivateComponents>
           }
         ></Route>

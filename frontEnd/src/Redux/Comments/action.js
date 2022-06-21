@@ -153,6 +153,6 @@ export const editingNestedReply =(payload) => (dispatch)=> {
     data : data
  };
  
- return Axios(config).then((res)=>console.log(res.data)).catch(()=>dispatch(commentsFailures()));
+ return Axios(config).then(()=>dispatch(getAllComments(payload.postId))).catch(()=>dispatch(commentsFailures()));
 
 }

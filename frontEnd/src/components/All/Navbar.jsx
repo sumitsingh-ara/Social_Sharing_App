@@ -75,7 +75,7 @@ export const Navbar = () => {
                       My followers
                     </Link>
                     <li>
-                      <Link to="" className="dropdown-item">
+                      <Link to="/user/profile" className="dropdown-item">
                         Profile
                       </Link>
                     </li>
