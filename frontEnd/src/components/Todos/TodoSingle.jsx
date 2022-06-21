@@ -1,45 +1,36 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Comments } from "./Comments";
 import { useSelector, useDispatch } from "react-redux";
+import {fetchSinglePost,singlePostEdit,singlePostLike} from "../../Redux/Post/action";
 import { getAllComments, makeNewComment } from "../../Redux/Comments/action";
 import "./Todo.css";
 export const TodoSingle = () => {
+  const editRef = useRef(null);
   const dispatch = useDispatch();
   const { isAuth, token } = useSelector((store) => store.auth);
   const { id } = useSelector((store) => store.users);
   const { loading, data, count } = useSelector((store) => store.comments);
+  const {postloading,postData,likeStatus} = useSelector((store) => store.posts)
   const navigate = useNavigate();
   const { postId } = useParams();
-  const [loadings, setLoading] = useState(true);
-  const [postData, setPostData] = useState();
   const [commentDisplay, setCommentDisplay] = useState(true);
   const [nestedShow, setNestedShow] = useState(false);
   const [editPost, setEditPost] = useState(false);
   const [comment, setComment] = useState("");
-  const [editPostDescription, setEditPostDescription] = useState("");
+  const [editPostDescription, setEditPostDescription] = useState(postData.description);
+ 
+  useEffect(() => {
+   dispatch(fetchSinglePost({
+    postId: postId,
+    id:id
+   }))
+   dispatch(getAllComments(postId));
+   setEditPostDescription(postData.description)
+  }, [postId,id,postData.description, dispatch]);
   const handlePostEdit = (e) => {
     setEditPostDescription(e.target.value);
   };
-  useEffect(() => {
-    setLoading(true);
-    const getPost = async () => {
-      try {
-        let data = await fetch(
-          `http://localhost:7448/social/post/singlePost/${postId}`
-        );
-        data = await data.json();
-        // console.log(data);
-        setPostData(data.post);
-        setEditPostDescription(data.post.description);
-        setLoading(false);
-        dispatch(getAllComments(postId));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getPost();
-  }, [postId, dispatch]);
   //function to post the new comments;
   const postComment = () => {
     if (!isAuth) {
@@ -57,39 +48,29 @@ export const TodoSingle = () => {
     dispatch(makeNewComment(payload));
     setComment("");
   };
-  const postEditChanges = async () => {
-    setLoading(true);
-    try {
-      var myHeaders = new Headers();
-      myHeaders.append(
-        "Authorization",
-        `Bearer ${token}`
-      );
-      myHeaders.append("Content-Type", "application/json");
-
-      var raw = JSON.stringify({
-        editedData: editPostDescription,
-      });
-
-      var requestOptions = {
-        method: "PATCH",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-     let data = await fetch(
-        `http://localhost:7448/social/post/singlePost/edit/${postId}`,
-        requestOptions
-      )
-       data = await data.json();
-       setPostData(data);
-       setLoading(false)
-    } catch (err) {}
+  const postEditChanges = () => {
+   let payload = {
+    token: token,
+    id:id,
+    editedData:editPostDescription,
+    postId:postId,
+   }
+   dispatch(singlePostEdit(payload));
+    setEditPost(false);
   };
+
+  const likePost = ()=> {
+    let payload = {
+      token: token,
+      id:id,
+      editedData:editPostDescription,
+      postId:postId,
+     }
+     dispatch(singlePostLike(payload));
+  }
   return (
     <>
-      {loadings ? (
+      {postloading ? (
         <div className="spinner-grow mt-5" role="status">
           <span className="sr-only">Loading...</span>
         </div>
@@ -104,6 +85,15 @@ export const TodoSingle = () => {
               ? `${(postData.views / 1000).toFixed(2)}K`
               : postData.views}
           </span>
+          {isAuth ?likeStatus? <i
+                className="fa fa-light fa-heart floatRight mx-1 text-success p-1"
+                style={{ fontSize: "30px" }}
+              ></i>:
+              <i onClick={likePost}
+                className="fa fa-light fa-heart floatRight mx-1 text-secondary p-1"
+                style={{ fontSize: "30px" }}
+              ></i>:""
+           }
           {postData.user === id ? (
             <span className="floatRight">
               {editPost ? (
@@ -123,6 +113,9 @@ export const TodoSingle = () => {
                   className="btn btn-primary"
                   onClick={() => {
                     setEditPost(true);
+                    setTimeout(() => {
+                      editRef.current.focus();
+                    }, 50);
                   }}
                 >
                   Edit
@@ -143,6 +136,7 @@ export const TodoSingle = () => {
             <p className="m-1 h5 text-success">{postData.title}</p>
             {editPost ? (
               <textarea
+                ref={editRef}
                 value={editPostDescription}
                 onChange={handlePostEdit}
                 className="form-control mb-4"

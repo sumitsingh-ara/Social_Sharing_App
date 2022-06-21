@@ -9,11 +9,13 @@ import { todosReducer } from "./Todo/reducer";
 import {authReducer} from "./Auth/reducer";
 import {usersReducer} from './User/reducer';
 import {commentReducer} from './Comments/reducer';
+import {postReducer} from './Post/reducer';
 const rootReducer = combineReducers({
     todos:todosReducer,
     auth:authReducer,
     users:usersReducer,
-    comments:commentReducer
+    comments:commentReducer,
+    posts:postReducer,
 })
 
 export const store = createStore(

@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Users = require("../models/users.models");
 const Post = require("../models/posts.models");
 const Comment = require("../models/comments.models");
-const authenticate =require("../middlewares/authenticate");
+const authenticate = require("../middlewares/authenticate");
 //make a new post;
 
 router.post("/newPost", async (req, res) => {
@@ -23,75 +23,100 @@ router.post("/newPost", async (req, res) => {
   }
 });
 
-router.get('/singlePost/:id',async(req,res)=>{
+router.get("/singlePost/:id", async (req, res) => {
+  try {
+    let post = await Post.findById(req.params.id).populate("user", {
+      password: 0,
+      _id: 0,
+      email: 0,
+    }); //getting the post alongwith userdata by using populate;
+    post = await Post.findByIdAndUpdate(
+      { _id: req.params.id },
+      { views: post.views + 1 },
+      { new: true }
+    )
+      .lean()
+      .exec();
+    if (post) return res.status(200).send({ post: post }); //if post present sending data to frontend
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+});
 
-    try{
-        let post = await Post.findById(req.params.id).populate("user",{ password: 0 ,_id:0,email:0});//getting the post alongwith userdata by using populate;
-            post = await Post.findByIdAndUpdate({_id:req.params.id},{views:post.views+1},{new:true}).lean().exec()
-       if(!post) return res.status(400).send({message: "Post Not available"})
-        
-        if(post) return res.status(200).send({post:post});//if post present sending data to frontend
-    }catch(err){
-        return res.status(500).send(err);
-    }
-})
+router.get("/allPosts", async (req, res) => {
+  try {
+    let posts = await Post.find().populate("user", {
+      password: 0,
+      _id: 0,
+      email: 0,
+    });
 
-router.get('/allPosts',async(req,res)=>{
-    try{
+    return res.status(200).send({ posts: posts });
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+});
 
-        let posts = await Post.find().populate("user",{password:0,_id:0,email:0});
+router.delete("/deletePost/:id", authenticate, async (req, res) => {
+  try {
+    let post = await Post.findById(req.params.id).lean().exec();
+    if (post.user != req.user._id)
+      return res
+        .status(400)
+        .send({
+          message: "You are not the authorized person to delete the post",
+        });
 
-        return res.status(200).send({posts:posts});
-    }catch(err){
-        return res.status(500).send(err);
-    }
-})
+    post = await Post.findByIdAndDelete(req.params.id);
+    const comment = await Comment.deleteMany({ post: req.params.id })
+      .lean()
+      .exec(); //getting all the comments of that post, so when deleting a post, we will also delete all the comments done on that.
+    return res.status(200).send({ message: "Post deleted successfully" });
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+});
 
-router.delete('/deletePost/:id',authenticate,async(req,res) => {
-    try{
+router.patch("/singlePost/edit/:id", authenticate, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id).lean().exec();
+    //checking the user who have written this post is only want to make the chnanges;
 
-        let post = await Post.findById(req.params.id).lean().exec();
-        if(post.user != req.user._id) return res.status(400).send({message: "You are not the authorized person to delete the post"});
+    if (post.user != req.user._id)
+      return res
+        .status(404)
+        .send({ message: "You are not authorized to edit this post" });
 
-        post = await Post.findByIdAndDelete(req.params.id);
-        const comment = await Comment.deleteMany({post:req.params.id}).lean().exec();//getting all the comments of that post, so when deleting a post, we will also delete all the comments done on that.
-        return res.status(200).send({message: "Post deleted successfully"});
-    }catch(err) {
-        return res.status(500).send(err);
-    }
-})
+    let editedPost = await Post.findByIdAndUpdate(
+      { _id: req.params.id },
+      { description: req.body.editedData },
+      { new: true }
+    )
+      .lean()
+      .exec();
 
-router.patch('/singlePost/edit/:id',authenticate,async(req,res)=>{
-    try {
-        const post = await Post.findById(req.params.id).lean().exec();
-        //checking the user who have written this post is only want to make the chnanges;
-       
-        if(post.user != req.user._id) return res.status(404).send({message: "You are not authorized to edit this post"})
-        
-        let editedPost = await Post.findByIdAndUpdate({_id:req.params.id},{description:req.body.editedData},{new:true}).lean().exec()
-        //console.log(editedPost)
-        return res.status(200).send(editedPost);
-    }catch(err){
-        return res.status(500).send(err);
-    }
-})
-//liking a post 
+    return res.status(200).send(editedPost);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+});
+//liking a post
 
-router.post('/specificPost/like/:postId/:likerId',async(req,res)=>{
-    try{
-        const post = await Post.findById(req.params.postId);
-        let deta ={
-            user:req.params.likerId
-        }
-        let modified = {
-            ...post,
-            likes:[...post.likes,deta]
-        }
-        let modifiedPost = await Post.findByIdAndUpdate(req.params.postId,modified,{new:true}).lean().exec();
-
-        return res.status(200).send({message:"Post liked successfully"})
-    }catch(err){
-        return res.status(500).send(err);
-    }
-})
+router.patch("/singlePost/like/:postId/:likerId",authenticate,async (req, res) => {
+  try {
+    let deta = {
+      user: req.params.likerId,
+    };
+    let likedPost = await Post.updateOne(
+      { _id: req.params.postId },
+      { $push: { likes: deta } },
+      { new: true }
+    )
+      .lean()
+      .exec();
+    return res.status(200).send({ message: "Post liked successfully"});
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+});
 module.exports = router;

@@ -36,8 +36,6 @@ export const postTodos =(payload) =>(dispatch) => {
     .then((res)=> dispatch(todoPostRequestSuccess()))
     .catch((err)=> dispatch(todoRequestFailure()))
 }
-
-
 export const deletePost =(payload) => (dispatch) =>{
     dispatch(todogetRequest());
       let config = {
@@ -52,4 +50,5 @@ export const deletePost =(payload) => (dispatch) =>{
     .catch((err)=> dispatch(todoRequestFailure()))
     
 }
+
 
