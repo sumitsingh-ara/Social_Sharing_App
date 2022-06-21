@@ -120,8 +120,18 @@
 .mainCommentBox{
     width: 54vw;
     padding:1vw;
-    box-shadow: 5px 6px 6px 2px #e9ecef;
+    box-shadow: 0px 10px 6px 2px #e9ecef;
     height: fit-content;
+    margin-top:2vh;
+    margin-bottom:2vh;
+}
+.mainCommentBoxNested{
+    width:40vw;
+    margin-left:auto;
+    padding:1vw;
+    box-shadow: 0px 5px 10px 5px #9bb9d7;
+    height: fit-content;
+    margin-bottom:2vh;
 }
 .userCommentorDetails{
     display: flex;
@@ -157,4 +167,9 @@
     .mainCommentBox{
         width: 90vw;
     }
+    .mainCommentBoxNested{
+        width: 80vw !important;
+        
+    }
 }
+

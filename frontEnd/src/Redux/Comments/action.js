@@ -23,7 +23,10 @@ export const getAllComments = (postId) => (dispatch) => {
     dispatch(commentsLoading());
    // console.log(postId,"action");
     return Axios.get(`http://localhost:7448/social/comment/allcomments/${postId}`)
-    .then((res)=> dispatch(commentsSuccess(res.data)))
+    .then((res)=>{
+      //console.log(res.data);
+      dispatch(commentsSuccess(res.data))
+    })
     .catch((error)=> dispatch(commentsFailures()))
 }
 
