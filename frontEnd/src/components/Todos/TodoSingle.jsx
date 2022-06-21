@@ -15,7 +15,7 @@ export const TodoSingle = () => {
   const [postData, setPostData] = useState();
   const [commentDisplay, setCommentDisplay] = useState(true);
   const [nestedShow, setNestedShow] = useState(false);
-
+  const [editPost,setEditPost] = useState(false);
   const [comment, setComment] = useState("");
   useEffect(() => {
     setLoading(true);
@@ -62,11 +62,14 @@ export const TodoSingle = () => {
         <div className="container mt-5">
           <span className="floatRight">
               <i
-                className="fa fa-eye text-warning text-small"
+                className="fa fa-eye text-warning text-small mt-2"
                 aria-hidden="true"
               ></i>
               {postData.views>=1000?`${(postData.views/1000).toFixed(2)}K`:postData.views}
             </span>
+            {postData.user===id?<span className="floatRight"><button className="btn btn-primary" onClick={()=>{
+              setEditPost(!editPost);
+            }}>{editPost?"Save":"Edit"}</button></span>:""}
           <h4
             className="text-success"
             style={{ display: "flex", justifyContent: "space-evenly" }}
