@@ -99,7 +99,7 @@ export const deleteComment =(payload) => (dispatch) =>{
     .catch((err)=> dispatch(commentsFailures()));
 }
 
-///nested comments actions
+///nested comments actions making a new nested reply
 export const makeNestedNewCommentOnReply = (payload) => (dispatch) => {
   dispatch(commentsLoading())
    //console.log("Call kr rhe he",payload)
@@ -120,9 +120,9 @@ export const makeNestedNewCommentOnReply = (payload) => (dispatch) => {
   return Axios(config).then((res)=>dispatch(getAllComments(payload.postId))).catch((err)=>dispatch(commentsFailures()));
 }
 
-
+//deleting nested comments replies
 export const deleteNestedCommentReplies =(payload) => (dispatch) => {
-  console.log(payload);
+  //console.log(payload);
  let config = {
    method: 'delete',
    url: `http://localhost:7448/social/comment/singlecomment/nestedcomment/delete/${payload.commentId}/${payload.repliedId}`,
@@ -133,4 +133,26 @@ export const deleteNestedCommentReplies =(payload) => (dispatch) => {
  };
  
  return Axios(config).then((res)=>dispatch(getAllComments(payload.postId))).catch((err)=>dispatch(commentsFailures()));
+}
+
+//editing a nested comment reply
+
+export const editingNestedReply =(payload) => (dispatch)=> {
+  //dispatch(commentsLoading())
+  let data = JSON.stringify({
+    "editedcomment": payload.editedcomment,
+ });
+
+ let config = {
+   method: 'patch',
+   url:  `http://localhost:7448/social/comment/singlecomment/nestedcomment/edit/${payload.commentId}/${payload.repliedId}`,
+   headers: { 
+     'Authorization': "Bearer "+payload.token, 
+     'Content-Type': 'application/json'
+   },
+    data : data
+ };
+ 
+ return Axios(config).then((res)=>console.log(res.data)).catch(()=>dispatch(commentsFailures()));
+
 }

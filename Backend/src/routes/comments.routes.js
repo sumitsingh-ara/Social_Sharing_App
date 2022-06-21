@@ -135,8 +135,10 @@ router.delete(
             $elemMatch: { uniqueId: req.params.nestedcommentId },
           },
         }
-      );
-//   console.log(req.user.username,repliedComment.nestedcomments[0].user)//extracted the userName from db to check the authentication
+      )
+        .lean()
+        .exec();
+      //   console.log(req.user.username,repliedComment.nestedcomments[0].user)//extracted the userName from db to check the authentication
       if (req.user.username != repliedComment.nestedcomments[0].user)
         return res
           .status(401)
@@ -144,10 +146,46 @@ router.delete(
       const deletedComment = await Comment.updateOne(
         { _id: req.params.commentId },
         { $pull: { nestedcomments: { uniqueId: req.params.nestedcommentId } } }
-      );
+      )
+        .lean()
+        .exec();
       return res.status(200).send(deletedComment);
     } catch (err) {
       return res.status(500).send(err);
+    }
+  }
+);
+
+//editing the single replies of specific user after authentication
+router.patch(
+  "/singlecomment/nestedcomment/edit/:commentId/:nestedcommentId",
+  authenticate,
+  async (req, res) => {
+    try {
+      const repliedComment = await Comment.findOne(
+        { _id: req.params.commentId },
+        {
+          nestedcomments: {
+            $elemMatch: { uniqueId: req.params.nestedcommentId },
+          },
+        }
+      )
+        .lean()
+        .exec();
+      //   console.log(req.user.username,repliedComment.nestedcomments[0].user)//extracted the userName from db to check the authentication
+      if (req.user.username != repliedComment.nestedcomments[0].user)
+        return res
+          .status(401)
+          .send("You are not authorised to edit this comment");
+      //finding the replied comment that need to be edited and then using position operator to set it;
+      const editedcomments = await Comment.updateOne({
+        _id: req.params.commentId,
+        "nestedcomments.uniqueId": req.params.nestedcommentId,
+      },{$set:{"nestedcomments.$.comment":req.body.editedcomment}});
+    
+      return res.status(200).send(editedcomments);
+    } catch (err) {
+      return res.status(500).send(err.message);
     }
   }
 );

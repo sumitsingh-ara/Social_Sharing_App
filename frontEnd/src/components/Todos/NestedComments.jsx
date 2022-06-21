@@ -1,7 +1,7 @@
 import {Link,useNavigate,useParams} from "react-router-dom";
 import {useState,useRef} from "react";
 import {useSelector,useDispatch} from "react-redux";
-import {makeNestedNewCommentOnReply,deleteNestedCommentReplies} from "../../Redux/Comments/action"
+import {makeNestedNewCommentOnReply,deleteNestedCommentReplies,editingNestedReply} from "../../Redux/Comments/action"
 export const NestedComments = ({replies,comment}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -136,6 +136,18 @@ export const NestedComments = ({replies,comment}) => {
                 <button
                   className="btn btn-outline-secondary"
                   type="button"
+                  onClick={() =>{
+                    if(!nestedNestComment.trim())return;
+                    dispatch(editingNestedReply({
+                      id: userName,
+                      token: token,
+                      commentId: comment._id,
+                      editedcomment: nestedNestComment,
+                      repliedId:replies.uniqueId,
+                      postId: postId
+                    }))
+                    setNestedNestComment("")
+                  }}
                 >
                   Edit
                 </button>
