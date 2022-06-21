@@ -4,7 +4,9 @@ import { postTodos } from "../../Redux/Todo/action";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate,Navigate} from "react-router-dom";
 import "./Todo.css";
+const Filter = require('bad-words');
 export const TodosInput = () => {
+  const filter = new Filter({ regex: /\*|\.|$/gi });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error,isAuth } = useSelector((store) => store.auth);
@@ -16,6 +18,16 @@ export const TodosInput = () => {
    subCategory:""
   });
   const handleSubmit = (e) => {
+    e.preventDefault();
+    // filter.addWords('sala',"Bastard","Son of a Bitch","Dick","Pussy",);
+    const x =filter.clean(formData.description)
+    const y =filter.clean(formData.title)
+    setFormData({
+      ...formData,
+      title:y,
+      description: x
+    })
+    if(x.includes("*")||y.includes("*")) return alert("OOPS, bad-words are no more supported here!");
     e.preventDefault();
     if(formData.categories !== "Computer Science"){
       setFormData({
@@ -39,11 +51,12 @@ export const TodosInput = () => {
     }, 1000);
   };
   const handleChange = (e) => {
+    
     setFormData({
       ...formData,
-      [e.target.id]: e.target.value,
+      [e.target.id]:e.target.value,
     });
-   
+  
   };
 
   if(!isAuth) {

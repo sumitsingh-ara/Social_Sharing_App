@@ -94,7 +94,13 @@ router.patch("/singlePost/edit/:id", authenticate, async (req, res) => {
     )
       .lean()
       .exec();
-
+      await Post.findByIdAndUpdate(
+        { _id: req.params.id },
+        { views: post.views - 1 },
+        { new: true }
+      )
+        .lean()
+        .exec();
     return res.status(200).send(editedPost);
   } catch (err) {
     return res.status(500).send(err);
@@ -114,6 +120,13 @@ router.patch("/singlePost/like/:postId/:likerId",authenticate,async (req, res) =
     )
       .lean()
       .exec();
+      await Post.findByIdAndUpdate(
+        { _id: req.params.id },
+        { views: post.views + 1 },
+        { new: true }
+      )
+        .lean()
+        .exec();
     return res.status(200).send({ message: "Post liked successfully"});
   } catch (err) {
     return res.status(500).send(err);

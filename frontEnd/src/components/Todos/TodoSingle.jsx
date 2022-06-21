@@ -5,7 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import {fetchSinglePost,singlePostEdit,singlePostLike} from "../../Redux/Post/action";
 import { getAllComments, makeNewComment } from "../../Redux/Comments/action";
 import "./Todo.css";
+const Filter = require('bad-words');
+
 export const TodoSingle = () => {
+  const filter = new Filter({ regex: /\*|\.|$/gi });
   const editRef = useRef(null);
   const dispatch = useDispatch();
   const { isAuth, token } = useSelector((store) => store.auth);
@@ -28,11 +31,15 @@ export const TodoSingle = () => {
    dispatch(getAllComments(postId));
    setEditPostDescription(postData.description)
   }, [postId,id,postData.description, dispatch]);
+  
   const handlePostEdit = (e) => {
     setEditPostDescription(e.target.value);
   };
   //function to post the new comments;
   const postComment = () => {
+    const x = filter.clean(comment);
+    setComment(x);
+    if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
     if (!isAuth) {
       navigate("/login");
       return;
@@ -49,6 +56,9 @@ export const TodoSingle = () => {
     setComment("");
   };
   const postEditChanges = () => {
+    const x = filter.clean(editPostDescription)
+    setEditPostDescription(x);
+    if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
    let payload = {
     token: token,
     id:id,
@@ -63,7 +73,6 @@ export const TodoSingle = () => {
     let payload = {
       token: token,
       id:id,
-      editedData:editPostDescription,
       postId:postId,
      }
      dispatch(singlePostLike(payload));

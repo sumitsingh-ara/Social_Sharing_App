@@ -95,3 +95,4 @@ export const singlePostLike = (payload) => (dispatch) => {
       })
       .catch((err) =>{dispatch(getSinglePostFailure())});
   };
+

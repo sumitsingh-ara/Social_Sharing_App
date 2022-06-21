@@ -2,7 +2,10 @@ import {Link,useNavigate,useParams} from "react-router-dom";
 import {useState,useRef} from "react";
 import {useSelector,useDispatch} from "react-redux";
 import {makeNestedNewCommentOnReply,deleteNestedCommentReplies,editingNestedReply} from "../../Redux/Comments/action"
+const Filter = require('bad-words');
+ 
 export const NestedComments = ({replies,comment}) => {
+  const filter = new Filter({ regex: /\*|\.|$/gi });
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { userName } = useSelector((store) => store.users);
@@ -115,6 +118,9 @@ export const NestedComments = ({replies,comment}) => {
               {nestedReply ? (
                 <button
                   onClick={() => {
+                    const x = filter.clean(nestedNestComment);
+                    setNestedNestComment(x);
+                    if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
                     if(!nestedNestComment.trim()) return;
                     dispatch(
                       makeNestedNewCommentOnReply({
@@ -137,6 +143,9 @@ export const NestedComments = ({replies,comment}) => {
                   className="btn btn-outline-secondary"
                   type="button"
                   onClick={() =>{
+                    const x = filter.clean(nestedNestComment);
+                    setNestedNestComment(x);
+                    if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
                     if(!nestedNestComment.trim())return;
                     dispatch(editingNestedReply({
                       id: userName,

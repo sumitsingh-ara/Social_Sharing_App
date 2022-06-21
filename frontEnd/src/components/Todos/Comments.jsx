@@ -8,7 +8,9 @@ import {
 } from "../../Redux/Comments/action";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {NestedComments} from "./NestedComments";
+const Filter = require('bad-words');
 export const Comments = ({ comment,nestedShow,setNestedShow }) => {
+  const filter = new Filter({ regex: /\*|\.|$/gi });
   const navigate = useNavigate();
   const reply = useRef(null);
  
@@ -146,6 +148,9 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
               {replyBox ? (
                 <button
                   onClick={() => {
+                    const x = filter.clean(nestedcomment);
+                    setNestedComment(x);
+                    if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
                     dispatch(
                       makeNestedNewCommentOnReply({
                         id: userName,
@@ -164,6 +169,9 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
                 </button>
               ) : (
                 <button onClick={()=>{
+                  const x = filter.clean(nestedcomment);
+                  setNestedComment(x);
+                  if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
                   if(!nestedcomment.trim()) return;
                   dispatch(editComment({
                     token:token,
