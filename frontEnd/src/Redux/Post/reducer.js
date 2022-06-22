@@ -8,6 +8,7 @@ const initState = {
 };
 
 export const postReducer = (state = initState, { type, payload }) => {
+
   switch (type) {
     case types.GET_SINGLE_POST_REQUEST:
       return {
@@ -16,10 +17,11 @@ export const postReducer = (state = initState, { type, payload }) => {
         posterror: false,
       };
     case types.GET_SINGLE_POST_SUCCESS:
+     
       return {
+        ...state,
         postloading: false,
         posterror: false,
-        likeStatus: payload.status,
         postData: payload.data,
       };
     case types.GET_SINGLE_POST_FAILURE:
@@ -28,6 +30,11 @@ export const postReducer = (state = initState, { type, payload }) => {
         postloading: false,
         posterror: false,
       };
+    case types.SINGLE_POST_LIKER:
+      return {
+        ...state,
+        likeStatus:payload
+      }
     default:
       return state;
   }

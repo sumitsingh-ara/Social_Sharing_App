@@ -6,7 +6,10 @@ const getSinglePostRequest = () => {
     type: types.GET_SINGLE_POST_REQUEST,
   };
 };
+
 const getSinglePostSuccess = (payload) => {
+  // console.log(payload,"Yhn check krle bhai");
+
   return {
     type: types.GET_SINGLE_POST_SUCCESS,
     payload: payload,
@@ -18,28 +21,23 @@ const getSinglePostFailure = () => {
   };
 };
 //fetch call to get data of single post;
+
 export const fetchSinglePost = (payload) => (dispatch) => {
   dispatch(getSinglePostRequest());
   return Axios.get(
     `http://localhost:7448/social/post/singlePost/${payload.postId}`
   )
     .then((res) => {
-      let status = false;
-      res.data.post.likes.forEach((likers) => {
-        if (likers.user === payload.id) {
-          status = true;
-          return;
-        }
-      });
       let payloads = {
         data: res.data.post,
-        status: status,
+        status: false,
+        id: payload.id,
       };
+
       dispatch(getSinglePostSuccess(payloads));
     })
     .catch(() => dispatch(getSinglePostFailure()));
 };
-
 //edit singlepost call
 export const singlePostEdit = (payload) => (dispatch) => {
   dispatch(getSinglePostRequest());
@@ -71,8 +69,34 @@ export const singlePostEdit = (payload) => (dispatch) => {
 };
 
 //like singlepost call
+//post likes acts as a middleware , first we will check post is already liked by user  or not then dispatch the main call to set data;
+const setPostLikes = (payload) => {
+  return {
+    type: types.SINGLE_POST_LIKER,
+    payload: payload,
+  };
+};
+export const checkPostLikeOrNot = (payload) => (dispatch) => {
+  let config = {
+    method: "get",
+    url: `http://localhost:7448/social/post/singlePost/likedOrNot/${payload.postId}`,
+    headers: {
+      Authorization: "Bearer " + payload.token,
+      "Content-Type": "application/json",
+    },
+  };
+
+  return Axios(config)
+    .then((res) => {
+      if (res.data.status) dispatch(setPostLikes(true));
+      else dispatch(setPostLikes(false));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 export const singlePostLike = (payload) => (dispatch) => {
-  dispatch(getSinglePostRequest());
   let data = JSON.stringify({
     editedData: payload.editedData,
   });
@@ -90,10 +114,10 @@ export const singlePostLike = (payload) => (dispatch) => {
   return Axios(config)
     .then((res) => {
       let payloads = {
-        id: payload.id,
         postId: payload.postId,
+        token: payload.token,
       };
-      dispatch(fetchSinglePost(payloads));
+      dispatch(checkPostLikeOrNot(payloads));
     })
     .catch((err) => {
       dispatch(getSinglePostFailure());
@@ -107,7 +131,5 @@ export const viewCounter = (payload) => (dispatch) => {
     url: `http://localhost:7448/social/post/singlePost/viewedTimes/${payload}`,
   };
 
-  return Axios(config)
-    .then((res) => {console.log(res)})
-    .catch((err) => {console.log(err)});
+  return Axios(config);
 };

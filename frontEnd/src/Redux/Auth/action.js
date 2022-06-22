@@ -64,7 +64,7 @@ const loginFailure = () => {
   }
 }
 export const tryLogin = (payload) =>(dispatch)=> {
-  console.log(payload,"from reset password")
+ // console.log(payload,"from reset password")
   dispatch(loginLoading())
   return Axios.post("http://localhost:7448/social/login", payload)
     .then((response) => {
@@ -148,7 +148,7 @@ export const resetPasswordCall =(payload) => (dispatch) => {
   dispatch(resetPasswordLoading());
   return Axios.post(`http://localhost:7448/social/reset-password/${payload.user.id}/${payload.user.token}`,payload.body)
   .then((response) => {
-    console.log(response);
+   // console.log(response);
     dispatch(resetPasswordSuccess())
     const payloa={
       email:response.data.email,

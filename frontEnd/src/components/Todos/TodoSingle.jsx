@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { Comments } from "./Comments";
 import { useSelector, useDispatch } from "react-redux";
-import {fetchSinglePost,singlePostEdit,singlePostLike,viewCounter} from "../../Redux/Post/action";
+import {fetchSinglePost,singlePostEdit,singlePostLike,viewCounter,checkPostLikeOrNot} from "../../Redux/Post/action";
 import { getAllComments, makeNewComment } from "../../Redux/Comments/action";
 import "./Todo.css";
 const Filter = require('bad-words');
@@ -29,25 +29,29 @@ export const TodoSingle = () => {
     id:id
    }))
    dispatch(getAllComments(postId));
+   dispatch(checkPostLikeOrNot({
+    postId: postId,
+    token: token
+   }))
    // eslint-disable-next-line
   }, []);
 
-  //this useEffect will take place when a user will see the post atleast for 20 seconds;
+  //this useEffect will take place when a user will see the post atleast for 40 seconds;
   useEffect(() => {
    let timerId = setTimeout(() =>{
     dispatch(viewCounter(postId))
-   },20000)
+   },1000*40)
    //cleanup function so , if someone wants to just visist instead of reading the entire post,views will not be counted;
    return()=>{
-    console.log(timerId,"Cleanup wroks")
     if(timerId)clearTimeout(timerId)
    }
     // eslint-disable-next-line
   }, []);
   //below useEfefct to handle the change for textarea to persist the pre existing description and then edit continues
   useEffect(() => {
-    setEditPostDescription(postData.description)
-  },[postData.description])
+    setEditPostDescription(postData.description);
+     // eslint-disable-next-line
+  },[postData.description,])
   const handlePostEdit = (e) => {
     setEditPostDescription(e.target.value);
   };

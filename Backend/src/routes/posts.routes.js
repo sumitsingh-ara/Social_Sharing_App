@@ -86,13 +86,7 @@ router.patch("/singlePost/edit/:id", authenticate, async (req, res) => {
     )
       .lean()
       .exec();
-    await Post.findByIdAndUpdate(
-      { _id: req.params.id },
-      { views: post.views - 1 },
-      { new: true }
-    )
-      .lean()
-      .exec();
+
     return res.status(200).send(editedPost);
   } catch (err) {
     return res.status(500).send(err);
@@ -114,13 +108,7 @@ router.patch(
       )
         .lean()
         .exec();
-      await Post.findByIdAndUpdate(
-        { _id: req.params.id },
-        { views: post.views + 1 },
-        { new: true }
-      )
-        .lean()
-        .exec();
+
       return res.status(200).send({ message: "Post liked successfully" });
     } catch (err) {
       return res.status(500).send(err);
@@ -130,12 +118,27 @@ router.patch(
 //Set the post views count;
 router.patch("/singlePost/viewedTimes/:postId", async (req, res) => {
   try {
-    let post = await Post.findById(req.params.postId)
-    post = await Post.findByIdAndUpdate(req.params.postId,{views:post.views+1}).lean().exec()
-      return res.status(200).send({message:"Congratulations this post get viewed one more time"});
+    let post = await Post.findById(req.params.postId);
+    post = await Post.findByIdAndUpdate(req.params.postId, {
+      views: post.views + 1,
+    })
+      .lean()
+      .exec();
+    return res
+      .status(200)
+      .send({ message: "Congratulations this post get viewed one more time" });
   } catch (err) {
     return res.status(500).send(err.message);
   }
 });
-
+//check a specific post is liked by user or not
+router.get('/singlePost/likedOrNot/:postId',authenticate,async(req,res) => {
+  try{
+    let status =await Post.findOne({_id: req.params.postId},{likes: {$elemMatch: {user:req.user._id}}})
+    if(status.likes.length > 0)return res.status(200).send({status:true});
+    else return res.status(200).send({status:false});
+  }catch(err){
+    return res.status(500).send(err);
+  }
+})
 module.exports = router;
