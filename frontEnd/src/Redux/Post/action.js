@@ -97,9 +97,6 @@ export const checkPostLikeOrNot = (payload) => (dispatch) => {
 };
 
 export const singlePostLike = (payload) => (dispatch) => {
-  let data = JSON.stringify({
-    editedData: payload.editedData,
-  });
 
   let config = {
     method: "patch",
@@ -108,7 +105,6 @@ export const singlePostLike = (payload) => (dispatch) => {
       Authorization: "Bearer " + payload.token,
       "Content-Type": "application/json",
     },
-    data: data,
   };
 
   return Axios(config)
@@ -123,7 +119,30 @@ export const singlePostLike = (payload) => (dispatch) => {
       dispatch(getSinglePostFailure());
     });
 };
+//dislike the liked post
+export const singlePostDislike = (payload) => (dispatch) => {
 
+  let config = {
+    method: "patch",
+    url: `http://localhost:7448/social/post/singlePost/dislike/${payload.postId}/${payload.id}`,
+    headers: {
+      Authorization: "Bearer " + payload.token,
+      "Content-Type": "application/json",
+    },
+  };
+
+  return Axios(config)
+    .then((res) => {
+      let payloads = {
+        postId: payload.postId,
+        token: payload.token,
+      };
+      dispatch(checkPostLikeOrNot(payloads));
+    })
+    .catch((err) => {
+      dispatch(getSinglePostFailure());
+    });
+};
 //view count api call
 export const viewCounter = (payload) => (dispatch) => {
   let config = {

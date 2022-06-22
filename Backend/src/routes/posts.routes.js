@@ -115,6 +115,20 @@ router.patch(
     }
   }
 );
+//-------------------------------------------------------disliking a post
+router.patch("/singlePost/dislike/:postId/:likerId",authenticate,async (req, res) => {
+    try {
+     if(req.user._id != req.params.likerId) return res.status(404).send({ message: "You are not allowed to dislike a post"})
+     const dislikedPost = await Post.updateOne(
+      { _id: req.params.postId },
+      { $pull: { likes: { user: req.params.likerId } } }).lean().exec();
+      console.log(dislikedPost)
+      return res.status(200).send({ message: "Post disliked successfully" });
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
+);
 //Set the post views count;
 router.patch("/singlePost/viewedTimes/:postId", async (req, res) => {
   try {

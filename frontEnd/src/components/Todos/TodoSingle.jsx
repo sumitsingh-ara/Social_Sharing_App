@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { Comments } from "./Comments";
 import { useSelector, useDispatch } from "react-redux";
-import {fetchSinglePost,singlePostEdit,singlePostLike,viewCounter,checkPostLikeOrNot} from "../../Redux/Post/action";
+import {fetchSinglePost,singlePostEdit,singlePostLike,viewCounter,checkPostLikeOrNot,singlePostDislike} from "../../Redux/Post/action";
 import { getAllComments, makeNewComment } from "../../Redux/Comments/action";
 import "./Todo.css";
 const Filter = require('bad-words');
@@ -97,6 +97,14 @@ export const TodoSingle = () => {
      }
      dispatch(singlePostLike(payload));
   }
+  const dislikePost = ()=> {
+    let payload = {
+      token: token,
+      id:id,
+      postId:postId,
+     }
+    dispatch(singlePostDislike(payload));
+  }
   return (
     <>
       {postloading ? (
@@ -114,7 +122,7 @@ export const TodoSingle = () => {
               ? `${(postData.views / 1000).toFixed(2)}K`
               : postData.views}
           </span>
-          {isAuth ?likeStatus? <i
+          {isAuth ?likeStatus? <i onClick={dislikePost}
                 className="fa fa-light fa-heart floatRight mx-1 text-success p-1"
                 style={{ fontSize: "30px" }}
               ></i>:
