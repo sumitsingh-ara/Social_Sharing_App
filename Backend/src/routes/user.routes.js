@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/users.models");
+const Comment = require("../models/comments.models");
 const bcrypt = require('bcrypt');
 const authenticate =require("../middlewares/authenticate");
 const Post = require("../models/posts.models");
@@ -50,7 +51,7 @@ router.delete('/delete',authenticate,async(req, res)=>{
             if(user.password !== req.body.password) return res.status(400).send({message:"Something went wrong"});//check and confirm password, as someone else can try with someone's else pc to delete his ID;
                 
             await Post.deleteMany({username: user.username});
-
+            await Comment.deleteMany({username: user.username});
             await User.findOneAndDelete({email: req.body.email});
             
             return res.status(200).send({message:"User has been successfully deleted"});

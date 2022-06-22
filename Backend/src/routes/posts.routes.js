@@ -40,11 +40,11 @@ router.get("/singlePost/:id", async (req, res) => {
 router.get("/allPosts", async (req, res) => {
   try {
     const page = +req.query.page || 1; //creating a query for user endpoints and converting string into number using plus sign & setting default to page 1 is no user input given;
-    const size = +req.query.size || 6 //creating a query for user endpoints and converting string into number using plus sign & setting default to size 10 is no user input given;
+    const limit = +req.query.limit || 6 //creating a query for user endpoints and converting string into number using plus sign & setting default to size 10 is no user input given;
 
-    const offset = (page -1) * size; //creating a formula to get the search results in pagination according to user input given which page he wants to see the list
+    const offset = (page -1) * limit; //creating a formula to get the search results in pagination according to user input given which page he wants to see the list
 
-    let posts = await Post.find().skip(offset).limit(size).populate("user", {
+    let posts = await Post.find().skip(offset).limit(limit).populate("user", {
       password: 0,
       _id: 0,
       email: 0,

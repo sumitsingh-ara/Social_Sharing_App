@@ -10,7 +10,7 @@ import { GoogleRedirect } from "../Auth/GoogleRedirect";
 import { SingleUser } from "../User/SingleUser";
 import { PrivateComponents } from "./PrivateComponents";
 import {UserProfile} from "../User/UserProfile"
-export const AllRoutes = () => {
+export const AllRoutes = ({passerSearchParams}) => {
   return (
     <>
       <Routes>
@@ -22,7 +22,7 @@ export const AllRoutes = () => {
           element={<ResetPassword />}
         ></Route>
         <Route path="/todosInput" element={<TodosInput />}></Route>
-        <Route path="/allPosts" element={<TodosLists />}></Route>
+        <Route path="/allPosts" element={<TodosLists passerSearchParams={passerSearchParams}/>}></Route>
         <Route path="/todoSingle/:postId" element={<TodoSingle />}></Route>
         <Route path="/googleRedirect" element={<GoogleRedirect />}></Route>
         <Route

@@ -3,7 +3,8 @@ import {useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { serverLogout } from "../../Redux/Auth/action";
 import {fetchUserDetails} from "../../Redux/User/action";
-export const Navbar = () => {
+export const Navbar = ({passerSearchParams}) => {
+ const {setSortBy,setFilterBy} = passerSearchParams;
   const { isAuth,token } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const {name} = useSelector((store) => store.users)
@@ -12,8 +13,8 @@ export const Navbar = () => {
       if(isAuth) {
           dispatch(fetchUserDetails(token))
       }
-      // eslint-disable-next-line
-  },[]);
+  },[isAuth,token,dispatch]);
+ 
   return (
     <>
       {!isAuth ? (
@@ -45,7 +46,7 @@ export const Navbar = () => {
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item ">
                   <Link
-                    to="/todosList"
+                    to="/allPosts"
                     className="nav-link active text-light"
                     aria-current="page"
                   >
@@ -116,18 +117,24 @@ export const Navbar = () => {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    <p role="button" className="dropdown-item m-0 " aria-disabled="true">
+                    <p role="button" onClick={()=>{
+                      setSortBy("mostRecents")
+                    }}className="dropdown-item m-0 " aria-disabled="true">
                       Recent Posts
                     </p>
                     <li>
-                      <p role="button" className="dropdown-item m-0">
+                      <p role="button" onClick={()=>{
+                      setSortBy("mostViewedPosts")
+                    }} className="dropdown-item m-0">
                         Most Viewed Posts
                       </p>
                     </li>
                     <li>
                      
                     </li>
-                    <button className="dropdown-item">
+                    <button className="dropdown-item" onClick={()=>{
+                      setSortBy("mostLikedPosts");
+                    }} >
                       Most liked posts
                     </button>
                   </ul>
@@ -145,17 +152,23 @@ export const Navbar = () => {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    <p role="button" className="dropdown-item m-0 " aria-disabled="true">
-                      Tech Gyaan
+                    <p role="button" onClick={()=>{
+                      setFilterBy("techInfo")
+                    }} className="dropdown-item m-0 " aria-disabled="true">
+                      Tech Info
                     </p>
                     <li>
-                      <p role="button" className="dropdown-item m-0">
+                      <p role="button" onClick={()=>{
+                      setFilterBy("jokes")
+                    }} className="dropdown-item m-0">
                         Jokes
                       </p>
                     </li>
                     <li>
                     </li>
-                    <button className="dropdown-item">
+                    <button className="dropdown-item" onClick={()=>{
+                      setFilterBy("motivational")
+                    }}>
                       Motivational
                     </button>
                   </ul>

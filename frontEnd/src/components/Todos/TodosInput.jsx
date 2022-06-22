@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { nanoid } from "nanoid";
 import { postTodos } from "../../Redux/Todo/action";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate,Navigate,useSearchParams} from "react-router-dom";
+import { useNavigate,Navigate} from "react-router-dom";
 import "./Todo.css";
 const Filter = require('bad-words');
 export const TodosInput = () => {
@@ -38,13 +37,10 @@ export const TodosInput = () => {
     if(formData.description.trim().length <=2) return alert("Please write some more about the post")
     dispatch(postTodos({...formData,user:id}));
     setFormData({
-      title: "",
-      status: false,
-      priority: "",
-      dated: new Date(),
-      id: nanoid(4),
-      description: "",
-      subTopic: "",
+      title:"",
+      description:"",
+      categories:"",
+      subCategory:""
     });
     setTimeout(() => {
       navigate(-1);
