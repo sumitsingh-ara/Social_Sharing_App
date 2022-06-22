@@ -6,9 +6,10 @@ const initState ={
     loading:false,
     data:[],
     error:false,
+    totalPosts:0,
 }
 
-export const todosReducer =(state= initState,{type,payload}) =>{
+export const allPostsReducer =(state= initState,{type,payload}) =>{
     switch(type){
         case types.TODO_GET_REQUEST:
             return{
@@ -19,9 +20,10 @@ export const todosReducer =(state= initState,{type,payload}) =>{
             case types.TODO_REQUEST_SUCCESS:
                 return{
                     ...state,
-                    data:payload,
+                    data:payload.posts,
                     error:false,
                     loading:false,
+                    totalPosts:payload.postTotalCount
                 }
             case types.TODO_REQUEST_FAILURE:
                 return{

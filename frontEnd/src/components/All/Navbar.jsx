@@ -92,6 +92,75 @@ export const Navbar = () => {
                   </ul>
                 </li>
               </ul>
+              {/* Created the middle things for extra things like sort filter etc */}
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item ">
+                  <Link
+                    to="/allPosts"
+                    className="nav-link active text-light"
+                    aria-current="page"
+                  >
+                    Feeds
+                  </Link>
+                </li>
+                <li className="nav-item dropdown">
+                  <p
+                    className="nav-link dropdown-toggle text-light m-0"
+                    id="navbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                  >
+                    Sort By
+                  </p>
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby="navbarDropdown"
+                  >
+                    <p role="button" className="dropdown-item m-0 " aria-disabled="true">
+                      Recent Posts
+                    </p>
+                    <li>
+                      <p role="button" className="dropdown-item m-0">
+                        Most Viewed Posts
+                      </p>
+                    </li>
+                    <li>
+                     
+                    </li>
+                    <button className="dropdown-item">
+                      Most liked posts
+                    </button>
+                  </ul>
+                </li>
+                <li className="nav-item dropdown">
+                  <p
+                    className="nav-link dropdown-toggle text-light m-0"
+                    id="navbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                  >
+                    Filter By
+                  </p>
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby="navbarDropdown"
+                  >
+                    <p role="button" className="dropdown-item m-0 " aria-disabled="true">
+                      Tech Gyaan
+                    </p>
+                    <li>
+                      <p role="button" className="dropdown-item m-0">
+                        Jokes
+                      </p>
+                    </li>
+                    <li>
+                    </li>
+                    <button className="dropdown-item">
+                      Motivational
+                    </button>
+                  </ul>
+                </li>
+              </ul>
               <div className="d-flex" style={{display: "none"}}>
                 <input
                   className="form-control me-2"

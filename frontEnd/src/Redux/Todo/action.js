@@ -18,10 +18,14 @@ const todoRequestSuccess =(payload) => {
         payload,
     }
 }
-export const fetchTodos = () => (dispatch) => {
+export const fetchTodos = (payload) => (dispatch) => {
     dispatch(todogetRequest());
-    return Axios.get("http://localhost:7448/social/post/allPosts")
-    .then((res)=>dispatch(todoRequestSuccess(res.data.posts)))
+    return Axios.get("http://localhost:7448/social/post/allPosts",{
+        params:{
+            ...payload
+          }
+    })
+    .then((res)=>dispatch(todoRequestSuccess(res.data)))
     .catch((err)=> dispatch(todoRequestFailure()))
 }
 const todoPostRequestSuccess =()=>{

@@ -39,13 +39,18 @@ router.get("/singlePost/:id", async (req, res) => {
 //get all posts
 router.get("/allPosts", async (req, res) => {
   try {
-    let posts = await Post.find().populate("user", {
+    const page = +req.query.page || 1; //creating a query for user endpoints and converting string into number using plus sign & setting default to page 1 is no user input given;
+    const size = +req.query.size || 6 //creating a query for user endpoints and converting string into number using plus sign & setting default to size 10 is no user input given;
+
+    const offset = (page -1) * size; //creating a formula to get the search results in pagination according to user input given which page he wants to see the list
+
+    let posts = await Post.find().skip(offset).limit(size).populate("user", {
       password: 0,
       _id: 0,
       email: 0,
-    });
-
-    return res.status(200).send({ posts: posts });
+    }).lean().exec();
+    const postTotalCount = await Post.find().countDocuments().lean().exec(); //calculating the total no of posts collection.
+    return res.status(200).send({posts,postTotalCount});
   } catch (err) {
     return res.status(500).send(err);
   }

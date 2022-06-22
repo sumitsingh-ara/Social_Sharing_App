@@ -5,13 +5,13 @@ import {
   applyMiddleware,
 } from "redux";
 import thunk from "redux-thunk";
-import { todosReducer } from "./Todo/reducer";
+import { allPostsReducer } from "./Todo/reducer";
 import {authReducer} from "./Auth/reducer";
 import {usersReducer} from './User/reducer';
 import {commentReducer} from './Comments/reducer';
 import {postReducer} from './Post/reducer';
 const rootReducer = combineReducers({
-    todos:todosReducer,
+  allPosts:allPostsReducer,
     auth:authReducer,
     users:usersReducer,
     comments:commentReducer,

@@ -1,19 +1,27 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { fetchTodos,deletePost } from "../../Redux/Todo/action";
+import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { fetchTodos, deletePost } from "../../Redux/Todo/action";
 import "./Todo.css";
 export const TodosLists = () => {
+  const [searchParams, setSearchParams] = useSearchParams(); //to not loose the state of page or data fetched by user in the case of reloading;
+  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchTodos());
-  }, [dispatch]);
-  const { loading, error, data } = useSelector((store) => store.todos);
+    setSearchParams({ page: page }, { replace: true });
+    let params = {
+      page: searchParams.get("page"),
+    };
+    dispatch(fetchTodos(params));
+  }, [dispatch, page, setSearchParams, searchParams]);
+
+  const { loading, error, data,totalPosts } = useSelector((store) => store.allPosts);
   const { userName } = useSelector((store) => store.users);
-  const {token} = useSelector((store) => store.auth);
+  const { token } = useSelector((store) => store.auth);
   return (
     <>
-      <h1>Welcome to todo lists</h1>
+      <h1>Welcome to Share Kro.com</h1>
       {loading ? (
         <>
           <div className="spinner-grow text-primary" role="status"></div>
@@ -46,13 +54,17 @@ export const TodosLists = () => {
                   <button
                     to={`/todoSingle/${item._id}`}
                     className="btn btn-danger m-1"
-                    onClick={()=>{
-                      const confirmBox = window.confirm("Delete post confirmation");
-                      if(!confirmBox) return;
-                      dispatch(deletePost({
-                        id:item._id,
-                        token: token
-                      }))
+                    onClick={() => {
+                      const confirmBox = window.confirm(
+                        "Delete post confirmation"
+                      );
+                      if (!confirmBox) return;
+                      dispatch(
+                        deletePost({
+                          id: item._id,
+                          token: token,
+                        })
+                      );
                     }}
                   >
                     Delete Post
@@ -63,7 +75,7 @@ export const TodosLists = () => {
               </div>
               <div className="card-footer text-muted">
                 Created on{" "}
-                {item.createdAt.split("T")[0].split("-").sort().join("-")} by{" "}
+                {item.createdAt.split("T")[0].split("-").reverse().join("-")} by{" "}
                 <Link to={`/user/${item.user.username}`}>
                   {item.user.username === userName ? "You" : item.user.username}
                 </Link>
@@ -72,6 +84,26 @@ export const TodosLists = () => {
           ))}
         </div>
       )}
+      <div className="prevAndNext">
+      <button
+        disabled={page === 1}
+        className="btn btn-primary mx-2"
+        onClick={() => {
+          setPage(page - 1);
+        }}
+      >
+        Prev Page
+      </button>
+      <button
+      disabled={page ===Math.ceil(totalPosts/6)}
+        className="btn btn-primary mx-2"
+        onClick={() => {
+          setPage(page + 1);
+        }}
+      >
+        Next Page
+      </button>
+      </div>
     </>
   );
 };

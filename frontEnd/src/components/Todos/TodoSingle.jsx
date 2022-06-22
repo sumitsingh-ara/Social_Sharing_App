@@ -127,7 +127,7 @@ export const TodoSingle = () => {
                 style={{ fontSize: "30px" }}
               ></i>:
               <i onClick={likePost}
-                className="fa fa-light fa-heart floatRight mx-1 text-secondary p-1"
+                className="fa fa-thin fa-heart floatRight mx-1  p-1"
                 style={{ fontSize: "30px" }}
               ></i>:""
            }

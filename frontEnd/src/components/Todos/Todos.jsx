@@ -12,7 +12,7 @@ export const Todos =() => {
         <>
         <h1 className="h4 mt-0">Hello {name} to Share Karo </h1>
         <Link className="btn btn-primary m-2" to="/todosInput">Make a new Todo</Link>
-        <Link className="btn btn-primary m-2" to="/todosList">View Todos</Link>
+        <Link className="btn btn-primary m-2" to="/allPosts">View Todos</Link>
         </>
     )
 }
