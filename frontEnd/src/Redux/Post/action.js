@@ -44,7 +44,7 @@ export const fetchSinglePost = (payload) => (dispatch) => {
 export const singlePostEdit = (payload) => (dispatch) => {
   dispatch(getSinglePostRequest());
   let data = JSON.stringify({
-    editedData:payload.editedData,
+    editedData: payload.editedData,
   });
 
   let config = {
@@ -58,41 +58,56 @@ export const singlePostEdit = (payload) => (dispatch) => {
   };
 
   return Axios(config)
-    .then((res) =>{
-        let payloads={
-            id:payload.id,
-            postId:payload.postId
-        }
-        dispatch(fetchSinglePost(payloads))
+    .then((res) => {
+      let payloads = {
+        id: payload.id,
+        postId: payload.postId,
+      };
+      dispatch(fetchSinglePost(payloads));
     })
-    .catch((err) =>{dispatch(getSinglePostFailure())});
+    .catch((err) => {
+      dispatch(getSinglePostFailure());
+    });
 };
 
 //like singlepost call
 export const singlePostLike = (payload) => (dispatch) => {
-    dispatch(getSinglePostRequest());
-    let data = JSON.stringify({
-      editedData:payload.editedData,
-    });
-  
-    let config = {
-      method: "patch",
-      url: `http://localhost:7448/social/post/singlePost/like/${payload.postId}/${payload.id}`,
-      headers: {
-        Authorization: "Bearer " + payload.token,
-        "Content-Type": "application/json",
-      },
-      data: data,
-    };
-  
-    return Axios(config)
-      .then((res) =>{
-          let payloads={
-              id:payload.id,
-              postId:payload.postId
-          }
-          dispatch(fetchSinglePost(payloads))
-      })
-      .catch((err) =>{dispatch(getSinglePostFailure())});
+  dispatch(getSinglePostRequest());
+  let data = JSON.stringify({
+    editedData: payload.editedData,
+  });
+
+  let config = {
+    method: "patch",
+    url: `http://localhost:7448/social/post/singlePost/like/${payload.postId}/${payload.id}`,
+    headers: {
+      Authorization: "Bearer " + payload.token,
+      "Content-Type": "application/json",
+    },
+    data: data,
   };
 
+  return Axios(config)
+    .then((res) => {
+      let payloads = {
+        id: payload.id,
+        postId: payload.postId,
+      };
+      dispatch(fetchSinglePost(payloads));
+    })
+    .catch((err) => {
+      dispatch(getSinglePostFailure());
+    });
+};
+
+//view count api call
+export const viewCounter = (payload) => (dispatch) => {
+  let config = {
+    method: "patch",
+    url: `http://localhost:7448/social/post/singlePost/viewedTimes/${payload}`,
+  };
+
+  return Axios(config)
+    .then((res) => {console.log(res)})
+    .catch((err) => {console.log(err)});
+};

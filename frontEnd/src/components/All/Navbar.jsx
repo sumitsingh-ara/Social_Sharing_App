@@ -12,7 +12,8 @@ export const Navbar = () => {
       if(isAuth) {
           dispatch(fetchUserDetails(token))
       }
-  },[dispatch,isAuth,token]);
+      // eslint-disable-next-line
+  },[]);
   return (
     <>
       {!isAuth ? (
