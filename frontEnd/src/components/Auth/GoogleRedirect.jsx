@@ -7,10 +7,9 @@ export const GoogleRedirect = () => {
     const location = useLocation();
     const token =location.search.split("?")[1];
     const {isAuth}= useSelector((store) => store.auth)
-    console.log(token)
     useEffect(() => {
         if(token && !isAuth){
-            console.log("token andar use effect se")
+           // console.log("token andar use effect se")
             dispatch(googleLoginSuccess(token));
         }
     }, [dispatch,token,isAuth]);

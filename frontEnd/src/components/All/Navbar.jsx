@@ -95,15 +95,6 @@ export const Navbar = ({passerSearchParams}) => {
               </ul>
               {/* Created the middle things for extra things like sort filter etc */}
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item ">
-                  <Link
-                    to="/allPosts"
-                    className="nav-link active text-light"
-                    aria-current="page"
-                  >
-                    Feeds
-                  </Link>
-                </li>
                 <li className="nav-item dropdown">
                   <p
                     className="nav-link dropdown-toggle text-light m-0"
@@ -173,6 +164,17 @@ export const Navbar = ({passerSearchParams}) => {
                     </button>
                   </ul>
                 </li>
+                <li className="nav-item ">
+                  <p
+                   
+                    className="nav-link active btn btn-danger text-light m-0 "
+                    role="button"
+                 
+                    aria-current="page"
+                  >
+                    Reset
+                  </p>
+                </li>
               </ul>
               <div className="d-flex" style={{display: "none"}}>
                 <input
@@ -181,7 +183,7 @@ export const Navbar = ({passerSearchParams}) => {
                   placeholder="Search"
                   aria-label="Search"
                 />
-                <button className="btn btn-success" type="submit">
+                <button className="btn btn-success">
                   Search
                 </button>
               </div>
