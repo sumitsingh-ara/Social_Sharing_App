@@ -15,7 +15,7 @@ export const Search = ({passerSearchParams}) => {
   const { token } = useSelector((store) => store.auth);
   useEffect(() => {
     setError(false);
-    setLoading(true)
+    setLoading(true);
     let params = {
       page:page,
       limit:limit,
@@ -30,7 +30,6 @@ export const Search = ({passerSearchParams}) => {
         }).then((res) => {
             setData(res.data.posts)
             setTotalPosts(res.data.postTotalCount)
-            setSearch("")
             setLoading(false);
         }).catch((err) => {
            setError(err)

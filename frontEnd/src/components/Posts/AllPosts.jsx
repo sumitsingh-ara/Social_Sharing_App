@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchTodos, deletePost } from "../../Redux/Todo/action";
+import {dateManager} from "../../utils/dateManager"
 import "./Todo.css";
 export const TodosLists = ({passerSearchParams}) => {
   const {page,setPage,sortBy,setSearchParams,filterBy,limit} =passerSearchParams
@@ -77,8 +78,8 @@ export const TodosLists = ({passerSearchParams}) => {
                 )}
               </div>
               <div className="card-footer text-muted">
-                Created on{" "}
-                {item.createdAt.split("T")[0].split("-").reverse().join("-")} by{" "}
+                Created at{" "}
+                {dateManager(item.createdAt)} by{" "}
                 <Link to={`/user/${item.user.username}`}>
                   {item.user.username === userName ? "You" : item.user.username}
                 </Link>

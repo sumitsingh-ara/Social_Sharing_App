@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect,useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { serverLogout } from "../../Redux/Auth/action";
 import { fetchUserDetails } from "../../Redux/User/action";
@@ -21,8 +21,10 @@ export const Navbar = ({ passerSearchParams }) => {
   };
 
   const searchCall=() => {
+    
     if(search.trim() <=3) return alert("Please give some more hint atleast 3 chars");
     navigate(`search/${search}`);
+    setSearch("")
   }
   return (
     <>
@@ -247,6 +249,7 @@ export const Navbar = ({ passerSearchParams }) => {
                 }}
                   className="form-control me-2"
                   type="search"
+                  value={search}
                   placeholder="Search"
                   aria-label="Search"
                 />

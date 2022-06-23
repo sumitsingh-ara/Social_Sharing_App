@@ -1,10 +1,12 @@
 import {Link,useNavigate,useParams} from "react-router-dom";
 import {useState,useRef} from "react";
 import {useSelector,useDispatch} from "react-redux";
+import {dateManager} from "../../utils/dateManager";
 import {makeNestedNewCommentOnReply,deleteNestedCommentReplies,editingNestedReply} from "../../Redux/Comments/action"
 const Filter = require('bad-words');
  
 export const NestedComments = ({replies,comment}) => {
+  console.log(replies,"dddjdj")
   const filter = new Filter({ regex: /\*|\.|$/gi });
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -37,7 +39,7 @@ export const NestedComments = ({replies,comment}) => {
             </Link>
            
           </div>
-          <div>2 hours ago</div>
+          <div>{dateManager(replies.date)}</div>
         </div>
         {/* comment view */}
         <div className="commentContainer mt-1 text-center">

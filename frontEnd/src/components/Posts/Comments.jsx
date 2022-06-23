@@ -1,5 +1,6 @@
 import "./Todo.css";
 import { useState, useRef } from "react";
+import {dateManager} from '../../utils/dateManager'
 import { useSelector, useDispatch } from "react-redux";
 import {
   deleteComment,
@@ -22,7 +23,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
   
   const [replyBox, setReplyBox] = useState(false);
   const [editBox, setEditBox] = useState(false);
-  
+ 
   
   const handleDeleteComment = (commentId) => {
     const confirmBox = window.confirm("Do you really want delete comment ?");
@@ -56,7 +57,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
             {userName === comment.user.username?"you":comment.user.username}
             </Link>
           </div>
-          <div>2 hours ago</div>
+          <div>{dateManager(comment.createdAt)}</div>
         </div>
         {/* comment view */}
         <div className="commentContainer mt-1 text-center">{comment.comment}</div>
