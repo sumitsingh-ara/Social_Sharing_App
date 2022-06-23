@@ -44,6 +44,17 @@ router.get("/allPosts", async (req, res) => {
 
     const offset = (page - 1) * limit; //creating a formula to get the search results in pagination according to user input given which page he wants to see the list
     console.log(req.query);
+
+    //if only search results are to be provided;
+    if(req.query.search){
+      console.log(req.query.search);
+      let posts = await Post.find( { $text: { $search: req.query.search} } );
+
+    }
+    
+
+
+
     let sortBy = req.query.sortBy; //getting the values from frontend;
     const filterBy = req.query.filterBy; //getting the values from frontend;
     let posts ;

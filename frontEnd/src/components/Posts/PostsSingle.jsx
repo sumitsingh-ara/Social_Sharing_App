@@ -7,7 +7,7 @@ import { getAllComments, makeNewComment } from "../../Redux/Comments/action";
 import "./Todo.css";
 const Filter = require('bad-words');
 
-export const TodoSingle = () => {
+export const PostSingle = () => {
   const filter = new Filter({ regex: /\*|\.|$/gi });
   const editRef = useRef(null);
   const dispatch = useDispatch();

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate,Navigate} from "react-router-dom";
 import "./Todo.css";
 const Filter = require('bad-words');
-export const TodosInput = () => {
+export const PostsInput = () => {
   const filter = new Filter({ regex: /\*|\.|$/gi });
   const dispatch = useDispatch();
   const navigate = useNavigate();

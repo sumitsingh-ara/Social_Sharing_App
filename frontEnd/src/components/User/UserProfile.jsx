@@ -3,7 +3,8 @@ import "./UserProfile.css";
 export const UserProfile = () => {
   return (
     <>
-      <div class="container rounded bg-white mt-5 mb-5">
+    <h1>Very soon you will be able to acess the page...</h1>
+      {/* <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
           <div class="col-md-3 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
@@ -183,7 +184,7 @@ export const UserProfile = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

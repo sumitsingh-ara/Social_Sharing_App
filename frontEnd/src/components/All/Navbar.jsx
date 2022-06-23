@@ -93,8 +93,8 @@ export const Navbar = ({ passerSearchParams }) => {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    <Link to="" className="dropdown-item " aria-disabled="true">
-                      My followers
+                    <Link to="/contactAdmin" className="dropdown-item " aria-disabled="true">
+                      Contact Admin
                     </Link>
                     <li>
                       <Link to="/user/profile" className="dropdown-item">
