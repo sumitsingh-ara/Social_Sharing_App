@@ -11,10 +11,12 @@ import { SingleUser } from "../User/SingleUser";
 import { PrivateComponents } from "./PrivateComponents";
 import {UserProfile} from "../User/UserProfile";
 import {ContactAdmin} from "../Admin/ContactAdmin";
+import {Search} from "../All/Search";
 export const AllRoutes = ({passerSearchParams}) => {
   return (
     <>
       <Routes>
+        <Route path="/search/:search" element={<Search passerSearchParams={passerSearchParams}/>}></Route>
         <Route path="/contactAdmin" element={<ContactAdmin/>}></Route>
         <Route path="/" element={<Posts />}></Route>
         <Route path="/signup" element={<Signup />}></Route>

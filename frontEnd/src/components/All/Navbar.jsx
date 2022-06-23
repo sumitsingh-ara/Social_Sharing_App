@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { serverLogout } from "../../Redux/Auth/action";
 import { fetchUserDetails } from "../../Redux/User/action";
 export const Navbar = ({ passerSearchParams }) => {
-  const { setSortBy, setFilterBy, setLimit } = passerSearchParams;
+  const { setSortBy, setFilterBy, setLimit,search,setSearch } = passerSearchParams;
   const { isAuth, token } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const { name } = useSelector((store) => store.users);
@@ -19,6 +19,11 @@ export const Navbar = ({ passerSearchParams }) => {
     setFilterBy("");
     setLimit(6);
   };
+
+  const searchCall=() => {
+    if(search.trim() <=3) return alert("Please give some more hint atleast 3 chars");
+    navigate(`search/${search}`);
+  }
   return (
     <>
       {!isAuth ? (
@@ -237,13 +242,15 @@ export const Navbar = ({ passerSearchParams }) => {
                 </li>
               </ul>
               <div className="d-flex" style={{ display: "none" }}>
-                <input
+                <input onChange={(e)=>{
+                  setSearch(e.target.value)
+                }}
                   className="form-control me-2"
                   type="search"
                   placeholder="Search"
                   aria-label="Search"
                 />
-                <button className="btn btn-success">Search</button>
+                <button onClick={searchCall} className="btn btn-success">Search</button>
               </div>
             </div>
           </div>

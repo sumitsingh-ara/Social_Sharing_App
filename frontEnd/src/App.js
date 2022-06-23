@@ -6,6 +6,7 @@ import {Navbar} from './components/All/Navbar'
 function App() {
   const [searchParams, setSearchParams] = useSearchParams(); //to not loose the state of page or data fetched by user in the case of reloading;
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+  const [search,setSearch] = useState((searchParams.get("search"))|| "");
   const [sortBy,setSortBy] = useState(searchParams.get("sortBy") || "");
   const [filterBy,setFilterBy] = useState(searchParams.get("filterBy") || "");
   const [limit,setLimit] = useState(Number(searchParams.get("limit")) || 6);
@@ -20,6 +21,8 @@ function App() {
     setFilterBy:setFilterBy,
     limit:limit,
     setLimit:setLimit,
+    search:search,
+    setSearch:setSearch
   }
   return (
     <div className="App">

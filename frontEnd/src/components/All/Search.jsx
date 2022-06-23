@@ -1,30 +1,47 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { fetchTodos, deletePost } from "../../Redux/Todo/action";
-import "./Todo.css";
-export const TodosLists = ({passerSearchParams}) => {
-  const {page,setPage,sortBy,setSearchParams,filterBy,limit} =passerSearchParams
+import { Link,useParams } from "react-router-dom";
+import { useEffect,useState } from "react";
+import {deletePost } from "../../Redux/Todo/action";
+import axios from "axios";
+export const Search = ({passerSearchParams}) => {
+    const {search} = useParams();
+  const {page,setPage,limit,setSearchParams,setSearch} =passerSearchParams
    const dispatch = useDispatch();
-  const { loading, error, data, totalPosts } = useSelector(
-    (store) => store.allPosts
-  );
+   const [data,setData] = useState();
+   const [totalPosts,setTotalPosts]= useState(0);
+   const [loading,setLoading] = useState(true);
+   const [error,setError] = useState(false);
   const { userName,admin } = useSelector((store) => store.users);
   const { token } = useSelector((store) => store.auth);
   useEffect(() => {
+    setError(false);
+    setLoading(true)
     let params = {
       page:page,
-      sortBy: sortBy,
-      filterBy:filterBy,
       limit:limit,
+      search:search,
     }
-    
-    setSearchParams(params, { replace: true });
-    dispatch(fetchTodos(params));
-  }, [dispatch,limit,filterBy,page,setSearchParams,sortBy]);
+    setSearchParams(params,{ replace: true});
+    const getSearchResults=() => {
+        axios.get("http://localhost:7448/social/post/allPosts",{
+            params:{
+                ...params
+            }
+        }).then((res) => {
+            setData(res.data.posts)
+            setTotalPosts(res.data.postTotalCount)
+            setSearch("")
+            setLoading(false);
+        }).catch((err) => {
+           setError(err)
+           setLoading(false);
+        })
+    }
+    getSearchResults()
+  }, [dispatch,limit,page,search,setSearchParams,setSearch]);
   return (
     <>
-      <h1>Welcome to Share Kro.com</h1>
+      <h1>{data?"Your Search results are here":"Sorry,no matchings found"}</h1>
       {loading ? (
         <>
           <div className="spinner-grow text-primary" role="status"></div>
@@ -36,7 +53,7 @@ export const TodosLists = ({passerSearchParams}) => {
           <div className="spinner-grow text-dark" role="status"></div>
         </>
       ) : error ? (
-        <h1>Error...</h1>
+        <h1>No posts available  for your specified topic</h1>
       ) : (
         <div className="container-fluid text-center m-auto" id="todoList">
           {data.map((item) => (

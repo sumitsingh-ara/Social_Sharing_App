@@ -43,22 +43,26 @@ router.get("/allPosts", async (req, res) => {
     const limit = +req.query.limit || 6; //creating a query for user endpoints and converting string into number using plus sign & setting default to size 10 is no user input given;
 
     const offset = (page - 1) * limit; //creating a formula to get the search results in pagination according to user input given which page he wants to see the list
-    console.log(req.query);
-
-    //if only search results are to be provided;
-    if(req.query.search){
-      console.log(req.query.search);
-      let posts = await Post.find( { $text: { $search: req.query.search} } );
-
-    }
-    
-
-
-
     let sortBy = req.query.sortBy; //getting the values from frontend;
     const filterBy = req.query.filterBy; //getting the values from frontend;
     let posts ;
     let postTotalCount = await Post.find().countDocuments().lean().exec(); //calculating the total no of posts collection.
+     //if only search results are to be provided;
+     if(req.query.search){
+      let posts = await Post.find({
+        $or: [ {description : { $regex: req.query.search, $options: 'i' }}, { title: { $regex: req.query.search, $options: 'i' } } ]
+    }).skip(offset)
+    .limit(limit)
+    .populate("user", { password: 0, _id: 0, email: 0 })
+    .lean()
+    .exec();;
+      
+      postTotalCount = await Post.find({
+        $or: [ {description : { $regex: req.query.search, $options: 'i' }}, { title: { $regex: req.query.search, $options: 'i' } } ]
+    }).countDocuments();
+      if(postTotalCount > 0) return res.status(200).send({posts,postTotalCount})
+     else return res.status(400).send(err);
+    }
     //--------------------------------------------------------if users query only sorting at a time -----------------------------------------------------------
     if (sortBy && !filterBy) {
       switch (sortBy) {
