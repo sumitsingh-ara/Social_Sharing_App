@@ -25,7 +25,6 @@ export const TodosLists = ({passerSearchParams}) => {
   }, [dispatch,limit,filterBy,page,setSearchParams,sortBy]);
   return (
     <>
-      <h1>Welcome to Share Kro.com</h1>
       {loading ? (
         <>
           <div className="spinner-grow text-primary" role="status"></div>
