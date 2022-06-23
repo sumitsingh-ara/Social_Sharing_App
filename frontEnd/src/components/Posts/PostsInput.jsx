@@ -18,7 +18,7 @@ export const PostsInput = () => {
   });
   const handleSubmit = (e) => {
     e.preventDefault();
-    // filter.addWords('sala',"Bastard","Son of a Bitch","Dick","Pussy",);
+    // filter.addWords('sala',"Bastard","Son of a Bitch");
     const x =filter.clean(formData.description)
     const y =filter.clean(formData.title)
     setFormData({

@@ -46,7 +46,7 @@ router.post('/register',async (req,res) => {
 
         user = await User.findOne({username:req.body.username})
 
-        if(user) return res.status(400).send({message: "Username already exists"});
+        if(user) return res.status(400).send({message: "Username not available"});
         // else we will create the user with the email and password 
         // but before saving the password we need to hash it
         user = await User.create(req.body);
@@ -61,7 +61,7 @@ router.post('/register',async (req,res) => {
             from: process.env.USER, // sender address
             to: user.email, // list of receivers
             subject: 'Account Created Successfully', // Subject line
-            html: `<div> <h1>Hello ${user.name} Welcome to our Share Karo website`// plain text body
+            html: `<div> <h1>Hello ${user.name} Welcome to our Share Karo website</h1></br>Keep spreading the knowledge of your's.`// plain text body
           };
           transporter.sendMail(mailOptions, function (err, info) {
             if(err)
