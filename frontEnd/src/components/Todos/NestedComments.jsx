@@ -8,7 +8,7 @@ export const NestedComments = ({replies,comment}) => {
   const filter = new Filter({ regex: /\*|\.|$/gi });
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { userName } = useSelector((store) => store.users);
+    const { userName,admin } = useSelector((store) => store.users);
     const {token } = useSelector((store) => store.auth);
     const {postId} = useParams();
     const [nestedReply, setNestedReply] = useState(false);
@@ -46,7 +46,7 @@ export const NestedComments = ({replies,comment}) => {
         {/* options buttons */}
         <div className="commentOptioner">
           <div className="realOptionsComment reply px-2 ">
-            {userName === replies.user ? (
+            {userName === replies.user || admin ? (
               <small>
                 <i
                   onClick={() => {

@@ -4,12 +4,12 @@ import { useEffect } from "react";
 import { fetchTodos, deletePost } from "../../Redux/Todo/action";
 import "./Todo.css";
 export const TodosLists = ({passerSearchParams}) => {
-  const {page,setPage,sortBy,searchParams,setSearchParams,filterBy,limit} =passerSearchParams
+  const {page,setPage,sortBy,setSearchParams,filterBy,limit} =passerSearchParams
    const dispatch = useDispatch();
   const { loading, error, data, totalPosts } = useSelector(
     (store) => store.allPosts
   );
-  const { userName } = useSelector((store) => store.users);
+  const { userName,admin } = useSelector((store) => store.users);
   const { token } = useSelector((store) => store.auth);
   useEffect(() => {
     let params = {
@@ -53,7 +53,7 @@ export const TodosLists = ({passerSearchParams}) => {
                 >
                   More Options
                 </Link>
-                {userName === item.user.username ? (
+                {userName === item.user.username ||admin ? (
                   <button
                     to={`/todoSingle/${item._id}`}
                     className="btn btn-danger m-1"
@@ -98,7 +98,7 @@ export const TodosLists = ({passerSearchParams}) => {
           Prev Page
         </button>
         <button
-          disabled={page === Math.ceil(totalPosts /limit)}
+          disabled={(page === Math.ceil(totalPosts /limit)) || totalPosts===0}
           className="btn btn-primary mx-2"
           onClick={() => {
             setPage(page + 1);

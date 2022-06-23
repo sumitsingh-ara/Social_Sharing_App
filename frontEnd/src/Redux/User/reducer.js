@@ -10,6 +10,7 @@ const initState ={
     loading:true,
     error:false,
     message:null,
+    admin:false,
 }
 
 export const usersReducer =(state = initState, { type, payload }) =>{
@@ -29,6 +30,7 @@ export const usersReducer =(state = initState, { type, payload }) =>{
                 email:payload.email,
                 loading:false,
                 error:false,
+                admin:payload.admin?true:false,
                 message:"Successfully logined and got the user details"
             }
         case types.USER_DETAILS_FAILURE:

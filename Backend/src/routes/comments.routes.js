@@ -39,7 +39,7 @@ router.get("/allcomments/:postId", async (req, res) => {
 router.delete("/singlecomment/delete", authenticate, async (req, res) => {
   try {
     let comment = await Comment.findById(req.body.id).lean().exec();
-    if (comment.user != req.user._id)
+    if (comment.user != req.user._id && !req.user.admin)
       return res.status(400).send({
         message: "You are not authorized to delete the comment",
         status: false,
@@ -139,7 +139,7 @@ router.delete(
         .lean()
         .exec();
       //   console.log(req.user.username,repliedComment.nestedcomments[0].user)//extracted the userName from db to check the authentication
-      if (req.user.username != repliedComment.nestedcomments[0].user)
+      if (req.user.username != repliedComment.nestedcomments[0].user && !req.user.admin)
         return res
           .status(401)
           .send("You are not authorised to delete this comment");

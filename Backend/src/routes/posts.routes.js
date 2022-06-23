@@ -169,7 +169,7 @@ router.get("/allPosts", async (req, res) => {
 router.delete("/deletePost/:id", authenticate, async (req, res) => {
   try {
     let post = await Post.findById(req.params.id).lean().exec();
-    if (post.user != req.user._id)
+    if (post.user != req.user._id && !req.user.admin)
       return res.status(400).send({
         message: "You are not the authorized person to delete the post",
       });
