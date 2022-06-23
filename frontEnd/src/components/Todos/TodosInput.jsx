@@ -87,10 +87,10 @@ export const TodosInput = () => {
               <option value="" disabled>
                 Select Category
               </option>
+              <option value="Jobs">Jobs</option>
               <option value="Motivational">Motivational</option>
               <option value="Computer Science">Computer Science</option>
               <option value="Jokes">Jokes</option>
-              <option value="HR talks">HR Talks</option>
             </select>
             <select
               value={formData.subCategory}

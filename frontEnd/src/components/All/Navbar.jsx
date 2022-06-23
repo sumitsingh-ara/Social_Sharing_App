@@ -1,29 +1,50 @@
-import { Link,useNavigate } from "react-router-dom";
-import {useEffect} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { serverLogout } from "../../Redux/Auth/action";
-import {fetchUserDetails} from "../../Redux/User/action";
-export const Navbar = ({passerSearchParams}) => {
- const {setSortBy,setFilterBy} = passerSearchParams;
-  const { isAuth,token } = useSelector((store) => store.auth);
+import { fetchUserDetails } from "../../Redux/User/action";
+export const Navbar = ({ passerSearchParams }) => {
+  const { setSortBy, setFilterBy, setLimit } = passerSearchParams;
+  const { isAuth, token } = useSelector((store) => store.auth);
   const navigate = useNavigate();
-  const {name} = useSelector((store) => store.users)
+  const { name } = useSelector((store) => store.users);
   const dispatch = useDispatch();
   useEffect(() => {
-      if(isAuth) {
-          dispatch(fetchUserDetails(token))
-      }
-  },[isAuth,token,dispatch]);
- 
+    if (isAuth) {
+      dispatch(fetchUserDetails(token));
+    }
+  }, [isAuth, token, dispatch]);
+  const reset = () => {
+    setSortBy("");
+    setFilterBy("");
+    setLimit(6);
+  };
   return (
     <>
       {!isAuth ? (
-         <nav className="navbar navbar-expand-lg navbar-light bg-primary bg-gradient" style={{justifyContent:"space-evenly",position:"fixed",top:0,left:0,right:0,zIndex:100}}>
-          <Link className="navbar-brand btn btn-warning" to="/">Home</Link>
-          <Link  className="navbar-brand  btn btn-success" to="/signup">Signup</Link>
-         </nav>
+        <nav
+          className="navbar navbar-expand-lg navbar-light bg-primary bg-gradient"
+          style={{
+            justifyContent: "space-evenly",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 100,
+          }}
+        >
+          <Link className="navbar-brand btn btn-warning" to="/">
+            Home
+          </Link>
+          <Link className="navbar-brand  btn btn-success" to="/signup">
+            Signup
+          </Link>
+        </nav>
       ) : (
-        <nav className="navbar navbar-expand-lg navbar-light  bg-primary"  style={{position:"fixed",top:0,left:0,right:0,zIndex:100}}>
+        <nav
+          className="navbar navbar-expand-lg navbar-light  bg-primary"
+          style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100 }}
+        >
           <div className="container-fluid">
             <Link to="/" className="navbar-brand btn btn-light">
               Home
@@ -65,9 +86,8 @@ export const Navbar = ({passerSearchParams}) => {
                     id="navbarDropdown"
                     role="button"
                     data-bs-toggle="dropdown"
-                   
                   >
-                    {isAuth?name?name.split(" ")[0]:"":"My Profile"}
+                    {isAuth ? (name ? name.split(" ")[0] : "") : "My Profile"}
                   </Link>
                   <ul
                     className="dropdown-menu"
@@ -84,10 +104,14 @@ export const Navbar = ({passerSearchParams}) => {
                     <li>
                       <hr className="dropdown-divider" />
                     </li>
-                    <button onClick={()=>{
-                      navigate('/login',{replace:true})
-                      dispatch(serverLogout())
-                    }}className="dropdown-item">
+                    <button
+                      onClick={() => {
+                        reset();
+                        navigate("/login", { replace: true });
+                        dispatch(serverLogout());
+                      }}
+                      className="dropdown-item"
+                    >
                       {isAuth ? "Logout" : "Login"}
                     </button>
                   </ul>
@@ -108,24 +132,34 @@ export const Navbar = ({passerSearchParams}) => {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    <p role="button" onClick={()=>{
-                      setSortBy("mostRecents")
-                    }}className="dropdown-item m-0 " aria-disabled="true">
+                    <p
+                      role="button"
+                      onClick={() => {
+                        setSortBy("mostRecents");
+                      }}
+                      className="dropdown-item m-0 "
+                      aria-disabled="true"
+                    >
                       Recent Posts
                     </p>
                     <li>
-                      <p role="button" onClick={()=>{
-                      setSortBy("mostViewedPosts")
-                    }} className="dropdown-item m-0">
+                      <p
+                        role="button"
+                        onClick={() => {
+                          setSortBy("mostViewedPosts");
+                        }}
+                        className="dropdown-item m-0"
+                      >
                         Most Viewed Posts
                       </p>
                     </li>
-                    <li>
-                     
-                    </li>
-                    <button className="dropdown-item" onClick={()=>{
-                      setSortBy("mostLikedPosts");
-                    }} >
+                    <li></li>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => {
+                        setSortBy("mostLikedPosts");
+                      }}
+                    >
                       Most liked posts
                     </button>
                   </ul>
@@ -143,49 +177,73 @@ export const Navbar = ({passerSearchParams}) => {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    <p role="button" onClick={()=>{
-                      setFilterBy("techInfo")
-                    }} className="dropdown-item m-0 " aria-disabled="true">
-                      Tech Info
-                    </p>
                     <li>
-                      <p role="button" onClick={()=>{
-                      setFilterBy("jokes")
-                    }} className="dropdown-item m-0">
-                        Jokes
+                      <p
+                        role="button"
+                        onClick={() => {
+                          setFilterBy("jobs");
+                        }}
+                        className="dropdown-item m-0"
+                      >
+                        Jobs
                       </p>
                     </li>
                     <li>
+                    <p
+                      role="button"
+                      onClick={() => {
+                        setFilterBy("techInfo");
+                      }}
+                      className="dropdown-item m-0 "
+                      aria-disabled="true"
+                    >
+                      Tech Info
+                    </p>
                     </li>
-                    <button className="dropdown-item" onClick={()=>{
-                      setFilterBy("motivational")
-                    }}>
+                    <li>
+                      <p
+                        role="button"
+                        onClick={() => {
+                          setFilterBy("jokes");
+                        }}
+                        className="dropdown-item m-0"
+                      >
+                        Jokes
+                      </p>
+                    </li>
+                    
+                    <li></li>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => {
+                        setFilterBy("motivational");
+                      }}
+                    >
                       Motivational
                     </button>
                   </ul>
                 </li>
                 <li className="nav-item ">
                   <p
-                   
                     className="nav-link active btn btn-danger text-light m-0 "
                     role="button"
-                 
+                    onClick={() => {
+                      reset();
+                    }}
                     aria-current="page"
                   >
                     Reset
                   </p>
                 </li>
               </ul>
-              <div className="d-flex" style={{display: "none"}}>
+              <div className="d-flex" style={{ display: "none" }}>
                 <input
                   className="form-control me-2"
                   type="search"
                   placeholder="Search"
                   aria-label="Search"
                 />
-                <button className="btn btn-success">
-                  Search
-                </button>
+                <button className="btn btn-success">Search</button>
               </div>
             </div>
           </div>

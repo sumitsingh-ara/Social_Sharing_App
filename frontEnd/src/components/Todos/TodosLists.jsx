@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { fetchTodos, deletePost } from "../../Redux/Todo/action";
 import "./Todo.css";
 export const TodosLists = ({passerSearchParams}) => {
-  const {page,setPage,sortBy,setSearchParams,filterBy,limit} =passerSearchParams
+  const {page,setPage,sortBy,searchParams,setSearchParams,filterBy,limit} =passerSearchParams
    const dispatch = useDispatch();
   const { loading, error, data, totalPosts } = useSelector(
     (store) => store.allPosts
@@ -98,7 +98,7 @@ export const TodosLists = ({passerSearchParams}) => {
           Prev Page
         </button>
         <button
-          disabled={page === Math.ceil(totalPosts / 6)}
+          disabled={page === Math.ceil(totalPosts /limit)}
           className="btn btn-primary mx-2"
           onClick={() => {
             setPage(page + 1);

@@ -40,17 +40,127 @@ router.get("/singlePost/:id", async (req, res) => {
 router.get("/allPosts", async (req, res) => {
   try {
     const page = +req.query.page || 1; //creating a query for user endpoints and converting string into number using plus sign & setting default to page 1 is no user input given;
-    const limit = +req.query.limit || 6 //creating a query for user endpoints and converting string into number using plus sign & setting default to size 10 is no user input given;
+    const limit = +req.query.limit || 6; //creating a query for user endpoints and converting string into number using plus sign & setting default to size 10 is no user input given;
 
-    const offset = (page -1) * limit; //creating a formula to get the search results in pagination according to user input given which page he wants to see the list
+    const offset = (page - 1) * limit; //creating a formula to get the search results in pagination according to user input given which page he wants to see the list
+    console.log(req.query);
+    let sortBy = req.query.sortBy; //getting the values from frontend;
+    const filterBy = req.query.filterBy; //getting the values from frontend;
+    let posts ;
+    let postTotalCount = await Post.find().countDocuments().lean().exec(); //calculating the total no of posts collection.
+    //--------------------------------------------------------if users query only sorting at a time -----------------------------------------------------------
+    if (sortBy && !filterBy) {
+      switch (sortBy) {
+        case "mostRecents": {
+          posts = await Post.find()
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(limit)
+            .populate("user", { password: 0, _id: 0, email: 0 })
+            .lean()
+            .exec();
+          return res.status(200).send({ posts, postTotalCount });
+        }
+        case "mostViewedPosts": {
+          posts = await Post.find().sort({ views: -1 }).skip(offset)
+          .limit(limit)
+          .populate("user", {
+            password: 0,
+            _id: 0,
+            email: 0,
+          })
+          .lean()
+          .exec();
+        
+          return res.status(200).send({ posts, postTotalCount });
+        }
+        case "mostLikedPosts": {
+          posts = await Post.find().sort({ likes: -1 }).skip(offset)
+          .limit(limit)
+          .populate("user", {
+            password: 0,
+            _id: 0,
+            email: 0,
+          })
+          .lean()
+          .exec();
+          return res.status(200).send({ posts, postTotalCount });
+        }
+      }
+    }
+    //--------------------------------------------------------if users query only filter at a time-------------------------------------------------------------
+    if(filterBy && !sortBy){
+      switch(filterBy){
+        case "techInfo":
+          {
+            posts = await Post.find({categories:"Computer Science"}).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
+            postTotalCount = await Post.find({categories:"Computer Science"}).countDocuments().lean().exec()
+            return res.status(200).send({ posts, postTotalCount });
+          }
+          case "jokes":
+            {
+              posts = await Post.find({categories:"Jokes"}).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
+              postTotalCount = await Post.find({categories:"Jokes"}).countDocuments().lean().exec()
+              return res.status(200).send({ posts, postTotalCount });
+            }
+            case "motivational":
+            {
+              posts = await Post.find({categories:"Motivational"}).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
+              postTotalCount = await Post.find({categories:"Motivational"}).countDocuments().lean().exec()
+              return res.status(200).send({ posts, postTotalCount });
+            }
+            case "jobs":
+              {
+                posts = await Post.find({categories:"Jobs"}).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
+                postTotalCount = await Post.find({categories:"Jobs"}).countDocuments().lean().exec()
+                return res.status(200).send({ posts, postTotalCount });
+              }
+      }
+    }
+    //--------------------------------------------------------if users query both filter and sorting at ame time------------------------------------------------
 
-    let posts = await Post.find().skip(offset).limit(limit).populate("user", {
-      password: 0,
-      _id: 0,
-      email: 0,
-    }).lean().exec();
-    const postTotalCount = await Post.find().countDocuments().lean().exec(); //calculating the total no of posts collection.
-    return res.status(200).send({posts,postTotalCount});
+    if(filterBy &&sortBy){
+      sortBy = sortBy==="mostRecents"?{ createdAt: -1 }:sortBy==="mostViewedPosts"?{ views: -1 }:sortBy==="mostLikedPosts"?{ likes: -1 }:"";
+      switch(filterBy){
+        case "techInfo":
+          {
+            posts = await Post.find({categories:"Computer Science"}).sort(sortBy).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
+            postTotalCount = await Post.find({categories:"Computer Science"}).countDocuments().lean().exec()
+            return res.status(200).send({ posts, postTotalCount });
+          }
+          case "jokes":
+            {
+              posts = await Post.find({categories:"Jokes"}).sort(sortBy).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
+              postTotalCount = await Post.find({categories:"Jokes"}).countDocuments().lean().exec()
+              return res.status(200).send({ posts, postTotalCount });
+            }
+            case "motivational":
+            {
+              posts = await Post.find({categories:"Motivational"}).sort(sortBy).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
+              postTotalCount = await Post.find({categories:"Motivational"}).countDocuments().lean().exec()
+              return res.status(200).send({ posts, postTotalCount });
+            }
+            case "jobs":
+              {
+                posts = await Post.find({categories:"Jobs"}).sort(sortBy).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
+                postTotalCount = await Post.find({categories:"Jobs"}).countDocuments().lean().exec()
+                return res.status(200).send({ posts, postTotalCount });
+              }
+      }
+    }
+
+    posts = await Post.find()
+      .skip(offset)
+      .limit(limit)
+      .populate("user", {
+        password: 0,
+        _id: 0,
+        email: 0,
+      })
+      .lean()
+      .exec();
+    postTotalCount = await Post.find().countDocuments().lean().exec(); //calculating the total no of posts collection.
+    return res.status(200).send({ posts, postTotalCount });
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -121,13 +231,22 @@ router.patch(
   }
 );
 //-------------------------------------------------------disliking a post
-router.patch("/singlePost/dislike/:postId/:likerId",authenticate,async (req, res) => {
+router.patch(
+  "/singlePost/dislike/:postId/:likerId",
+  authenticate,
+  async (req, res) => {
     try {
-     if(req.user._id != req.params.likerId) return res.status(404).send({ message: "You are not allowed to dislike a post"})
-     const dislikedPost = await Post.updateOne(
-      { _id: req.params.postId },
-      { $pull: { likes: { user: req.params.likerId } } }).lean().exec();
-      console.log(dislikedPost)
+      if (req.user._id != req.params.likerId)
+        return res
+          .status(404)
+          .send({ message: "You are not allowed to dislike a post" });
+      const dislikedPost = await Post.updateOne(
+        { _id: req.params.postId },
+        { $pull: { likes: { user: req.params.likerId } } }
+      )
+        .lean()
+        .exec();
+      console.log(dislikedPost);
       return res.status(200).send({ message: "Post disliked successfully" });
     } catch (err) {
       return res.status(500).send(err);
@@ -151,13 +270,16 @@ router.patch("/singlePost/viewedTimes/:postId", async (req, res) => {
   }
 });
 //check a specific post is liked by user or not
-router.get('/singlePost/likedOrNot/:postId',authenticate,async(req,res) => {
-  try{
-    let status =await Post.findOne({_id: req.params.postId},{likes: {$elemMatch: {user:req.user._id}}})
-    if(status.likes.length > 0)return res.status(200).send({status:true});
-    else return res.status(200).send({status:false});
-  }catch(err){
+router.get("/singlePost/likedOrNot/:postId", authenticate, async (req, res) => {
+  try {
+    let status = await Post.findOne(
+      { _id: req.params.postId },
+      { likes: { $elemMatch: { user: req.user._id } } }
+    );
+    if (status.likes.length > 0) return res.status(200).send({ status: true });
+    else return res.status(200).send({ status: false });
+  } catch (err) {
     return res.status(500).send(err);
   }
-})
+});
 module.exports = router;

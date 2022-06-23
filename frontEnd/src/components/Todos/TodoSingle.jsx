@@ -40,7 +40,7 @@ export const TodoSingle = () => {
   useEffect(() => {
    let timerId = setTimeout(() =>{
     dispatch(viewCounter(postId))
-   },1000*40)
+   },1000)
    //cleanup function so , if someone wants to just visist instead of reading the entire post,views will not be counted;
    return()=>{
     if(timerId)clearTimeout(timerId)
