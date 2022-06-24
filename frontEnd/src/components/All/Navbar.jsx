@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { serverLogout } from "../../Redux/Auth/action";
 import { fetchUserDetails } from "../../Redux/User/action";
 export const Navbar = ({ passerSearchParams }) => {
-  const { setSortBy, setFilterBy, setLimit,search,setSearch } = passerSearchParams;
+  const { setSortBy, setFilterBy, setLimit, search, setSearch } =
+    passerSearchParams;
   const { isAuth, token } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const { name } = useSelector((store) => store.users);
@@ -20,12 +21,12 @@ export const Navbar = ({ passerSearchParams }) => {
     setLimit(6);
   };
 
-  const searchCall=() => {
-    
-    if(search.trim() <=3) return alert("Please give some more hint atleast 3 chars");
+  const searchCall = () => {
+    if (search.trim() <= 3)
+      return alert("Please give some more hint atleast 3 chars");
     navigate(`search/${search}`);
-    setSearch("")
-  }
+    setSearch("");
+  };
   return (
     <>
       {!isAuth ? (
@@ -100,7 +101,11 @@ export const Navbar = ({ passerSearchParams }) => {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    <Link to="/contactAdmin" className="dropdown-item " aria-disabled="true">
+                    <Link
+                      to="/contactAdmin"
+                      className="dropdown-item "
+                      aria-disabled="true"
+                    >
                       Contact Admin
                     </Link>
                     <li>
@@ -196,16 +201,16 @@ export const Navbar = ({ passerSearchParams }) => {
                       </p>
                     </li>
                     <li>
-                    <p
-                      role="button"
-                      onClick={() => {
-                        setFilterBy("techInfo");
-                      }}
-                      className="dropdown-item m-0 "
-                      aria-disabled="true"
-                    >
-                      Tech Info
-                    </p>
+                      <p
+                        role="button"
+                        onClick={() => {
+                          setFilterBy("techInfo");
+                        }}
+                        className="dropdown-item m-0 "
+                        aria-disabled="true"
+                      >
+                        Tech Info
+                      </p>
                     </li>
                     <li>
                       <p
@@ -218,7 +223,7 @@ export const Navbar = ({ passerSearchParams }) => {
                         Jokes
                       </p>
                     </li>
-                    
+
                     <li></li>
                     <button
                       className="dropdown-item"
@@ -231,29 +236,30 @@ export const Navbar = ({ passerSearchParams }) => {
                   </ul>
                 </li>
                 <li className="nav-item ">
-                  <p
-                    className="nav-link active btn btn-danger text-light m-0 "
-                    role="button"
+                  <button
+                    className="nav-link btn-outline-danger border-0"
                     onClick={() => {
                       reset();
                     }}
-                    aria-current="page"
                   >
                     Reset
-                  </p>
+                  </button>
                 </li>
               </ul>
               <div className="d-flex" style={{ display: "none" }}>
-                <input onChange={(e)=>{
-                  setSearch(e.target.value)
-                }}
+                <input
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                  }}
                   className="form-control me-2"
                   type="search"
                   value={search}
                   placeholder="Search"
                   aria-label="Search"
                 />
-                <button onClick={searchCall} className="btn btn-success">Search</button>
+                <button onClick={searchCall} className="btn btn-success">
+                  Search
+                </button>
               </div>
             </div>
           </div>

@@ -41,16 +41,16 @@ export const SingleUser = () => {
             
           />
           <div className="check">
-            <i className="fas fa-check"></i>
+            {userDetails.accountStatus.verified?<i className="fas fa-check"></i>:""}
           </div>
           <span className="name">{userDetails.name}</span>
-          <p className="m-0"> <small className="text-muted">{userDetails.username}</small></p>
+          <p className="m-0"> <small className="text-muted">{userDetails.username} {userDetails.accountStatus.verified? <i class="fa fa-solid fa-certificate text-success"></i>:""}</small></p>
           <p className="title">{userDetails.profession?.setUserDetails.profession}</p>
           <p className="description">
             {userDetails.aboutme?.userDetails.aboutme}
           </p>
           <button type="button" className="btn">
-            Follow
+            <a className="text-decoration-none text-white"  href={`mailto:${userDetails.email}`}>Contact me</a>
           </button>
         </div>
 
@@ -59,24 +59,30 @@ export const SingleUser = () => {
             <a href="/">
               <i className="fab fa-dribbble"></i>
             </a>
-            <h4>12.8k</h4>
-            <p>Followers</p>
+            <h4>{userDetails.postCount >= 1000
+              ? `${(userDetails.postCount / 1000).toFixed(2)}K`
+              : userDetails.postCount}</h4>
+            <p>Posts</p>
           </div>
 
           <div className="icon">
             <a href="/">
               <i className="fab fa-behance"></i>
             </a>
-            <h4>12.8k</h4>
-            <p>Followers</p>
+            <h4>{userDetails.likesCount >= 1000
+              ? `${(userDetails.likesCount / 1000).toFixed(2)}K`
+              : userDetails.likesCount}</h4>
+            <p>Likes</p>
           </div>
 
           <div className="icon">
-            <a href={userDetails.socialLinks.twitter}>
+            <a href="/">
               <i className="fab fa-twitter"></i>
             </a>
-            <h4>12.8k</h4>
-            <p>Followers</p>
+            <h4>{userDetails.views >= 1000
+              ? `${(userDetails.views / 1000).toFixed(2)}K`
+              : userDetails.views}</h4>
+            <p>Views</p>
           </div>
         </div>
       </div>

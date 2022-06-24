@@ -1,6 +1,6 @@
 export const ContactAdmin = () => {
   return (
-    <section className="m-auto mb-4 w-75">
+    <section className="mx-auto w-75" style={{marginTop:"15vh"}}>
       <h2 className="h1-responsive font-weight-bold text-center my-4">
         Contact us
       </h2>
@@ -22,7 +22,7 @@ export const ContactAdmin = () => {
         <i className="fas fa-envelope mt-4 fa-2x"></i>
       </a>
       </div>
-      
+      <h1 className="h4" style={{position:"fixed",bottom:0,left:0,right:0}}>Made with ❤️ by <a href="https://www.linkedin.com/in/sumit-singh-ara/" target="_blank" rel="noopener noreferrer" >Sumit</a> </h1>
     </section>
   );
 };

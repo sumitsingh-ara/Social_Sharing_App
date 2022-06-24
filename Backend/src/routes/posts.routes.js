@@ -245,7 +245,7 @@ router.patch(
     }
   }
 );
-//-------------------------------------------------------disliking a post
+//-------------------------------------------------------disliking a post-----------------------------------------------------
 router.patch(
   "/singlePost/dislike/:postId/:likerId",
   authenticate,

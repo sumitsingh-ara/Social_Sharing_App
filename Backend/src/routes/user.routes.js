@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const User = require("../models/users.models");
+const Post = require("../models/posts.models");
 const Comment = require("../models/comments.models");
 const bcrypt = require('bcrypt');
 const authenticate =require("../middlewares/authenticate");
-const Post = require("../models/posts.models");
 
 
 /////------------------------------------Crud Api for Patch----------------------------------///////////////////////////////
@@ -98,13 +98,23 @@ router.get("/all",async(req,res) =>{
     }
 })
 
-//Get a specific user details to show on page post written by whom---?..------------------------;
+//--------------------------------------Get a specific user details to show on page post written by whom---?..------------------------;
 router.get("/specificuser/:username",async(req,res)=>{
     try{
-        let user = await User.findOne({username:req.params.username});
+        let user = await User.findOne({username:req.params.username});//got the user profile details
         if(!user) return res.status(400).send({message:"User not available at the moment"});
-        const {password,_id,...others} = user._doc;
-        return res.status(200).send(others);
+
+        const {password,_id,...others} = user._doc;//destructuing to avoid sending password;
+
+        const postCount = await Post.find({user:user._id}).countDocuments();
+        const likesCount = await Post.find({user:user._id})
+        let sum = 0
+        let views =0;
+        likesCount.forEach((item)=>{
+            sum+=item.likes.length
+            views+=item.views;
+        })
+        return res.status(200).send({...others,postCount:postCount,likesCount:sum,views:views});
         
     }catch(err){
         return res.status(500).send(err);
