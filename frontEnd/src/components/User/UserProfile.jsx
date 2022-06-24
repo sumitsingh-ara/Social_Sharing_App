@@ -65,6 +65,7 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
       data = await data.json();
       setLoading(false);
       if(data.status) navigate(-1)
+      else alert("wrong credentials")
     }catch(err){
       setLoading(false);
       alert("Failed to update,wrong credentials")
@@ -74,6 +75,7 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
   };
   return (
     <>
+    {!loading?
       <div className="container rounded bg-white">
         <div className="row">
           <div className="col-md-3 border-right">
@@ -214,6 +216,24 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
           </div>
         </div>
       </div>
+      :<>
+      <div className="spinner-grow text-primary" role="status">
+</div>
+<div className="spinner-grow text-secondary" role="status">
+</div>
+<div className="spinner-grow text-success" role="status">
+</div>
+<div className="spinner-grow text-danger" role="status">
+</div>
+<div className="spinner-grow text-warning" role="status">
+</div>
+<div className="spinner-grow text-info" role="status">
+</div>
+<div className="spinner-grow text-light" role="status">
+</div>
+<div className="spinner-grow text-dark" role="status">
+</div>
+      </>}
     </>
   );
 };

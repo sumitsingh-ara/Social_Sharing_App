@@ -7,7 +7,7 @@ export const dateManager = (mongoDate) => {
             ? "0" + modified.getMinutes()
             : modified.getMinutes()
         }Pm`
-      : `${modified.getHours()} ${
+      : `${modified.getHours()}:${
           modified.getMinutes() < 10
             ? "0" + modified.getMinutes()
             : modified.getMinutes()

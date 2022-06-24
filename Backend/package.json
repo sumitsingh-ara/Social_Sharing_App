@@ -19,9 +19,9 @@
   },
   "name": "backend",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "server": "nodemon src/server"
+    "start": "nodemon src/server"
   },
   "author": "",
   "license": "ISC",

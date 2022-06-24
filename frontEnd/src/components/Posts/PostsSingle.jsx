@@ -170,7 +170,7 @@ export const PostSingle = () => {
           </h4>
           {/* -------------------------------------------Post Description here----------------------------------------- */}
           <div className="p-2 m-1 m-m-4 descriptionView">
-            <p className="m-1 h5 text-success">{postData.title}</p>
+            <p className="m-1 h5 text-success text-center">{postData.title}</p>
             {editPost ? (
               <textarea
                 ref={editRef}
@@ -183,7 +183,7 @@ export const PostSingle = () => {
                 placeholder="Enter description here max 10000 characters...."
               ></textarea>
             ) : (
-              <p> {postData.description}</p>
+              <p dangerouslySetInnerHTML={{__html:postData.description}}/>
             )}
           </div>
 

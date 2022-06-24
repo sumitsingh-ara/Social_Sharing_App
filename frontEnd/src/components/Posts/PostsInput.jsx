@@ -1,61 +1,65 @@
+
 import { useState } from "react";
+
 import { postTodos } from "../../Redux/Todo/action";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate,Navigate} from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "./Todo.css";
-const Filter = require('bad-words');
+const Filter = require("bad-words");
 export const PostsInput = () => {
   const filter = new Filter({ regex: /\*|\.|$/gi });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error,isAuth } = useSelector((store) => store.auth);
-  const {id}= useSelector((store) => store.users)
+  const { loading, error, isAuth } = useSelector((store) => store.auth);
+  const { id } = useSelector((store) => store.users);
   const [formData, setFormData] = useState({
-    title:"",
-   description:"",
-   categories:"",
-   subCategory:""
+    title: "",
+    description: "",
+    categories: "",
+    subCategory: "",
   });
   const handleSubmit = (e) => {
     e.preventDefault();
     // filter.addWords('sala',"Bastard","Son of a Bitch");
-    const x =filter.clean(formData.description)
-    const y =filter.clean(formData.title)
+    const x = filter.clean(formData.description);
+    const y = filter.clean(formData.title);
     setFormData({
       ...formData,
-      title:y,
-      description: x
-    })
-    if(x.includes("*")||y.includes("*")) return alert("OOPS, bad-words are no more supported here!");
+      title: y,
+      description: x,
+    });
+    if (x.includes("*") || y.includes("*"))
+      return alert("OOPS, bad-words are no more supported here!");
     e.preventDefault();
-    if(formData.categories !== "Computer Science"){
+    if (formData.categories !== "Computer Science") {
       setFormData({
         ...formData,
-        subCategory:""
-      })
+        subCategory: "",
+      });
     }
-    if(formData.description.trim().length <=100) return alert("Please write some more about the post")
-    dispatch(postTodos({...formData,user:id}));
+    if (formData.description.trim().length <= 100)
+      return alert("Please write some more about the post");
+    dispatch(postTodos({ ...formData, user: id }));
     setFormData({
-      title:"",
-      description:"",
-      categories:"",
-      subCategory:""
+      title: "",
+      description: "",
+      categories: "",
+      subCategory: "",
     });
     setTimeout(() => {
       navigate(-1);
     }, 1000);
   };
   const handleChange = (e) => {
-    
     setFormData({
       ...formData,
-      [e.target.id]:e.target.value,
+      [e.target.id]: e.target.value,
     });
-  
   };
 
-  if(!isAuth) {
+  if (!isAuth) {
     return <Navigate to="/login"></Navigate>;
   }
   return (
@@ -98,7 +102,8 @@ export const PostsInput = () => {
               id="subCategory"
               className="custom-select form-control  col-sm mb-3"
               style={{
-                display: formData.categories === "Computer Science" ? "block" : "none",
+                display:
+                  formData.categories === "Computer Science" ? "block" : "none",
               }}
             >
               <option value="" disabled>
@@ -111,7 +116,27 @@ export const PostsInput = () => {
               <option value="redux">Redux</option>
             </select>
 
-            <textarea
+            <div className="mb-4" style={{ minHeight: "40vh" }}>
+              <CKEditor
+                editor={ClassicEditor}
+                config={{
+                  plugins: ["Paragraph", "Bold", "Italic", "Essentials"],
+                  toolbar: ["bold", "italic"],
+                }}
+                maxLength="10000"
+                data={formData.description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  console.log(data);
+                  setFormData({
+                    ...formData,
+                    description: data,
+                  });
+                }}
+              />
+              
+            </div>
+            {/* <textarea
               required
               onChange={handleChange}
               id="description"
@@ -121,8 +146,12 @@ export const PostsInput = () => {
               cols={10}
               maxLength="10000"
               placeholder="Enter description here max 10000 characters...."
-            ></textarea>
-            <input type="submit" className="btn btn-success" value="Post Data" />
+            ></textarea> */}
+            <input
+              type="submit"
+              className="btn btn-success"
+              value="Post Data"
+            />
           </form>
         </div>
       )}

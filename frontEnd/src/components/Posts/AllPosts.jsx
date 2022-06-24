@@ -40,13 +40,13 @@ export const TodosLists = ({passerSearchParams}) => {
       ) : (
         <div className="container-fluid text-center m-auto" id="todoList">
           {data.map((item) => (
-            <div key={item._id} className="card text-center mb-4">
+            <div key={item._id} className="card text-center mt-2 mb-4">
               <div className="card-header text-center text-uppercase">
                 {item.categories}
               </div>
               <div className="card-body">
                 <h5 className="card-title">{item.title}</h5>
-                <p className="card-text  text-truncate">{item.description}</p>
+                <p className="card-text  text-truncate"style={{maxHeight:"6vh"}} dangerouslySetInnerHTML={{__html:item.description}} />
                 <Link
                   to={`/todoSingle/${item._id}`}
                   className="btn btn-primary m-1"
