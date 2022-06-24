@@ -19,7 +19,7 @@ app.use(function(req, res, next) {
     next();
 });
 const limit = rateLimit({
-    max: 2,// max requests
+    max: 5,// max requests
     windowMs: 60 * 60 * 1000, // 1 Hour
     message: 'Too many requests' // message to send
 });

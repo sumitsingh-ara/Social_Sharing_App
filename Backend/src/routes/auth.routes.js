@@ -55,7 +55,7 @@ router.post("/register", upload.single("image"), async (req, res) => {
     // but before saving the password we need to hash it
     let result;
     if (req.file) {
-      if(req.user.profilePic)
+      
       result = await cloudinary.uploader.upload(req.file.path);
       user = await User.create({
         ...req.body,
@@ -103,7 +103,7 @@ router.post("/register", upload.single("image"), async (req, res) => {
     // res.cookie("Bearer ","Bearer "+token, {httpOnly: true});
     return res.status(200).json({ message: msg, status: true, token: token });
   } catch (err) {
-    return res.status(500).send(err);
+    return res.status(500).send(err.message);
   }
 });
 //Login

@@ -150,7 +150,6 @@ export const Signup = () => {
                         </label>
                         <input
                           onChange={saveFile}
-                          required
                           type="file"
                           placeholder="Upload image"
                           name="image"

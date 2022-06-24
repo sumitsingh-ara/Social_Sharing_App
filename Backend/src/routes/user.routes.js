@@ -110,7 +110,7 @@ router.post(
 
         const { password, ...others } = user._doc; //avoid sending password
 
-        return res.status(200).send({ user: others });
+        return res.status(200).send({status:true});
       } catch (err) {
         return res.status(500).send(err)
       }

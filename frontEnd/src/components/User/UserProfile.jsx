@@ -1,7 +1,9 @@
 import "./UserProfile.css";
 import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import { useState, useEffect } from "react";
 export const UserProfile = ({ setEdit, edit, userDetails }) => {
+  const navigate = useNavigate();
   const [file, setFile] = useState();
 
   const saveFile = (e) => {
@@ -60,7 +62,7 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
     try{
       let data = await fetch("http://localhost:7448/social/user/update",requestOptions);
       data = await data.json();
-      console.log(data);
+      if(data.status) navigate(-1)
     }catch(err){
       console.log(err.message);
     }

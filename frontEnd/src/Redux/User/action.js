@@ -20,6 +20,7 @@ const userDetailsSuccess = (payload) => {
   };
 };
 export const destroyUserData = () => {
+  localStorage.clear();
   return{
     type:types.DESTROY_USER_DETAILS
   }
@@ -34,5 +35,6 @@ export const fetchUserDetails = (token) => (dispatch) => {
     dispatch(userDetailsSuccess(res.data.user))
   }).catch(()=>{
     dispatch(userDetailsFailure())
+    dispatch(destroyUserData())
   })
 };
