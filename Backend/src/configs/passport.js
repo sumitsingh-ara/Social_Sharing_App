@@ -27,12 +27,12 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
   },
   async function(request, accessToken, refreshToken, profile, done) {
-      //console.log(profile);
+     // console.log(profile);
       //console.log(accessToken);
     const email = profile?._json?.email
     const name = profile?._json?.given_name+" "+profile?._json?.family_name;
     const username = profile?._json?.name.split(" ")[0]+nanoid(3);
-
+    const image = profile?._json?.picture;
     let user;
     try { 
       user = await User.findOne({email}).lean().exec();
@@ -42,13 +42,20 @@ passport.use(new GoogleStrategy({
           username: username,
           email: email,
           name: name,
-          password: nanoid(8)
+          password: nanoid(8),
+          profilePic: {
+            image:image
+          },
+          accountStatus: {
+            active:true,
+            verified:profile?._json?.email_verified
+          }
         })
         const mailOptions = {
           from: process.env.USER, // sender address
           to:email, // list of receivers
           subject: 'Account Created Successfully', // Subject line
-          html: `<div> <h1>Hello ${name} Welcome to our Share Karo website`// plain text body
+          html: `<div> <h1>Hello ${name}</h1></div></br> <p>Welcome to our Share Karo website</>`// plain text body
         };
         transporter.sendMail(mailOptions, function (err, info) {
           if(err)

@@ -11,6 +11,8 @@ const initState ={
     error:false,
     message:null,
     admin:false,
+    socialLinks:null,
+    accountStatus:null,
 }
 
 export const usersReducer =(state = initState, { type, payload }) =>{
@@ -31,6 +33,8 @@ export const usersReducer =(state = initState, { type, payload }) =>{
                 loading:false,
                 error:false,
                 admin:payload.admin?true:false,
+                accountStatus:payload.accountStatus,
+                socialLinks:payload.socialLinks,
                 message:"Successfully logined and got the user details"
             }
         case types.USER_DETAILS_FAILURE:
@@ -48,8 +52,11 @@ export const usersReducer =(state = initState, { type, payload }) =>{
                 profilePic:null,
                 email:null,
                 loading:true,
+                admin:false,
                 error:false,
                 message:null,
+                accountStatus:null,
+                socialLinks:null,
             }
         default:
             return state

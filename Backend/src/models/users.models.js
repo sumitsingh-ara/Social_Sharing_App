@@ -7,15 +7,20 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minLength: 8, maxLength: 20 },
     socialLinks: {
-      linkedin: { type: String, required: false, unique: true },
-      instagram: { type: String, required: false, unique: true },
-      github: { type: String, required: false, unique: true}
+      linkedin: { type: String, required: false, unique: true,default:null },
+      instagram: { type: String, required: false, unique: true,default:null },
+      github: { type: String, required: false, unique: true,default:null},
+      twitter: { type: String, required: false, unique: true,default:null}
     },
     profilePic: {
-      public_id: { type: String, required: false, unique: true },
-      image: { type: String, required: false },
+      public_id: { type: String, required: false, unique: true,default:null },
+      image: { type: String, required: false,default:null },
     },
     admin: { type: Boolean, required: false, default: false },
+    accountStatus:{
+      active:{type:Boolean,required:true,default:false},
+      verified:{type:Boolean,required:false,default:false}
+    }
   },
   {
     versionKey: false,

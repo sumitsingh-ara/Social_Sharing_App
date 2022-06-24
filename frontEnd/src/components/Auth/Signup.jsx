@@ -8,12 +8,10 @@ import {
 } from "../../Redux/Auth/action";
 export const Signup = () => {
   const [file, setFile] = useState();
-      const [fileName, setFileName] = useState("");
- 
-      const saveFile = (e) => {
-        setFile(e.target.files[0]);
-        setFileName(e.target.files[0].name);
-      };
+
+  const saveFile = (e) => {
+    setFile(e.target.files[0]);
+  };
   const dispatch = useDispatch();
   const { isAuth, message, available, loading } = useSelector(
     (store) => store.auth
@@ -50,21 +48,21 @@ export const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     var formdata = new FormData();
-formdata.append("username", formData.username);
-formdata.append("email",formData.email);
-formdata.append("password",formData.password);
-formdata.append("name",formData.name);
-formdata.append("image", file);
-var requestOptions = {
-  method: 'POST',
-  body: formdata,
-  redirect: 'follow'
-};
+    formdata.append("username", formData.username);
+    formdata.append("email", formData.email);
+    formdata.append("password", formData.password);
+    formdata.append("name", formData.name);
+    formdata.append("image", file);
+    var requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow",
+    };
 
-// fetch("http://localhost:7448/social/register", requestOptions)
-//   .then(response => response.text())
-//   .then(result => console.log(result))
-//   .catch(error => console.log('error', error));
+    // fetch("http://localhost:7448/social/register", requestOptions)
+    //   .then(response => response.text())
+    //   .then(result => console.log(result))
+    //   .catch(error => console.log('error', error));
     //e.preventDefault();
     // let newData ={...formData,image:image}
     if (available === true) dispatch(registerNew(requestOptions));
@@ -147,14 +145,17 @@ var requestOptions = {
                         />
                       </div>
                       <div className="form-outline mb-2">
-                        <label className="form-control" htmlFor="image">Upload profile image</label>
+                        <label className="form-control" htmlFor="image">
+                          Upload profile image
+                        </label>
                         <input
                           onChange={saveFile}
                           required
                           type="file"
                           placeholder="Upload image"
                           name="image"
-                          className="form-control form-control-lg "
+                          id="image"
+                          className="form-control form-control-lg d-none"
                         />
                       </div>
                       <div>

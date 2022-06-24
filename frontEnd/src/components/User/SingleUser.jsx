@@ -5,6 +5,7 @@ export const SingleUser = () => {
   const { id } = useParams();
   const [userDetails, setUserDetails] = useState();
     const [loading,setLoading] = useState(true);
+    const [error,setError] = useState(false);
     
   useEffect(() => {
     setLoading(true);
@@ -15,7 +16,7 @@ export const SingleUser = () => {
             setUserDetails(data)
             setLoading(false);
         }catch(err){
-            console.log(err);
+            setError(true);
         }
       }
     getData()
@@ -26,7 +27,7 @@ export const SingleUser = () => {
     <div className="frame">
         {loading?<div className="spinner-grow mt-5" role="status">
   <span className="sr-only">Loading...</span>
-</div> : <>
+</div> :error?<><h1>SOmething went wrong</h1></>: <>
       <input id="slider" className="customSlider" type="checkbox" />
       <label htmlFor="slider"></label>
 
@@ -35,7 +36,7 @@ export const SingleUser = () => {
         <div className="profile">
           <img
           alt="profile"
-            src={userDetails.profilePic?userDetails.profilePic:"https://c.tenor.com/ueth-WpGsukAAAAd/mee6-wii-chicken.gif"}
+            src={userDetails.profilePic.image?userDetails.profilePic.image:"https://c.tenor.com/ueth-WpGsukAAAAd/mee6-wii-chicken.gif"}
             className="thumbnail"
             
           />
@@ -71,7 +72,7 @@ export const SingleUser = () => {
           </div>
 
           <div className="icon">
-            <a href="/">
+            <a href={userDetails.socialLinks.twitter}>
               <i className="fab fa-twitter"></i>
             </a>
             <h4>12.8k</h4>
