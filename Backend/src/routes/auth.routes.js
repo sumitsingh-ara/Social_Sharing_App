@@ -2,11 +2,11 @@ const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const User = require('../models/users.models');
 const bcrypt = require('bcrypt');
+const upload = require('../middlewares/fileuploads.middleware')
 const dotenv = require('dotenv');
 dotenv.config();
 const nodemailer = require('nodemailer');
-
-
+const cloudinary = require('../utils/cloudinary')
 
 const transporter = nodemailer.createTransport({ //syntax to integrate own gmail with nodemailer to send emails;
     service: 'gmail',
@@ -19,6 +19,8 @@ const transporter = nodemailer.createTransport({ //syntax to integrate own gmail
 const newToken = (user) => {
     return jwt.sign({user}, process.env.JWT_SECRET_KEY);
 }
+
+
 router.get('/logout', (req, res) => {
     res.clearCookie("Bearer ");
     res.send("clear cookie")
@@ -35,21 +37,36 @@ router.post('/checkUsername',async(req, res) => {
     }
 })
 //Register 
-router.post('/register',async (req,res) => {
+router.post('/register',upload.single('image'),async (req,res) => {
     let user;
     try{
-        //console.log(req.body)
         // First we check if user with same email already exists
         user = await User.findOne({email: req.body.email})
         // if yes then we throw an error that email already exists
         if (user) return res.status(400).send({message: "Account already exists"});
 
         user = await User.findOne({username:req.body.username})
-
+      
         if(user) return res.status(400).send({message: "Username not available"});
         // else we will create the user with the email and password 
         // but before saving the password we need to hash it
-        user = await User.create(req.body);
+        let result
+        if(req.file){
+            result = await cloudinary.uploader.upload(req.file.path);
+             user = await User.create({...req.body,profilePic:{
+            public_id:result.public_id,
+            image:result.url
+        }});
+        }else{
+            let deta ={
+                name:req.body.name,
+                username:req.body.username,
+                profilePic:{public_id:"",image:""},
+                password:req.body.password,
+                email:req.body.email
+            }
+            user = await User.create(deta);
+        }
         
         // we will create a token
          const token = newToken(user)

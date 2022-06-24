@@ -12,6 +12,7 @@ router.patch('/update',authenticate,async(req, res)=>{
    
     if(req.user.email === req.body.email){ //check the authenticated person email is same as the email received in body or not
          try{
+            if(req.body.admin) return res.status(400).send("You are not authorsied for this")
         const userCheck = await User.findOne({email: req.body.email});
 
         if(!userCheck) return res.status(400).send({message: "You are not authorized to make any changes"}); 

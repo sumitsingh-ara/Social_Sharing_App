@@ -27,7 +27,7 @@ function App() {
   return (
     <div className="App">
       <Navbar passerSearchParams={passerSearchParams}/>
-      <div style={{marginTop: '12vh'}}></div>
+      <div style={{marginTop: '9vh'}}></div>
      <AllRoutes passerSearchParams={passerSearchParams} />
     </div>
   );

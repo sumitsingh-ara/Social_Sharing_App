@@ -1,17 +1,16 @@
 const express = require('express');
-const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const app = express();
-const cookieParser = require("cookie-parser");
+
 const passport = require("./configs/passport")
-app.use(cookieParser());
-app.use(express.json({ limit: '10kb' })); //integrating json into app and saving it from DOS ATTACKS by limiting the body
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
+ //integrating json into app and saving it from DOS ATTACKS by limiting the body
+
 // Data Sanitization against XSS //preventing users from inserting HTML and scripts on input;
-app.use(xss());
-const cors = require('cors');
-app.use(cors({
-    origin: ['http://localhost:3000']
-}));
+
+const cors = require("cors");
+app.use(cors({ origin: process.env.ORIGIN, credentials: true }));
 const limit = rateLimit({
     max: 2,// max requests
     windowMs: 60 * 60 * 1000, // 1 Hour
