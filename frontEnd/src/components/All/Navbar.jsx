@@ -8,7 +8,7 @@ export const Navbar = ({ passerSearchParams }) => {
     passerSearchParams;
   const { isAuth, token } = useSelector((store) => store.auth);
   const navigate = useNavigate();
-  const { name } = useSelector((store) => store.users);
+  const { name,userName } = useSelector((store) => store.users);
   const dispatch = useDispatch();
   useEffect(() => {
     if (isAuth) {
@@ -19,6 +19,7 @@ export const Navbar = ({ passerSearchParams }) => {
     setSortBy("");
     setFilterBy("");
     setLimit(6);
+    navigate('/allPosts');
   };
 
   const searchCall = () => {
@@ -109,7 +110,7 @@ export const Navbar = ({ passerSearchParams }) => {
                       Contact Admin
                     </Link>
                     <li>
-                      <Link to="/user/profile" className="dropdown-item">
+                      <Link to={`/user/${userName}`} className="dropdown-item">
                         Profile
                       </Link>
                     </li>

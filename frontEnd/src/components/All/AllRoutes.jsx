@@ -37,14 +37,6 @@ export const AllRoutes = ({passerSearchParams}) => {
             </PrivateComponents>
           }
         ></Route>
-         <Route
-          path="/user/profile"
-          element={
-            <PrivateComponents>
-              <UserProfile />
-            </PrivateComponents>
-          }
-        ></Route>
       </Routes>
     </>
   );
