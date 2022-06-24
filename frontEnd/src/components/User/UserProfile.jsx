@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 export const UserProfile = ({ setEdit, edit, userDetails }) => {
   const navigate = useNavigate();
   const [file, setFile] = useState();
-
+  const [loading,setLoading] = useState(false);
   const saveFile = (e) => {
     setFile(e.target.files[0]);
   };
@@ -40,6 +40,7 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
   };
 
   const handleSubmit = async(e) => {
+    setLoading(true);
     e.preventDefault();
     var formdata = new FormData();
     formdata.append("email", formData.email);
@@ -62,9 +63,11 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
     try{
       let data = await fetch("http://localhost:7448/social/user/update",requestOptions);
       data = await data.json();
+      setLoading(false);
       if(data.status) navigate(-1)
     }catch(err){
-      console.log(err.message);
+      setLoading(false);
+      alert("Failed to update,wrong credentials")
     }
    
     
