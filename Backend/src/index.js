@@ -11,6 +11,13 @@ app.use(express.urlencoded({ extended: true}));
 
 const cors = require("cors");
 app.use(cors({ origin: process.env.ORIGIN, credentials: true }));
+app.use(function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE,PATCH');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
 const limit = rateLimit({
     max: 2,// max requests
     windowMs: 60 * 60 * 1000, // 1 Hour

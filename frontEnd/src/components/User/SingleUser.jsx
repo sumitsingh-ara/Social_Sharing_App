@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {useSelector} from "react-redux";
 import "./Singleuser.css";
+import {UserProfile} from './UserProfile';
 export const SingleUser = () => {
   const { ids } = useParams();
   const [userDetails, setUserDetails] = useState();
@@ -10,6 +11,7 @@ export const SingleUser = () => {
   const {token} = useSelector((store) => store.auth);
   const [messageShow,setMessageShow] = useState(false);
   const {id,userName} = useSelector((store) => store.users);
+  const [edit,setEdit] = useState(false);
   useEffect(() => {
     setLoading(true);
     const getData = async () => {
@@ -59,12 +61,15 @@ export const SingleUser = () => {
         <>
           <h1>SOmething went wrong</h1>
         </>
-      ) : (
+      ) :!edit ?(
         <>
           <input id="slider" className="customSlider" type="checkbox" />
           <label htmlFor="slider"></label>
 
           <div className="wrapper">
+            {userName===ids&&<button onClick={()=>{
+              setEdit(!edit)
+            }} className="btn btn-outline-success">Edit profile</button>}
             <div className="profile">
               <img
                 alt="profile"
@@ -164,7 +169,7 @@ export const SingleUser = () => {
             </div>
           </div>
         </>
-      )}
+      ):<UserProfile setEdit={setEdit} edit={edit} userDetails={userDetails}/>}
     </div>
   );
 };
