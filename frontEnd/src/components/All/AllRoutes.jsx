@@ -30,7 +30,7 @@ export const AllRoutes = ({passerSearchParams}) => {
         <Route path="/todoSingle/:postId" element={<PostSingle />}></Route>
         <Route path="/googleRedirect" element={<GoogleRedirect />}></Route>
         <Route
-          path="/user/:id"
+          path="/user/:ids"
           element={
             <PrivateComponents>
               <SingleUser />

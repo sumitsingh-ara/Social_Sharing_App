@@ -3,14 +3,30 @@ const User = require("../models/users.models");
 const Post = require("../models/posts.models");
 const Comment = require("../models/comments.models");
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 const authenticate =require("../middlewares/authenticate");
+const dotenv = require("dotenv");
+dotenv.config();
+const nodemailer = require("nodemailer");
 
+const transporter = nodemailer.createTransport({
+  //syntax to integrate own gmail with nodemailer to send emails;
+  service: "gmail",
+  auth: {
+    user: process.env.USER,
+    pass: process.env.PASSWORD,
+  },
+});
+
+const newToken = (user) => {
+  return jwt.sign({ user }, process.env.JWT_SECRET_KEY);
+};
 
 /////------------------------------------Crud Api for Patch----------------------------------///////////////////////////////
 
 router.patch('/update',authenticate,async(req, res)=>{
    
-    if(req.user.email === req.body.email){ //check the authenticated person email is same as the email received in body or not
+    if(req.user.email === req.body.email ){ //check the authenticated person email is same as the email received in body or not
          try{
             if(req.body.admin) return res.status(400).send("You are not authorsied for this")
         const userCheck = await User.findOne({email: req.body.email});
@@ -116,6 +132,69 @@ router.get("/specificuser/:username",async(req,res)=>{
         })
         return res.status(200).send({...others,postCount:postCount,likesCount:sum,views:views});
         
+    }catch(err){
+        return res.status(500).send(err);
+    }
+})
+
+
+
+///-------------------------------------Verify user email --------------------------------------------------------;
+
+router.get('/specificuser/emailverify/:id',authenticate,async(req,res)=>{
+    try{
+        if(req.user._id != req.params.id) return res.status(200).send("You are not authorized to make changes");
+            // First we will check if user with same email already exists
+            const user = await User.findById(req.params.id);
+            // if not exists we throw an error
+            if (!user) return res.status(400).send("User not exists");
+            //User exists now create a one time reset link which will be valid for 10 minutes;
+            const secret = process.env.JWT_SECRET_KEY + user.password;
+            //console.log(process.env.JWT_SECRET_KEY)
+            const payload = {
+              email: user.email,
+              id: user.id,
+            };
+            const token = jwt.sign(payload, secret, { expiresIn: "5m" }); //creating token with the expire time of 5 minutes
+            const link = `http://localhost:7448/social/user/specificuser/emailverifypatch/${user.id}/${token}`;
+            const mailOptions = {
+              from: process.env.USER, // sender address
+              to: user.email, // list of receivers
+              subject: "Verification of your email", // Subject line
+              html: `<div> <h1>Hey ${user.name} Please click on the given link below to verify your email address</h1></br><a href=${link}>Click me</a></div>`, // plain text body
+            };
+            transporter.sendMail(mailOptions, function (err, info) {
+              if (err) console.log(err);
+              else {
+                console.log(info);
+              }
+            });
+            return res
+              .status(200)
+              .send({ message: "Password link sent to your mail successfully",status:true });
+          
+    }catch(err){
+        return res.status(500).send(err.message);
+    }
+})
+
+router.get('/specificuser/emailverifypatch/:id/:token',async(req,res)=>{
+    try{
+    const { id, token } = req.params;
+    const user = await User.findById(id);
+    if (!user) return res.status(400).send("Something went wrong");
+    const secret = process.env.JWT_SECRET_KEY + user.password; //since this here we havent change the password yet;
+
+    const payload = jwt.verify(token, secret);
+    if (!payload) return res.status(400).send({ message: "Token Invalid" });
+    //validate password and password2 should match
+    const updateUser = await User.findByIdAndUpdate(
+      id,
+      { accountStatus:{verified:true,active:true}, },
+      { new: true }
+    );
+    return res.status(200).send({message: "Email verified successfully"});
+
     }catch(err){
         return res.status(500).send(err);
     }
