@@ -9,7 +9,6 @@ import { ResetPassword } from "../Auth/ResetPassword";
 import { GoogleRedirect } from "../Auth/GoogleRedirect";
 import { SingleUser } from "../User/SingleUser";
 import { PrivateComponents } from "./PrivateComponents";
-import {UserProfile} from "../User/UserProfile";
 import {ContactAdmin} from "../Admin/ContactAdmin";
 import {Search} from "../All/Search";
 export const AllRoutes = ({passerSearchParams}) => {

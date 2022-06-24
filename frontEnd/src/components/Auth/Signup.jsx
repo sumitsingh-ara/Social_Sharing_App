@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   registerNew,
   checkUsername,
-  resetAvaialableUsername,
+  setMessage,resetMessage
 } from "../../Redux/Auth/action";
 export const Signup = () => {
   const [file, setFile] = useState();
@@ -22,28 +22,32 @@ export const Signup = () => {
     email: "sumit47919@gmail.com",
     password: "123456789",
   });
-
   useEffect(() => {
-    if (formData.username.trim().length >= 5) {
+    dispatch(resetMessage())
+    if(formData.username.trim().length>4){
+      dispatch(setMessage("Checking"))
       dispatch(
         checkUsername({
           username: formData.username,
         })
-      );
+      )
+    }else if(formData.username.trim()){
+      dispatch(setMessage("Username must be of 5 chars"))
+    }else{
+      dispatch(resetMessage())
     }
-  }, [formData.username, dispatch, message]);
+    //eslint-disable-next-line
+  },[formData?.username])
 
   if (isAuth) {
     return <Navigate to="/"></Navigate>;
   }
   const handleChange = (e) => {
+    dispatch(resetMessage())
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
     });
-    if (formData.username.length <= 4) {
-      dispatch(resetAvaialableUsername());
-    }
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -84,6 +88,7 @@ export const Signup = () => {
                       <div className="form-outline mb-2">
                         <input
                           value={formData.username}
+                          
                           onChange={handleChange}
                           pattern="[^\s]+"
                           required
@@ -93,22 +98,6 @@ export const Signup = () => {
                           className="form-control form-control-lg"
                         />
                       </div>
-                      {loading ? (
-                        <div className="spinner-grow" role="status"></div>
-                      ) : (
-                        <div className="form-outline mb-2">
-                          {formData.username.length < 5 &&
-                          available === "less chars" ? (
-                            <span>Username should be of 5 characters</span>
-                          ) : available === true ? (
-                            <span className="text-success">Available</span>
-                          ) : available === false ? (
-                            <span className="text-danger">Not available</span>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      )}
                       <div className="form-outline mb-2">
                         <input
                           value={formData.name}
@@ -159,16 +148,18 @@ export const Signup = () => {
                       </div>
                       <div>
                         {loading ? (
+                          <>
                           <div className="spinner-grow" role="status"></div>
+                          {message}
+                          </>
                         ) : (
-                          <span className="text-danger p2">
-                            {message ? message : ""}
+                          <span className={`p2 ${message==="available"?"text-success":"text-danger"}`}>
+                            {message}
                           </span>
                         )}
                       </div>
                       <div className="d-flex justify-content-center">
                         <input
-                          onChange={handleChange}
                           type="submit"
                           className="btn btn-success btn-block btn-lg gradient-custom-4 text-body mt-4 mb-4"
                           value="Register"

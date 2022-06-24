@@ -12,6 +12,16 @@ const initState = {
 
 export const authReducer = (state = initState, { type, payload }) => {
   switch (type) {
+    case types.SET_MESSAGE:
+      return{
+        ...state,
+        message:payload
+      }
+    case types.RESET_MESSAGE:
+      return{
+        ...state,
+        message:""
+      }
     case types.GOOGLE_LOGIN_SUCCESS:
       return{
         ...state,
@@ -25,14 +35,14 @@ export const authReducer = (state = initState, { type, payload }) => {
         ...state,
         loading:true,
         error: false,
-        message: null,
+        message: "Setting new password",
       }
       case types.RESET_PASSWORD_SUCCESS:
         return {
           ...state,
           loading:false,
           error: false,
-          message: null,
+          message: 'Password reset successfully,logging in',
         }
       case types.RESET_PASSWORD_FAILURE:
         return {
@@ -41,19 +51,11 @@ export const authReducer = (state = initState, { type, payload }) => {
           error: true,
           message: "Link Expired"
         }
-    case types.RESET_AVAIALABLE_USERNAME:
-      return {
-        loading: false,
-        error: false,
-        available: "less chars",
-      };
-
     case types.USERNAME_LOADING:
       return {
         ...state,
         loading: true,
         error: false,
-        available: null,
       };
     case types.USERNAME_SUCCESS:
       return {
@@ -74,7 +76,7 @@ export const authReducer = (state = initState, { type, payload }) => {
         ...state,
         loading: true,
         error: false,
-        message: null,
+        message: "Logging in",
       };
     case types.LOGIN_SUCCESS:
       return {
@@ -98,14 +100,14 @@ export const authReducer = (state = initState, { type, payload }) => {
         loading: false,
         token: null,
         error: false,
-        message: null,
+        message: "Logging out",
       };
     case types.REGISTER_LOADING:
       return {
         ...state,
         loading: true,
         error: false,
-        message: "Account creation in progress",
+        message: "Account creation is in progress",
       };
     case types.REGISTER_SUCCESS:
       return {
@@ -113,15 +115,14 @@ export const authReducer = (state = initState, { type, payload }) => {
         token: payload.token,
         loading: false,
         error: false,
-        message: payload.message,
+        message: "Account created successfully",
       };
     case types.REGISTER_FAILURE:
       return {
-        isAuth: false,
-        token: null,
+        ...state,
         loading: false,
         error: false,
-        message: payload,
+        message:payload,
       };
     default:
       return state;

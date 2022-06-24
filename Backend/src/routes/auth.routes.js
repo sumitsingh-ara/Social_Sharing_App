@@ -55,17 +55,19 @@ router.post("/register", upload.single("image"), async (req, res) => {
     // but before saving the password we need to hash it
     let result;
     if (req.file) {
-      
-      result = await cloudinary.uploader.upload(req.file.path);
+      result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "sharekarodotcom/users",
+        public_id: new Date() + req.body.email + Math.random() * 10,
+      });
       user = await User.create({
         ...req.body,
         profilePic: {
           public_id: result.public_id,
           image: result.url,
         },
-        accountStatus:{
-            active:true,
-          }
+        accountStatus: {
+          active: true,
+        },
       });
     } else {
       let deta = {
@@ -74,9 +76,9 @@ router.post("/register", upload.single("image"), async (req, res) => {
         profilePic: { public_id: "", image: "" },
         password: req.body.password,
         email: req.body.email,
-        accountStatus:{
-            active:true,
-          }
+        accountStatus: {
+          active: true,
+        },
       };
       user = await User.create(deta);
     }
@@ -124,13 +126,11 @@ router.post("/login", async (req, res) => {
     const token = newToken(user); //if everything ok, sending json web token for the user;
     //saving the token into cookies using cookies-parser;
     //res.cookie("Bearer ","Bearer "+token, {httpOnly: true});
-    return res
-      .status(200)
-      .json({
-        message: "Logged in successfully 😊 👌",
-        status: true,
-        token: token,
-      });
+    return res.status(200).json({
+      message: "Logged in successfully 😊 👌",
+      status: true,
+      token: token,
+    });
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -162,7 +162,7 @@ router.post("/resetpassword", async (req, res) => {
     transporter.sendMail(mailOptions, function (err, info) {
       if (err) console.log(err);
       else {
-       // console.log(info);
+        // console.log(info);
       }
     });
     return res

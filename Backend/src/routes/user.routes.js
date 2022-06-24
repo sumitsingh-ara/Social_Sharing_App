@@ -32,13 +32,17 @@ router.post(
   authenticate,
   async (req, res) => {
     if (
-      req.user._id === req.headers.id
+      req.user._id === req.headers.id 
     ) {
       //check the authenticated person email is same as the email received in body or not
       try {
+        const userCheck = await User.findById(req.headers.id);
+        let match = userCheck.checkPassword(req.body.password);
+        // if not match then we throw an error
+        if (!match) return res.status(400).send({ message: "Wrong Credentials" });
         if (req.body.admin)
           return res.status(400).send("You are not authorsied for this");
-        const userCheck = await User.findById(req.headers.id);
+        
 
         if (!userCheck)
           return res
@@ -59,7 +63,10 @@ router.post(
           if (userCheck.profilePic.public_id) {
             await cloudinary.uploader.destroy(userCheck.profilePic.public_id);
           }
-          result = await cloudinary.uploader.upload(req.file.path);
+          result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "sharekarodotcom/users",
+            public_id: new Date() + req.body.email + Math.random() * 10,
+          });
           updateData = {
             username: req.user.username,
             name: req.body.name,

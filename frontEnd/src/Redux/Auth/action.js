@@ -1,9 +1,18 @@
 import * as types from "./actionTypes";
 import Axios from "axios";
 import {destroyUserData} from "../User/action";
+export const setMessage = (payload) => {
+  return {
+    type:types.SET_MESSAGE,
+    payload:payload
+  }
+}
+export const resetMessage =()=>{
+  return {
+    type:types.RESET_MESSAGE
+  }
+}
 export const logout = () => {
-  // localStorage.setItem("isAuth", false);
-  // localStorage.setItem("token", null);
   localStorage.clear();
   return {
     type: types.LOGOUT,
@@ -13,7 +22,7 @@ export const serverLogout = () => (dispatch) => {
   dispatch(logout());
   dispatch(destroyUserData());
   return Axios.get("http://localhost:7448/social/logout")
-    .then((res) =>"login Successfull")
+    .then((res) =>"logout Successfull")
     .catch((error) => console.log(error));
 };
 
@@ -109,17 +118,20 @@ const userNameFailure = () => {
     payload:false
   }
 }
-export const resetAvaialableUsername = () => {
-  return{
-    type:types.RESET_AVAIALABLE_USERNAME
-  }
-}
+
 export const checkUsername = (payload)=>(dispatch)=>{
   dispatch(userNameLoading());
+  dispatch(setMessage("Checking availability"))
   return Axios.post("http://localhost:7448/social/checkUsername",payload)
   .then(function (response) {
-    if (response.data.status) dispatch(userNameSuccess(true));
-    else dispatch(userNameSuccess(false));
+    if (response.data.status){
+      dispatch(userNameSuccess(true))
+      dispatch(setMessage("available"))
+    }
+    else{
+      dispatch(userNameSuccess(false));
+    dispatch(setMessage("oops already taken"))
+    } 
   })
   .catch(function () {
     dispatch(userNameFailure())
