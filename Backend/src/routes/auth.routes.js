@@ -38,6 +38,7 @@ router.post('/checkUsername',async(req, res) => {
 })
 //Register 
 router.post('/register',upload.single('image'),async (req,res) => {
+    console.log(req.body,req.file)
     let user;
     try{
         // First we check if user with same email already exists

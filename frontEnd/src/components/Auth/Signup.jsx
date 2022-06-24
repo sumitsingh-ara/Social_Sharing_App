@@ -1,8 +1,19 @@
 import { Link, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { registerNew,checkUsername,resetAvaialableUsername } from "../../Redux/Auth/action";
+import {
+  registerNew,
+  checkUsername,
+  resetAvaialableUsername,
+} from "../../Redux/Auth/action";
 export const Signup = () => {
+  const [file, setFile] = useState();
+      const [fileName, setFileName] = useState("");
+ 
+      const saveFile = (e) => {
+        setFile(e.target.files[0]);
+        setFileName(e.target.files[0].name);
+      };
   const dispatch = useDispatch();
   const { isAuth, message, available, loading } = useSelector(
     (store) => store.auth
@@ -12,7 +23,6 @@ export const Signup = () => {
     name: "Sumit Singh",
     email: "sumit47919@gmail.com",
     password: "123456789",
-    profilePic: "",
   });
 
   useEffect(() => {
@@ -23,7 +33,7 @@ export const Signup = () => {
         })
       );
     }
-  }, [formData.username, dispatch,message]);
+  }, [formData.username, dispatch, message]);
 
   if (isAuth) {
     return <Navigate to="/"></Navigate>;
@@ -33,13 +43,31 @@ export const Signup = () => {
       ...formData,
       [e.target.id]: e.target.value,
     });
-    if (formData.username.length <=4){
+    if (formData.username.length <= 4) {
       dispatch(resetAvaialableUsername());
     }
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (available === true) dispatch(registerNew(formData));
+    var formdata = new FormData();
+formdata.append("username", formData.username);
+formdata.append("email",formData.email);
+formdata.append("password",formData.password);
+formdata.append("name",formData.name);
+formdata.append("image", file);
+var requestOptions = {
+  method: 'POST',
+  body: formdata,
+  redirect: 'follow'
+};
+
+// fetch("http://localhost:7448/social/register", requestOptions)
+//   .then(response => response.text())
+//   .then(result => console.log(result))
+//   .catch(error => console.log('error', error));
+    //e.preventDefault();
+    // let newData ={...formData,image:image}
+    if (available === true) dispatch(registerNew(requestOptions));
   };
   return (
     <>
@@ -68,21 +96,21 @@ export const Signup = () => {
                         />
                       </div>
                       {loading ? (
-          <div className="spinner-grow" role="status">
-          </div>
-        ) : (
-          <div className="form-outline mb-2">
-            {formData.username.length < 5 && available === "less chars" ? (
-              <span>Username should be of 5 characters</span>
-            ) : available === true ? (
-              <span className="text-success">Available</span>
-            ) : available === false ? (
-              <span className="text-danger">Not available</span>
-            ) : (
-              ""
-            )}
-          </div>
-        )}
+                        <div className="spinner-grow" role="status"></div>
+                      ) : (
+                        <div className="form-outline mb-2">
+                          {formData.username.length < 5 &&
+                          available === "less chars" ? (
+                            <span>Username should be of 5 characters</span>
+                          ) : available === true ? (
+                            <span className="text-success">Available</span>
+                          ) : available === false ? (
+                            <span className="text-danger">Not available</span>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      )}
                       <div className="form-outline mb-2">
                         <input
                           value={formData.name}
@@ -118,9 +146,26 @@ export const Signup = () => {
                           className="form-control form-control-lg"
                         />
                       </div>
+                      <div className="form-outline mb-2">
+                        <label className="form-control" htmlFor="image">Upload profile image</label>
+                        <input
+                          onChange={saveFile}
+                          required
+                          type="file"
+                          placeholder="Upload image"
+                          name="image"
+                          className="form-control form-control-lg "
+                        />
+                      </div>
                       <div>
-                        {loading?<div className="spinner-grow" role="status">
-                         </div>:<span className="text-danger p2">{message?message:""}</span>}</div>
+                        {loading ? (
+                          <div className="spinner-grow" role="status"></div>
+                        ) : (
+                          <span className="text-danger p2">
+                            {message ? message : ""}
+                          </span>
+                        )}
+                      </div>
                       <div className="d-flex justify-content-center">
                         <input
                           onChange={handleChange}

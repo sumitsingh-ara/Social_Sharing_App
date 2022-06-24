@@ -36,7 +36,7 @@ const registerError = (payload) => {
 };
 export const registerNew = (payload) => (dispatch) => {
   dispatch(registerLoading());
-  return Axios.post("http://localhost:7448/social/register", payload)
+  return Axios.post("http://localhost:7448/social/register",payload.body)
     .then((response) => {
       localStorage.setItem("isAuth", true);
       localStorage.setItem("token", JSON.stringify(response.data.token));
