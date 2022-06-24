@@ -5,7 +5,7 @@
     "cloudinary": "^1.30.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.1",
     "express-rate-limit": "^6.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.0",
@@ -21,7 +21,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/server"
+    "start": "node src/server"
   },
   "author": "",
   "license": "ISC",

@@ -20,7 +20,7 @@ const todoRequestSuccess =(payload) => {
 }
 export const fetchTodos = (payload) => (dispatch) => {
     dispatch(todogetRequest());
-    return Axios.get("http://localhost:7448/social/post/allPosts",{
+    return Axios.get("https://socialsharekaro.herokuapp.com/social/post/allPosts",{
         params:{
             ...payload
           }
@@ -36,7 +36,7 @@ const todoPostRequestSuccess =()=>{
 export const postTodos =(payload) =>(dispatch) => {
     // console.log(payload)
     dispatch(todogetRequest());
-    return Axios.post("http://localhost:7448/social/post/newPost", payload)
+    return Axios.post("https://socialsharekaro.herokuapp.com/social/post/newPost", payload)
     .then((res)=> dispatch(todoPostRequestSuccess()))
     .catch((err)=> dispatch(todoRequestFailure()))
 }
@@ -44,7 +44,7 @@ export const deletePost =(payload) => (dispatch) =>{
     dispatch(todogetRequest());
       let config = {
         method: 'delete',
-        url: `http://localhost:7448/social/post/deletePost/${payload.id}`,
+        url: `https://socialsharekaro.herokuapp.com/social/post/deletePost/${payload.id}`,
         headers: { 
           'Authorization': "Bearer "+payload.token, 
           'Content-Type': 'application/json'

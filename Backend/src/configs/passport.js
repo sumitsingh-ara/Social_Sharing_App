@@ -1,11 +1,11 @@
-require("dotenv").config();
+const dotenv = require('dotenv');
+dotenv.config();
 const passport = require('passport');
 const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const {nanoid} = require('nanoid');
 const User = require("../models/users.models");
 const jwt = require("jsonwebtoken");
-const dotenv = require('dotenv');
-dotenv.config();
+
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({ //syntax to integrate own gmail with nodemailer to send emails;
@@ -20,8 +20,8 @@ const newToken = (user) => {
 }
 
 passport.use(new GoogleStrategy({
-    clientID:     process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    clientID:process.env.GOOGLE_CLIENT_ID ,
+    clientSecret:process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:7448/auth/google/callback",
     userProfileURL: "https://**www**.googleapis.com/oauth2/v3/userinfo",
     passReqToCallback: true

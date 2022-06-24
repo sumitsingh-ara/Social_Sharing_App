@@ -152,7 +152,7 @@ router.post("/resetpassword", async (req, res) => {
       id: user.id,
     };
     const token = jwt.sign(payload, secret, { expiresIn: "5m" }); //creating token with the expire time of 5 minutes
-    const link = `http://localhost:7448/social/reset-password/${user.id}/${token}`;
+    const link = `https://socialsharekaro.herokuapp.com/social/reset-password/${user.id}/${token}`;
     const mailOptions = {
       from: process.env.USER, // sender address
       to: user.email, // list of receivers

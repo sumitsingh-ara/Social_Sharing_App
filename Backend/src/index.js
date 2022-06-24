@@ -1,7 +1,8 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const app = express();
-
+const dotenv = require('dotenv');
+dotenv.config();
 const passport = require("./configs/passport")
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));

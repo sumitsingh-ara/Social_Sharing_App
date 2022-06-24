@@ -21,7 +21,7 @@ export const logout = () => {
 export const serverLogout = () => (dispatch) => {
   dispatch(logout());
   dispatch(destroyUserData());
-  return Axios.get("http://localhost:7448/social/logout")
+  return Axios.get("https://socialsharekaro.herokuapp.com/social/logout")
     .then((res) =>"logout Successfull")
     .catch((error) => console.log(error));
 };
@@ -45,7 +45,7 @@ const registerError = (payload) => {
 };
 export const registerNew = (payload) => (dispatch) => {
   dispatch(registerLoading());
-  return Axios.post("http://localhost:7448/social/register",payload.body)
+  return Axios.post("https://socialsharekaro.herokuapp.com/social/register",payload.body)
     .then((response) => {
       localStorage.setItem("isAuth", true);
       localStorage.setItem("token", JSON.stringify(response.data.token));
@@ -75,7 +75,7 @@ const loginFailure = () => {
 export const tryLogin = (payload) =>(dispatch)=> {
  // console.log(payload,"from reset password")
   dispatch(loginLoading())
-  return Axios.post("http://localhost:7448/social/login", payload)
+  return Axios.post("https://socialsharekaro.herokuapp.com/social/login", payload)
     .then((response) => {
         // console.log(response.data,"eho success")
       localStorage.setItem("isAuth", true);
@@ -122,7 +122,7 @@ const userNameFailure = () => {
 export const checkUsername = (payload)=>(dispatch)=>{
   dispatch(userNameLoading());
   dispatch(setMessage("Checking availability"))
-  return Axios.post("http://localhost:7448/social/checkUsername",payload)
+  return Axios.post("https://socialsharekaro.herokuapp.com/social/checkUsername",payload)
   .then(function (response) {
     if (response.data.status){
       dispatch(userNameSuccess(true))
@@ -158,7 +158,7 @@ const resetPasswordFailure=() => {
 
 export const resetPasswordCall =(payload) => (dispatch) => {
   dispatch(resetPasswordLoading());
-  return Axios.post(`http://localhost:7448/social/reset-password/${payload.user.id}/${payload.user.token}`,payload.body)
+  return Axios.post(`https://socialsharekaro.herokuapp.com/social/reset-password/${payload.user.id}/${payload.user.token}`,payload.body)
   .then((response) => {
    // console.log(response);
     dispatch(resetPasswordSuccess())

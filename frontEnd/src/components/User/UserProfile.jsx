@@ -61,7 +61,7 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
       redirect: "follow",
     };
     try{
-      let data = await fetch("http://localhost:7448/social/user/update",requestOptions);
+      let data = await fetch("https://socialsharekaro.herokuapp.com/social/user/update",requestOptions);
       data = await data.json();
       setLoading(false);
       if(data.status) navigate(-1)

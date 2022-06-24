@@ -17,7 +17,7 @@ export const SingleUser = () => {
     const getData = async () => {
       try {
         let data = await fetch(
-          `http://localhost:7448/social/user/specificuser/${ids}`
+          `https://socialsharekaro.herokuapp.com/social/user/specificuser/${ids}`
         );
         data = await data.json();
         setUserDetails(data);
@@ -32,7 +32,7 @@ export const SingleUser = () => {
   const verifyEmail = async() => {
     setLoading(true);
     try{
-      let data = await fetch(`http://localhost:7448/social/user//specificuser/emailverify/${id}`,{
+      let data = await fetch(`https://socialsharekaro.herokuapp.com/social/user//specificuser/emailverify/${id}`,{
         headers:{
           Authorization: `Bearer ${token}`
         }

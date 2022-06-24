@@ -43,6 +43,10 @@
     .todoFormContainer{
         width: 100%;
     }
+    .prevAndNext{
+        margin-top: 12vh;
+        margin-bottom:8vh;
+    }
 }
 
 .card {

@@ -23,7 +23,7 @@ export const Search = ({passerSearchParams}) => {
     }
     setSearchParams(params,{ replace: true});
     const getSearchResults=() => {
-        axios.get("http://localhost:7448/social/post/allPosts",{
+        axios.get("https://socialsharekaro.herokuapp.com/social/post/allPosts",{
             params:{
                 ...params
             }

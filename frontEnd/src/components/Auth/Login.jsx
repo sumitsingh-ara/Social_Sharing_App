@@ -31,7 +31,7 @@ export const Login = () => {
     //console.log("sendo",resetEmail)
     let data;
     try {
-      data = await fetch("http://localhost:7448/social/resetpassword", {
+      data = await fetch("https://socialsharekaro.herokuapp.com/social/resetpassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const Login = () => {
     }
   };
   const googleLogin = () => {
-    window.location.href = "http://localhost:7448/auth/google";
+    window.location.href = "https://socialsharekaro.herokuapp.com/auth/google";
   };
   return (
     <>

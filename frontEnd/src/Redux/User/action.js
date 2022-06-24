@@ -27,7 +27,7 @@ export const destroyUserData = () => {
 }
 export const fetchUserDetails = (token) => (dispatch) => {
   dispatch(userDataLoading());
-  return Axios.get("http://localhost:7448/social/user/one",{
+  return Axios.get("https://socialsharekaro.herokuapp.com/social/user/one",{
     headers: {
       Authorization: `Bearer ${token}`
     }

@@ -22,7 +22,7 @@ const commentsFailures= () => {
 export const getAllComments = (postId) => (dispatch) => {
     dispatch(commentsLoading());
    // console.log(postId,"action");
-    return Axios.get(`http://localhost:7448/social/comment/allcomments/${postId}`)
+    return Axios.get(`https://socialsharekaro.herokuapp.com/social/comment/allcomments/${postId}`)
     .then((res)=>{
       //console.log(res.data);
       dispatch(commentsSuccess(res.data))
@@ -41,7 +41,7 @@ export const makeNewComment =(payload) => (dispatch) =>{
       
       let config = {
         method: 'post',
-        url: 'http://localhost:7448/social/comment/newcomment',
+        url: 'https://socialsharekaro.herokuapp.com/social/comment/newcomment',
         headers: { 
           'Authorization': "Bearer "+payload.token, 
           'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ export const editComment =(payload) => (dispatch) => {
 
  let config = {
    method: 'patch',
-   url: `http://localhost:7448/social/comment/singlecomment/update/${payload.commentId}`,
+   url: `https://socialsharekaro.herokuapp.com/social/comment/singlecomment/update/${payload.commentId}`,
    headers: { 
      'Authorization': "Bearer "+payload.token, 
      'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ export const deleteComment =(payload) => (dispatch) =>{
       
       let config = {
         method: 'delete',
-        url: 'http://localhost:7448/social/comment/singlecomment/delete',
+        url: 'https://socialsharekaro.herokuapp.com/social/comment/singlecomment/delete',
         headers: { 
           'Authorization': "Bearer "+payload.token, 
           'Content-Type': 'application/json'
@@ -109,7 +109,7 @@ export const makeNestedNewCommentOnReply = (payload) => (dispatch) => {
 
   let config = {
     method: 'post',
-    url: `http://localhost:7448/social/comment/singlecomment/nestedcomment/${payload.commentId}/${payload.id}`,
+    url: `https://socialsharekaro.herokuapp.com/social/comment/singlecomment/nestedcomment/${payload.commentId}/${payload.id}`,
     headers: { 
       'Authorization': "Bearer "+payload.token, 
       'Content-Type': 'application/json'
@@ -125,7 +125,7 @@ export const deleteNestedCommentReplies =(payload) => (dispatch) => {
   //console.log(payload);
  let config = {
    method: 'delete',
-   url: `http://localhost:7448/social/comment/singlecomment/nestedcomment/delete/${payload.commentId}/${payload.repliedId}`,
+   url: `https://socialsharekaro.herokuapp.com/social/comment/singlecomment/nestedcomment/delete/${payload.commentId}/${payload.repliedId}`,
    headers: { 
      'Authorization': "Bearer "+payload.token, 
      'Content-Type': 'application/json'
@@ -145,7 +145,7 @@ export const editingNestedReply =(payload) => (dispatch)=> {
 
  let config = {
    method: 'patch',
-   url:  `http://localhost:7448/social/comment/singlecomment/nestedcomment/edit/${payload.commentId}/${payload.repliedId}`,
+   url:  `https://socialsharekaro.herokuapp.com/social/comment/singlecomment/nestedcomment/edit/${payload.commentId}/${payload.repliedId}`,
    headers: { 
      'Authorization': "Bearer "+payload.token, 
      'Content-Type': 'application/json'
