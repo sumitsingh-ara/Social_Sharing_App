@@ -34,7 +34,7 @@ export const PostsInput = () => {
         subCategory:""
       })
     }
-    if(formData.description.trim().length <=2) return alert("Please write some more about the post")
+    if(formData.description.trim().length <=100) return alert("Please write some more about the post")
     dispatch(postTodos({...formData,user:id}));
     setFormData({
       title:"",

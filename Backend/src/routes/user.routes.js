@@ -55,7 +55,7 @@ router.post(
         let result;
         let updateData;
         if (req.file) {
-            console.log("If ka locha dekh rhe h",req.file)
+           
           if (userCheck.profilePic.public_id) {
             await cloudinary.uploader.destroy(userCheck.profilePic.public_id);
           }
@@ -105,14 +105,14 @@ router.post(
                 },
               };
         }
-        console.log("yhn aaya mtlb result",result,updateData)
+       
         const user = await User.findByIdAndUpdate(userCheck._id,{...updateData},{new:true});
 
         const { password, ...others } = user._doc; //avoid sending password
 
         return res.status(200).send({ user: others });
       } catch (err) {
-        console.log(err.message);
+        return res.status(500).send(err)
       }
     } else {
       return res
@@ -123,34 +123,34 @@ router.post(
 );
 
 ////////////////////---------------------------------------Deleting the ID --------------------------------////////////////////;
-router.delete("/delete", authenticate, async (req, res) => {
-  if (req.user.email === req.body.email) {
-    //check the authenticated person email is same as the email received in body or not
-    try {
-      const user = await User.findOne({ email: req.body.email });
-      try {
-        if (user.password !== req.body.password)
-          return res.status(400).send({ message: "Something went wrong" }); //check and confirm password, as someone else can try with someone's else pc to delete his ID;
+// router.delete("/delete", authenticate, async (req, res) => {
+//   if (req.user.email === req.body.email) {
+//     //check the authenticated person email is same as the email received in body or not
+//     try {
+//       const user = await User.findOne({ email: req.body.email });
+//       try {
+//         if (user.password !== req.body.password)
+//           return res.status(400).send({ message: "Something went wrong" }); //check and confirm password, as someone else can try with someone's else pc to delete his ID;
 
-        await Post.deleteMany({ username: user.username });
-        await Comment.deleteMany({ username: user.username });
-        await User.findOneAndDelete({ email: req.body.email });
+//         await Post.deleteMany({ username: user.username });
+//         await Comment.deleteMany({ username: user.username });
+//         await User.findOneAndDelete({ email: req.body.email });
 
-        return res
-          .status(200)
-          .send({ message: "User has been successfully deleted" });
-      } catch (err) {
-        console.log(err.message);
-      }
-    } catch (err) {
-      return res.status(400).send({ message: "User not found" });
-    }
-  } else {
-    return res
-      .status(500)
-      .send({ message: "You are only allowed to delete your account" });
-  }
-});
+//         return res
+//           .status(200)
+//           .send({ message: "User has been successfully deleted" });
+//       } catch (err) {
+//        return res.status(500).send(err)
+//       }
+//     } catch (err) {
+//       return res.status(400).send({ message: "User not found" });
+//     }
+//   } else {
+//     return res
+//       .status(500)
+//       .send({ message: "You are only allowed to delete your account" });
+//   }
+// });
 
 //-------------------------------------Get user from token ----------------------------------;
 
@@ -231,7 +231,7 @@ router.get("/specificuser/emailverify/:id", authenticate, async (req, res) => {
     transporter.sendMail(mailOptions, function (err, info) {
       if (err) console.log(err);
       else {
-        console.log(info);
+        //console.log(info);
       }
     });
     return res

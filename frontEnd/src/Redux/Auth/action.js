@@ -157,7 +157,7 @@ export const resetPasswordCall =(payload) => (dispatch) => {
     dispatch(tryLogin(payloa))
   })
   .catch((error) => {
-    console.log(error)
+    //console.log(error)
     dispatch(resetPasswordFailure())
   })
 }

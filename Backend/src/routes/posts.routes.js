@@ -261,7 +261,7 @@ router.patch(
       )
         .lean()
         .exec();
-      console.log(dislikedPost);
+     // console.log(dislikedPost);
       return res.status(200).send({ message: "Post disliked successfully" });
     } catch (err) {
       return res.status(500).send(err);

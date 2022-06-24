@@ -59,7 +59,7 @@ router.patch(
   "/singlecomment/update/:commentId",
   authenticate,
   async (req, res) => {
-    console.log("jdjjd");
+    
     try {
       const comment = await Comment.findById(req.params.commentId)
         .lean()
@@ -70,7 +70,7 @@ router.patch(
           message: "You are not authorised to edit this comment",
           status: false,
         });
-      console.log(req.body, comment);
+     // console.log(req.body, comment);
       const commentupdate = await Comment.findByIdAndUpdate(
         req.params.commentId,
         { comment: req.body.editedcomment },

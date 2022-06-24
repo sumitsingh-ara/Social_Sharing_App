@@ -6,7 +6,7 @@ import {makeNestedNewCommentOnReply,deleteNestedCommentReplies,editingNestedRepl
 const Filter = require('bad-words');
  
 export const NestedComments = ({replies,comment}) => {
-  console.log(replies,"dddjdj")
+ 
   const filter = new Filter({ regex: /\*|\.|$/gi });
     const dispatch = useDispatch();
     const navigate = useNavigate();

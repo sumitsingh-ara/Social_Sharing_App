@@ -162,7 +162,7 @@ router.post("/resetpassword", async (req, res) => {
     transporter.sendMail(mailOptions, function (err, info) {
       if (err) console.log(err);
       else {
-        console.log(info);
+       // console.log(info);
       }
     });
     return res
