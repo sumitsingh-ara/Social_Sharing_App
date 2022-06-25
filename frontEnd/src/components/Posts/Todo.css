@@ -185,6 +185,11 @@
         width: 100%;
         grid-template-columns:100%;
     }
+   .mainCommentBoxNested{
+    display: grid;
+    width: 100%;
+    grid-template-columns:100%;
+   }
     .userCommentorDetails{
         align-items: center;
     }
