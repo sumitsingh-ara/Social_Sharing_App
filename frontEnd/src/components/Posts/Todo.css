@@ -13,41 +13,9 @@
     max-height: 80vh;
     overflow-y: auto;
     overflow-wrap: break-word;
-   
     text-justify: inter-word;
 }
-@media screen and (max-width:760px){
-    #todoList{
-        width: 100%;
-        display:grid;
-        grid-template-columns: repeat(2,45%);
-        grid-gap: 1%;
-    }
-    .todoFormContainer{
-        width: 90%;
-    }
-    .mb-4{
-        margin-bottom:10px !important;
-    }
-}
-@media screen and (max-width:400px){
-    #todoList{
-        width: 100%;
-        display:grid;
-        grid-template-columns: repeat(1,95%);
-        grid-gap: 1%;
-    }
-    .mb-4{
-        margin-bottom:10px !important;
-    }
-    .todoFormContainer{
-        width: 100%;
-    }
-    .prevAndNext{
-        margin-top: 12vh;
-        margin-bottom:8vh;
-    }
-}
+
 
 .card {
     
@@ -169,20 +137,63 @@
     display: flex;
     border-radius: 50px;
 }
-@media screen and (max-width:900px){
-   
-}
-@media screen and (max-width:500px){
-    .mainCommentBox{
-        width: 90vw;
-    }
-    .mainCommentBoxNested{
-        width: 80vw !important;
-        
-    }
-  
-}
 
 .floatRight{
     float: right;
+}
+@media screen and (max-width:760px){
+    #todoList{
+        width: 100%;
+        display:grid;
+        grid-template-columns: repeat(2,45%);
+        grid-gap: 1%;
+    }
+    .todoFormContainer{
+        width: 90%;
+    }
+    .mb-4{
+        margin-bottom:10px !important;
+    }
+}
+@media screen and (max-width:500px){
+    #todoList{
+        width: 100%;
+        display:grid;
+        grid-template-columns: repeat(1,95%);
+        grid-gap: 1%;
+    }
+    .mb-4{
+        margin-bottom:10px !important;
+    }
+    .todoFormContainer{
+        width: 100%;
+    }
+    .prevAndNext{
+        margin-top: 12vh;
+        margin-bottom:8vh;
+    }
+    .postViewSingle{
+        display:grid;
+        grid-template-columns:100%;
+    }
+    .firststPostGrid{
+        display: flex;
+        justify-content: space-around;
+    }
+    .mainCommentBox{
+        display: grid;
+        width: 100%;
+        grid-template-columns:100%;
+    }
+    .userCommentorDetails{
+        align-items: center;
+    }
+    .commentOptioner{
+        display: grid;
+        width: 100vw;
+        grid-template-columns: 50% 50%;
+    }
+    .commentSizeEnhancer{
+        font-size:3vw;
+    }
 }

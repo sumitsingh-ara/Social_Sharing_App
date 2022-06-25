@@ -40,7 +40,7 @@ export const PostSingle = () => {
   useEffect(() => {
    let timerId = setTimeout(() =>{
     dispatch(viewCounter(postId))
-   },1000)
+   },1000 * 60)
    //cleanup function so , if someone wants to just visist instead of reading the entire post,views will not be counted;
    return()=>{
     if(timerId)clearTimeout(timerId)
@@ -112,7 +112,8 @@ export const PostSingle = () => {
           <span className="sr-only">Loading...</span>
         </div>
       ) : (
-        <div className="container mt-5">
+        <div className="container postViewSingle mt-5">
+          <div className="firststPostGrid">
           <span className="floatRight">
             <i
               className="fa fa-eye text-warning text-small mt-2"
@@ -122,7 +123,7 @@ export const PostSingle = () => {
               ? `${(postData.views / 1000).toFixed(2)}K`
               : postData.views}
           </span>
-          {isAuth ?likeStatus? <i onClick={dislikePost}
+          <span>{isAuth ?likeStatus? <i onClick={dislikePost}
                 className="fa fa-light fa-heart floatRight mx-1 text-success p-1"
                 style={{ fontSize: "30px" }}
               ></i>:
@@ -131,7 +132,8 @@ export const PostSingle = () => {
                 style={{ fontSize: "30px" }}
               ></i>:""
            }
-          {postData.user.username === userName ? (
+           </span>
+         <span> {postData.user.username === userName ? (
             <span className="floatRight">
               {editPost ? (
                 <button
@@ -162,15 +164,19 @@ export const PostSingle = () => {
           ) : (
             ""
           )}
-          <h4
+          </span>
+          </div>
+          {/* 2nd grid col */}
+         <div>
+         <h4
             className="text-success"
-            style={{ display: "flex", justifyContent: "space-evenly" }}
           >
             <span>Tech Gyaan on {postData.categories}</span>{" "}
+            <p className="m-1 h5 text-success text-center">{postData.title}</p>
           </h4>
           {/* -------------------------------------------Post Description here----------------------------------------- */}
           <div className="p-2 m-1 m-m-4 descriptionView">
-            <p className="m-1 h5 text-success text-center">{postData.title}</p>
+            
             {editPost ? (
               <textarea
                 ref={editRef}
@@ -266,6 +272,8 @@ export const PostSingle = () => {
           ) : (
             ""
           )}
+         </div>
+         
         </div>
       )}
     </>

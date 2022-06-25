@@ -46,23 +46,24 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
             {" "}
             <img
               className="img-fluid img-responsive rounded-circle mr-2"
-              src={url}
-              width="38"
+              src={comment.user.profilePic.image?comment.user.profilePic.image:url}
+              width="40"
               alt="profile"
             />
           </div>
-          <div style={{fontSize:"2vh"}}>
+          <div className="commentSizeEnhancer">
           Commented by&nbsp;
             <Link to={`/user/${comment.user.username}`}>
             {userName === comment.user.username?"you":comment.user.username}
             </Link>
           </div>
-          <div>{dateManager(comment.createdAt)}</div>
+          <div className="commentSizeEnhancer">{dateManager(comment.updatedAt)===dateManager(comment.createdAt)?dateManager(comment.updatedAt):`edited ${dateManager(comment.updatedAt)}`}</div>
         </div>
         {/* comment view */}
         <div className="commentContainer mt-1 text-center">{comment.comment}</div>
         {/* options buttons */}
         <div className="commentOptioner">
+          {/* here options for comment */}
           <div className="realOptionsComment reply px-2 ">
             {userName === comment.user.username || admin? (
               <small>
@@ -111,6 +112,8 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
               <i className="fa fa-light fa-thumbs-up hover-on-like px-2"></i>
             </small>
           </div>
+          {/* see replies or not from here */}
+          <div>
           {comment.nestedcomments.length>0?<div className="badge align-items-center nestedDisplayChecker">
             <span className="text-primary">
               Load ({comment.nestedcomments.length}) Replies{" "}
@@ -129,6 +132,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
               />
             </span>
           </div>:""}
+          </div>
         </div>
         {/* reply or edit boxes */}
         {!editBox && !replyBox ? (

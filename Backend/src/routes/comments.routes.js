@@ -27,9 +27,7 @@ router.post("/newcomment", authenticate, async (req, res) => {
 router.get("/allcomments/:postId", async (req, res) => {
   try {
     let comments = await Comment.find({ post: req.params.postId })
-      .populate("user", { password: 0, email: 0, _id: 0 })
-      .lean()
-      .exec();
+      .populate("user", { password: 0, email: 0, _id: 0 }).populate([nestedcomments],"_id",{password: 0, email:0,_id: 0})
     return res.status(200).send({ comments: comments, count: comments.length });
   } catch (err) {
     return res.status(500).send({ err: err.message, status: false });
