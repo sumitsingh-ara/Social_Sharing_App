@@ -81,7 +81,7 @@ export const tryLogin = (payload) =>(dispatch)=> {
       localStorage.setItem("isAuth", true);
       localStorage.setItem("token", JSON.stringify(response.data.token));
       dispatch(loginSuccess(response.data));
-      // window.location.href="http://localhost:3000/"
+      // window.location.href="https://localhost:3000/"
     })
     .catch((err) => {
         // console.log(err,"error")
@@ -121,7 +121,8 @@ const userNameFailure = () => {
 
 export const checkUsername = (payload)=>(dispatch)=>{
   dispatch(userNameLoading());
-  dispatch(setMessage("Checking availability"))
+  // dispatch(setMessage("Checking availability"))
+  console.log("yhn ayay ah")
   return Axios.post("https://socialsharekaro.herokuapp.com/social/checkUsername",payload)
   .then(function (response) {
     if (response.data.status){

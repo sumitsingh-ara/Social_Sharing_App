@@ -1,26 +1,20 @@
 const express = require('express');
+var cors = require('cors')
 const rateLimit = require('express-rate-limit');
 const app = express();
+app.use(cors())
 const dotenv = require('dotenv');
 dotenv.config();
-const passport = require("./configs/passport")
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
+const passport = require("./configs/passport")
+
  //integrating json into app and saving it from DOS ATTACKS by limiting the body
 
 // Data Sanitization against XSS //preventing users from inserting HTML and scripts on input;
 
-const cors = require("cors");
-app.use(cors({ origin: process.env.ORIGIN, credentials: true }));
-app.use(function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE,PATCH');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
 const limit = rateLimit({
-    max: 5,// max requests
+    max: 500,// max requests
     windowMs: 60 * 60 * 1000, // 1 Hour
     message: 'Too many requests' // message to send
 });

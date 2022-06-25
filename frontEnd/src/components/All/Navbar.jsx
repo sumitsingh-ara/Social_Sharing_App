@@ -236,9 +236,9 @@ export const Navbar = ({ passerSearchParams }) => {
                     </button>
                   </ul>
                 </li>
-                <li className="nav-item ">
+                <li className="nav-item text-center border m-auto">
                   <button
-                    className="nav-link btn-outline-danger border-0"
+                    className="nav-link btn-outline-danger border-0 px-4"
                     onClick={() => {
                       reset();
                     }}

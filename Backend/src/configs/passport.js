@@ -22,7 +22,7 @@ const newToken = (user) => {
 passport.use(new GoogleStrategy({
     clientID:process.env.GOOGLE_CLIENT_ID ,
     clientSecret:process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://socialsharekaro.herokuapp.com/auth/google/callback",
+    callbackURL: `${process.env.ORIGIN}/auth/google/callback`,
     userProfileURL: "https://**www**.googleapis.com/oauth2/v3/userinfo",
     passReqToCallback: true
   },
