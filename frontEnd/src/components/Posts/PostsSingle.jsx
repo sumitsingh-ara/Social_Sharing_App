@@ -12,7 +12,7 @@ export const PostSingle = () => {
   const editRef = useRef(null);
   const dispatch = useDispatch();
   const { isAuth, token } = useSelector((store) => store.auth);
-  const { id,userName } = useSelector((store) => store.users);
+  const { id,userName,pic } = useSelector((store) => store.users);
   const { loading, data, count } = useSelector((store) => store.comments);
   const {postloading,postData,likeStatus} = useSelector((store) => store.posts)
   const navigate = useNavigate();
@@ -200,7 +200,7 @@ export const PostSingle = () => {
                   <div className="d-flex flex-row add-comment-section mt-4 mb-4">
                     <img
                       className="img-fluid img-responsive rounded-circle mr-2"
-                      src="https://i.imgur.com/qdiP4DB.jpg"
+                      src={pic?pic:"https://i.imgur.com/qdiP4DB.jpg"}
                       width="38"
                       alt="profile"
                     />

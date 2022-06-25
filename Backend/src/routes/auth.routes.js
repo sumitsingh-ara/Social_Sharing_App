@@ -132,7 +132,7 @@ router.post("/login", async (req, res) => {
       token: token,
     });
   } catch (err) {
-    return res.status(500).send(err);
+    return res.status(500).send(err.message);
   }
 });
 //Forgot Password

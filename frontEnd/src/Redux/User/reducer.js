@@ -28,7 +28,7 @@ export const usersReducer =(state = initState, { type, payload }) =>{
                 id:payload._id,
                 userName:payload.username,
                 name:payload.name,
-                profile:payload.profilePic,
+                pic:payload.profilePic.image,
                 email:payload.email,
                 loading:false,
                 error:false,

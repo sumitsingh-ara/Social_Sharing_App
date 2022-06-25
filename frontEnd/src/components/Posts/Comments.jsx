@@ -17,7 +17,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
  
   const dispatch = useDispatch();
   const { postId } = useParams();
-  const { userName,admin } = useSelector((store) => store.users);
+  const { userName,admin,id } = useSelector((store) => store.users);
   const { token } = useSelector((store) => store.auth);
   const [nestedcomment, setNestedComment] = useState("");
   
@@ -162,7 +162,8 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
                         token: token,
                         commentId: comment._id,
                         comment: nestedcomment,
-                        postId: postId
+                        postId: postId,
+                        realuser:id
                       })
                     );
                     setNestedComment("")

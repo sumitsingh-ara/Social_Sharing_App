@@ -162,7 +162,7 @@ export const SingleUser = () => {
                     ? `${(userDetails.postCount / 1000).toFixed(2)}K`
                     : userDetails.postCount}
                 </h4>
-                <p>Extra</p>
+                <p>Extra wala poster</p>
               </div>
               
               <div className="icon">

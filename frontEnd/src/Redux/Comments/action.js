@@ -105,6 +105,7 @@ export const makeNestedNewCommentOnReply = (payload) => (dispatch) => {
    //console.log("Call kr rhe he",payload)
   let data = JSON.stringify({
      "comment": payload.comment,
+     "realuser": payload.realuser
   });
 
   let config = {

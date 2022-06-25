@@ -27,8 +27,9 @@ router.post("/newcomment", authenticate, async (req, res) => {
 router.get("/allcomments/:postId", async (req, res) => {
   try {
     let comments = await Comment.find({ post: req.params.postId })
-      .populate("user", { password: 0, email: 0, _id: 0 }).populate([nestedcomments],"_id",{password: 0, email:0,_id: 0})
-    return res.status(200).send({ comments: comments, count: comments.length });
+      .populate("user", { password: 0, email: 0, _id: 0 })
+      
+    return res.status(200).send({ comments: comments, count: comments.length })
   } catch (err) {
     return res.status(500).send({ err: err.message, status: false });
   }
@@ -101,8 +102,10 @@ router.post(
         return res
           .status(404)
           .send({ message: "Please login before comment", status: false });
+          console.log(req.body)
       let deta = {
         uniqueId: nanoid(8),
+        realuser:req.body.realuser,
         user: req.params.userId,
         comment: req.body.comment,
         date: new Date(),
