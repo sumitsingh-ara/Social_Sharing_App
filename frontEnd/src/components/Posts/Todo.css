@@ -13,7 +13,7 @@
     max-height: 80vh;
     overflow-y: auto;
     overflow-wrap: break-word;
-    text-align: justify;
+   
     text-justify: inter-word;
 }
 @media screen and (max-width:760px){

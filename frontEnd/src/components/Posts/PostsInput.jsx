@@ -7,12 +7,13 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "./Todo.css";
-const Filter = require("bad-words");
+// const Filter = require("bad-words");
 export const PostsInput = () => {
-  const filter = new Filter({ regex: /\*|\.|$/gi });
+  // const filter = new Filter({ regex: /\*|\.|$/gi });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuth } = useSelector((store) => store.auth);
+  const {loading,error} = useSelector((store) => store.allPosts);
+  const {isAuth } = useSelector((store) => store.auth);
   const { id } = useSelector((store) => store.users);
   const [formData, setFormData] = useState({
     title: "",
@@ -23,15 +24,15 @@ export const PostsInput = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // filter.addWords('sala',"Bastard","Son of a Bitch");
-    const x = filter.clean(formData.description);
-    const y = filter.clean(formData.title);
-    setFormData({
-      ...formData,
-      title: y,
-      description: x,
-    });
-    if (x.includes("*") || y.includes("*"))
-      return alert("OOPS, bad-words are no more supported here!");
+    // const x = filter.clean(formData.description);
+    // const y = filter.clean(formData.title);
+    // setFormData({
+    //   ...formData,
+    //   title: y,
+    //   description: x,
+    // });
+    // if (x.includes("*") || y.includes("*"))
+    //   return alert("OOPS, bad-words are no more supported here!");
     e.preventDefault();
     if (formData.categories !== "Computer Science") {
       setFormData({
@@ -39,7 +40,7 @@ export const PostsInput = () => {
         subCategory: "",
       });
     }
-    if (formData.description.trim().length <= 100)
+    if (formData.description.trim().length <= 10)
       return alert("Please write some more about the post");
     dispatch(postTodos({ ...formData, user: id }));
     setFormData({
@@ -49,7 +50,7 @@ export const PostsInput = () => {
       subCategory: "",
     });
     setTimeout(() => {
-      navigate(-1);
+      navigate('/allPosts');
     }, 1000);
   };
   const handleChange = (e) => {
@@ -64,9 +65,17 @@ export const PostsInput = () => {
   }
   return (
     <>
-      <h1>Share your Knowledge</h1>
-      {loading ? (
-        <h1>Posting Data</h1>
+    {!loading &&  <h1>Share your Knowledge</h1>}
+      {loading ? (<>  <h1>Posting Data</h1>
+      <div className="spinner-border" style={{width:"3rem", height: "3rem"}} role="status">
+  <span className="sr-only">Loading...</span>
+</div>
+<div className="spinner-grow"  style={{width:"3rem", height: "3rem"}} role="status">
+  <span className="sr-only">Loading...</span>
+</div>
+      
+      </>
+      
       ) : error ? (
         <h1>Something went wrong</h1>
       ) : (
@@ -153,17 +162,16 @@ export const PostsInput = () => {
               value="Post Data"
             />
           </form>
-        </div>
-      )}
-
-      <button
+          <button
         onClick={() => {
           navigate(-1);
         }}
-        className="btn btn-danger"
+        className="btn btn-danger mb-2"
       >
         Go back
       </button>
+        </div>
+      )}
     </>
   );
 };

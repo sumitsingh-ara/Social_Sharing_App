@@ -5,10 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import {fetchSinglePost,singlePostEdit,singlePostLike,viewCounter,checkPostLikeOrNot,singlePostDislike} from "../../Redux/Post/action";
 import { getAllComments, makeNewComment } from "../../Redux/Comments/action";
 import "./Todo.css";
-const Filter = require('bad-words');
+// const Filter = require('bad-words');
 
 export const PostSingle = () => {
-  const filter = new Filter({ regex: /\*|\.|$/gi });
+  // const filter = new Filter({ regex: /\*|\.|$/gi });
   const editRef = useRef(null);
   const dispatch = useDispatch();
   const { isAuth, token } = useSelector((store) => store.auth);
@@ -57,9 +57,9 @@ export const PostSingle = () => {
   };
   //function to post the new comments;
   const postComment = () => {
-    const x = filter.clean(comment);
-    setComment(x);
-    if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
+    // const x = filter.clean(comment);
+    // setComment(x);
+    // if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
     if (!isAuth) {
       navigate("/login");
       return;
@@ -76,9 +76,9 @@ export const PostSingle = () => {
     setComment("");
   };
   const postEditChanges = () => {
-    const x = filter.clean(editPostDescription)
-    setEditPostDescription(x);
-    if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
+    // const x = filter.clean(editPostDescription)
+    // setEditPostDescription(x);
+    // if(x.includes("*")) return alert("OOPS, bad-words are no more supported here!");
    let payload = {
     token: token,
     id:id,

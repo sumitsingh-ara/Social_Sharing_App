@@ -80,17 +80,16 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
   return (
     <>
     {!loading?
-      <div className="container rounded bg-white">
+      <div className="container editProfileViews rounded bg-white">
         <div className="row">
-          <div className="col-md-3 border-right">
-            <div className="d-flex flex-column align-items-center text-center p-3 py-5">
+          <div className="col-md-4 border-right">
+            <div className="d-flex flex-column align-items-center text-center">
               <div className="image-upload">
                 <label htmlFor="file-input" >
                   <img
-                   
                     width="150px"
                     type="file"
-                    className="rounded-circle mt-5"
+                    className="rounded-circle mt-1"
                     src={
                       userDetails.profilePic.image
                         ? userDetails.profilePic.image
@@ -104,12 +103,12 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
                 <input id="file-input" type="file"  onChange={saveFile} />
               </div>
 
-              <span className="font-weight-bold">{userDetails.name}</span>
+              <span className="font-weight-bold">{userDetails.name} ({userDetails.username})</span>
               <span className="text-black-50">{userDetails.email}</span>
               <span> </span>
             </div>
           </div>
-          <div className="col-md-5 border-right text-center">
+          <div className="col-md-8 border-right text-center">
             <form onSubmit={handleSubmit}className="p-3 py-5">
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h4 className="text-center">Profile Settings</h4>
