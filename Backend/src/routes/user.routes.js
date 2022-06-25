@@ -71,6 +71,7 @@ router.post(
             username: req.user.username,
             name: req.body.name,
             email: req.user.email,
+            aboutme: req.body.aboutme,
             password: req.user.password,
             socialLinks: {
               linkedin: req.body.linkedin,
@@ -94,6 +95,7 @@ router.post(
                 username:userCheck.username,
                 name: req.body.name,
                 email: userCheck.email,
+                aboutme: req.body.aboutme,
                 password: userCheck.password,
                 socialLinks: {
                   linkedin: req.body.linkedin,

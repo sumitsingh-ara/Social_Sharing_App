@@ -18,9 +18,9 @@ export const Signup = () => {
   );
   const [formData, setFormData] = useState({
     username: "",
-    name: "Sumit Singh",
-    email: "sumit47919@gmail.com",
-    password: "123456789",
+    name: "",
+    email: "",
+    password: "",
   });
   useEffect(() => {
     dispatch(resetMessage())

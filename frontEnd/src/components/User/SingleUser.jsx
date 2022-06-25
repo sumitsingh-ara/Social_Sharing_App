@@ -27,7 +27,7 @@ export const SingleUser = () => {
       }
     };
     getData();
-  }, [ids]);
+  }, [ids,edit]);
 
   const verifyEmail = async() => {
     setLoading(true);
@@ -117,8 +117,8 @@ export const SingleUser = () => {
               <p className="title">
                 {userDetails.profession?.setUserDetails.profession}
               </p>
-              <p className="description">
-                {userDetails.aboutme?.userDetails.aboutme}
+              <p className="description text-wrap">
+                {userDetails.aboutme?userDetails.aboutme:""}
               </p>
               <button type="button" className="btn">
                 <a
@@ -132,8 +132,8 @@ export const SingleUser = () => {
 
             <div className="social-icons">
               <div className="icon">
-                <a href="/">
-                  <i className="fab fa-dribbble"></i>
+                <a href={userDetails.socialLinks.github}>
+                <i class="fab fa-brands fa-github"></i>
                 </a>
                 <h4>
                   {userDetails.postCount >= 1000
@@ -142,10 +142,9 @@ export const SingleUser = () => {
                 </h4>
                 <p>Posts</p>
               </div>
-
               <div className="icon">
-                <a href="/">
-                  <i className="fab fa-behance"></i>
+                <a href={userDetails.socialLinks.instagram}>
+                <i class="fab fa-brands fa-instagram"></i>
                 </a>
                 <h4>
                   {userDetails.likesCount >= 1000
@@ -154,10 +153,21 @@ export const SingleUser = () => {
                 </h4>
                 <p>Likes</p>
               </div>
-
               <div className="icon">
-                <a href="/">
-                  <i className="fab fa-twitter"></i>
+                <a href={userDetails.socialLinks.linkedin}>
+                <i class="fab fa-brands fa-linkedin"></i>
+                </a>
+                <h4>
+                  {userDetails.postCount >= 1000
+                    ? `${(userDetails.postCount / 1000).toFixed(2)}K`
+                    : userDetails.postCount}
+                </h4>
+                <p>Extra</p>
+              </div>
+              
+              <div className="icon">
+                <a href={userDetails.socialLinks.twitter}>
+                <i class="fa fa-brands fa-twitter"></i>
                 </a>
                 <h4>
                   {userDetails.views >= 1000

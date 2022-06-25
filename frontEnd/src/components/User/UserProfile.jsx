@@ -1,9 +1,8 @@
 import "./UserProfile.css";
 import {useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
 import { useState, useEffect } from "react";
 export const UserProfile = ({ setEdit, edit, userDetails }) => {
-  const navigate = useNavigate();
+
   const [file, setFile] = useState();
   const [loading,setLoading] = useState(false);
   const saveFile = (e) => {
@@ -19,6 +18,7 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
     instagram: "",
     github: "",
     linkedin: "",
+    aboutme:""
   });
 
   useEffect(() => {
@@ -30,6 +30,7 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
       instagram: userDetails.socialLinks.instagram,
       github: userDetails.socialLinks.github,
       linkedin: userDetails.socialLinks.linkedin,
+      aboutme:userDetails.aboutme
     });
   }, [userDetails]);
 
@@ -50,6 +51,7 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
     formdata.append("linkedin", formData.linkedin);
     formdata.append("instagram", formData.instagram);
     formdata.append("github",formData.github);
+    formdata.append("aboutme",formData.aboutme);
    formdata.append("image", file);
     var requestOptions = {
       method: "POST",
@@ -64,7 +66,9 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
       let data = await fetch("https://socialsharekaro.herokuapp.com/social/user/update",requestOptions);
       data = await data.json();
       setLoading(false);
-      if(data.status) navigate(-1)
+      if(data.status){
+        setEdit(!edit)
+      } 
       else alert("wrong credentials")
     }catch(err){
       setLoading(false);
@@ -121,6 +125,21 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
                     className="form-control"
                     placeholder="Enter name"
                     value={formData.name}
+                  />
+                </div>
+              </div>
+              <div className="row mt-2">
+                <div className="col-md-12">
+                  <label className="labels">About me</label>
+                  <input
+                  required
+                    onChange={handleChange}
+                    type="text"
+                    id="aboutme"
+                    className="form-control"
+                    placeholder="Enter something about yourself"
+                    maxLength="100"
+                    value={formData.aboutme}
                   />
                 </div>
               </div>

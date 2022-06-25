@@ -62,9 +62,9 @@
     color: #666b7d;
 }
 .wrapper {
-    width: 320px;
+    width: 50vh;
     margin:auto;
-    height: 80vh;
+    height: fit-content;
     background: #fdfeff;
     transition: background 0.6s ease;
     border-radius: 10px;
@@ -98,8 +98,8 @@
 }
 .wrapper .profile .check {
     position: absolute;
-    right: 5em;
-    bottom: 12.7em;
+    right: 6em;
+    top: 4.9em;
 }
 .wrapper .profile .check i {
     color: #fff;
@@ -139,10 +139,11 @@
 }
 .wrapper .profile .description {
     color: #080911;
-    font-size: 14px;
-    font-weight: 300;
     text-align: center;
-    margin-bottom: 1.3em;
+    word-wrap: break-word;
+    text-align: justify ;
+  text-justify: inter-word ;
+    
 }
 .wrapper .profile .btn {
     color: #fff;
@@ -179,11 +180,14 @@
     border-radius: 30px;
     box-shadow: 0 13px 26px rgba(0, 0, 0, .2), 0 3px 6px rgba(0, 0, 0, .2);
 }
-.wrapper .social-icons .icon:nth-of-type(1) a {
+.wrapper .social-icons .icon:nth-of-type(2) a {
     background: linear-gradient(to bottom right, #c90a6d, #ff48a0);
 }
-.wrapper .social-icons .icon:nth-of-type(2) a {
+.wrapper .social-icons .icon:nth-of-type(1) a {
     background: linear-gradient(to bottom right, #5e5aec, #3f9efc);
+}
+.wrapper .social-icons .icon:nth-of-type(4) a {
+     background: linear-gradient(to bottom right, #c90a6d, #ff48a0);
 }
 .wrapper .social-icons .icon:nth-of-type(3) a {
     background: linear-gradient(to bottom right, #6452e9, #639ff9);
@@ -203,14 +207,20 @@
 }
 @media screen and (max-width:500px) {
     .frame{
-        margin-top:10.5vh ;
+        margin-top:13vh ;
+    }
+    .profile{
+        margin-bottom:1vh;
     }
     .wrapper{
-        height: 90vh ;
-        padding: 10px ;
+        padding: 2vh ;
+        width: 90%;
     }
     .wrapper .profile {
-        margin-top: 1em;
+        margin-top:2vh;
         position: relative;
+    }
+    .social-icons{
+        margin-top:5vh !important;
     }
 }

@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, unique: true },
     name: { type: String, required: true },
+    aboutme: { type: String, required:false,default:""},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minLength: 8, maxLength: 20 },
     socialLinks: {
@@ -13,7 +14,7 @@ const UserSchema = new mongoose.Schema(
       twitter: { type: String, required: false,default:""}
     },
     profilePic: {
-      public_id: { type: String, required: false, unique: true,default:null },
+      public_id: { type: String, required: false,default:null },
       image: { type: String, required: false,default:null },
     },
     admin: { type: Boolean, required: false, default: false },

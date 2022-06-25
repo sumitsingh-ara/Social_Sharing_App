@@ -10,8 +10,8 @@ export const Login = () => {
   const [resetMessage, setResetMessage] = useState(false);
   const { isAuth, message, loading } = useSelector((store) => store.auth);
   const [formData, setFormData] = useState({
-    email: "sumit47919@gmail.com",
-    password: "123456789",
+    email: "",
+    password: "",
   });
   const [resetEmail, setResetEmail] = useState("");
   if (isAuth) {

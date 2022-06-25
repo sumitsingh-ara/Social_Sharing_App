@@ -44,7 +44,7 @@ app.get( '/auth/google/callback',
         failureRedirect: '/auth/google/failure'
 }), function(req, res) {
     const {user, token} = req.user;
-    return res.redirect(`https://sharekaro-theta.vercel.app/googleRedirect`+"?"+token);
+    return res.redirect(`https://sharekaro-one.vercel.app/googleRedirect`+"?"+token);
 });
 
 
