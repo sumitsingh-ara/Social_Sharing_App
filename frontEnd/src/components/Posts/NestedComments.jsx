@@ -2,7 +2,7 @@ import {Link,useNavigate,useParams} from "react-router-dom";
 import {useState,useRef} from "react";
 import {useSelector,useDispatch} from "react-redux";
 import {dateManager} from "../../utils/dateManager";
-import {makeNestedNewCommentOnReply,deleteNestedCommentReplies,editingNestedReply} from "../../Redux/Comments/action"
+import {makeNestedNewCommentOnReply,deleteNestedCommentReplies,editingNestedReply} from "../../Redux/Comments/action";
 const Filter = require('bad-words');
  
 export const NestedComments = ({replies,comment}) => {
@@ -28,18 +28,18 @@ export const NestedComments = ({replies,comment}) => {
             {" "}
             <img
               className="img-fluid img-responsive rounded-circle mr-2"
-              src={url}
+              src={replies.realuser.profilePic.image?replies.realuser.profilePic.image:url}
               width="38"
               alt="profile"
             />
           </div>
-          <div style={{fontSize:"2vh"}}> Replied by&nbsp;
+          <div className="commentSizeEnhancer"> Replied by&nbsp;
             <Link to={`/user/${replies.user}`}>
             {userName === replies.user?"you":replies.user}
             </Link>
            
           </div>
-          <div>{dateManager(replies.date)}</div>
+          <div className="commentSizeEnhancer">{dateManager(replies.date)}</div>
         </div>
         {/* comment view */}
         <div className="commentContainer mt-1 text-center">

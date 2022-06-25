@@ -27,7 +27,13 @@ router.post("/newcomment", authenticate, async (req, res) => {
 router.get("/allcomments/:postId", async (req, res) => {
   try {
     let comments = await Comment.find({ post: req.params.postId })
-      .populate("user", { password: 0, email: 0, _id: 0 })
+      .populate("user", { password: 0, email: 0, _id: 0 }).populate({
+        path:"nestedcomments",
+        populate:[
+          {path:"realuser",profilePic:1}
+        ]
+      }).lean().exec()
+
       
     return res.status(200).send({ comments: comments, count: comments.length })
   } catch (err) {
