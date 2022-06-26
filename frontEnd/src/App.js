@@ -27,7 +27,7 @@ function App() {
   return (
     <div className="App">
       <Navbar passerSearchParams={passerSearchParams}/>
-      <div style={{marginTop: '9vh'}}></div>
+      <div className="topMarginForFixed"></div>
      <AllRoutes passerSearchParams={passerSearchParams} />
     </div>
   );

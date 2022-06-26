@@ -51,6 +51,7 @@ export const Signup = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(formData.password <8 || formData.password > 20)return alert("Please choose a password between 8 to 20 characters");
     var formdata = new FormData();
     formdata.append("username", formData.username);
     formdata.append("email", formData.email);
@@ -62,7 +63,7 @@ export const Signup = () => {
       body: formdata,
       redirect: "follow",
     };
-
+    
     // fetch("http://localhost:7448/social/register", requestOptions)
     //   .then(response => response.text())
     //   .then(result => console.log(result))

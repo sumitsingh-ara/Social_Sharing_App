@@ -106,7 +106,7 @@ export const Navbar = ({ passerSearchParams }) => {
                   </Link>
                   <ul onClick={closeNavbar}
                     className="dropdown-menu text-center text-light"
-                    style={{background:"#9999ff"}}
+                    style={{background:"#0d6efd"}}
                     aria-labelledby="navbarDropdown"
                   >
                     {/* kkdkdkd----------------------------dddddddddddddddd */}
@@ -151,7 +151,7 @@ export const Navbar = ({ passerSearchParams }) => {
                   <ul
                     className="dropdown-menu text-center"
                     aria-labelledby="navbarDropdown"
-                    style={{background:"#9999ff"}}
+                    style={{background:"#0d6efd"}}
                   >
                     <p  
                       role="button"
@@ -200,7 +200,7 @@ export const Navbar = ({ passerSearchParams }) => {
                   <ul
                     className="dropdown-menu text-center text-light"
                     aria-labelledby="navbarDropdown"
-                    style={{background:"#9999ff"}}
+                    style={{background:"#0d6efd"}}
                   >
                     <li>
                       <p
