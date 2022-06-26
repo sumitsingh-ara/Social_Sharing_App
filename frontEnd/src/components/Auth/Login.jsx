@@ -130,16 +130,16 @@ export const Login = () => {
           </div>
         </section>
       ) : (
-        <section className="vh-60">
+        <section className="vh-60 m-auto">
           <div className="mask d-flex align-items-center h-100 gradient-custom-3">
             <div className="container-fluid h-100">
               <div className="row d-flex justify-content-center align-items-center h-100">
                 <div className="col-12 col-md-9 col-lg-7 col-xl-6">
                   <div className="card" style={{ borderRadius: "15px" }}>
                     <div className="card-body">
-                      <h2 className="text-uppercase h4 text-center mb-4">
-                        Login with email and password
-                      </h2>
+                      <h4 className="text-uppercase h5 text-center mb-4">
+                        Login with email or username
+                      </h4>
 
                       <form onSubmit={handleSubmit}>
                         <div className="form-outline mb-4">
@@ -147,9 +147,9 @@ export const Login = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            type="email"
+                            type="text"
                             id="email"
-                            placeholder="Enter email address"
+                            placeholder="Enter username or email"
                             className="form-control form-control-lg"
                           />
                         </div>
@@ -215,7 +215,9 @@ export const Login = () => {
                         />
                         Login with google
                       </button>
+                      <br/>
                     </div>
+                    
                   </div>
                 </div>
               </div>

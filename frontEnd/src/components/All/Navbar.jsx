@@ -1,14 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { serverLogout } from "../../Redux/Auth/action";
 import { fetchUserDetails } from "../../Redux/User/action";
 export const Navbar = ({ passerSearchParams }) => {
+  const [flag,setFlag] = useState(true)
   const { setSortBy, setFilterBy, setLimit, search, setSearch } =
     passerSearchParams;
   const { isAuth, token } = useSelector((store) => store.auth);
   const navigate = useNavigate();
-  const { name,userName } = useSelector((store) => store.users);
+  const { name, userName } = useSelector((store) => store.users);
   const dispatch = useDispatch();
   useEffect(() => {
     if (isAuth) {
@@ -19,7 +20,7 @@ export const Navbar = ({ passerSearchParams }) => {
     setSortBy("");
     setFilterBy("");
     setLimit(6);
-    navigate('/allPosts');
+    navigate("/allPosts");
   };
 
   const searchCall = () => {
@@ -28,6 +29,9 @@ export const Navbar = ({ passerSearchParams }) => {
     navigate(`search/${search}`);
     setSearch("");
   };
+  const closeNavbar = () => {
+    setFlag(!flag)
+  }
   return (
     <>
       {!isAuth ? (
@@ -51,66 +55,68 @@ export const Navbar = ({ passerSearchParams }) => {
         </nav>
       ) : (
         <nav
-          className="navbar navbar-expand-lg navbar-light  bg-primary"
+          className="navbar navbar-expand-lg navbar-light  bg-primary px-2"
           style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100 }}
         >
-          <div className="container-fluid">
-            <Link to="/" className="navbar-brand btn btn-light">
+            <Link onClick={()=>{
+              setFlag(true);
+            }} to="/" className="navbar-brand btn btn-light">
               Home
             </Link>
             <button
               className="navbar-toggler bg-light"
               type="button"
-              data-bs-toggle="collapse"
+              onClick={closeNavbar}
               data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
+              aria-controls=""
               aria-label="Toggle navigation"
             >
               <span className="navbar-toggler-icon"></span>
             </button>
             <div
-              className="collapse navbar-collapse"
+              className={`navbar-collapse ${flag?"collapse":""}`}
               id="navbarSupportedContent"
             >
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item ">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0" >
+                <li className="nav-item" onClick={closeNavbar}>
                   <Link
                     to="/allPosts"
                     className="nav-link active text-light"
                     aria-current="page"
+                    
                   >
                     Feeds
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item" onClick={closeNavbar}>
                   <Link to="/todosInput" className="nav-link active text-light">
                     Create a new post
                   </Link>
                 </li>
-                <li className="nav-item dropdown">
+                <li className="nav-item dropdown" >
                   <Link
                     to=""
                     className="nav-link dropdown-toggle text-light"
                     id="navbarDropdown"
                     role="button"
                     data-bs-toggle="dropdown"
+                    
                   >
                     {isAuth ? (name ? name.split(" ")[0] : "") : "My Profile"}
                   </Link>
-                  <ul
-                    className="dropdown-menu"
+                  <ul onClick={closeNavbar}
+                    className="dropdown-menu text-center text-light"
+                    style={{background:"#9999ff"}}
                     aria-labelledby="navbarDropdown"
                   >
-                    <Link
-                      to="/contactAdmin"
-                      className="dropdown-item "
-                      aria-disabled="true"
-                    >
-                      Contact Admin
-                    </Link>
+                    {/* kkdkdkd----------------------------dddddddddddddddd */}
+                    <li >
+                      <Link to="/contactAdmin" style={{color:"white"}}  className="dropdown-item ">
+                        Contact Admin
+                      </Link>
+                    </li>
                     <li>
-                      <Link to={`/user/${userName}`} className="dropdown-item">
+                      <Link to={`/user/${userName}`} style={{color:"white"}}  className="dropdown-item">
                         Profile
                       </Link>
                     </li>
@@ -123,7 +129,7 @@ export const Navbar = ({ passerSearchParams }) => {
                         navigate("/login", { replace: true });
                         dispatch(serverLogout());
                       }}
-                      className="dropdown-item"
+                      className="dropdown-item text-light"
                     >
                       {isAuth ? "Logout" : "Login"}
                     </button>
@@ -131,7 +137,7 @@ export const Navbar = ({ passerSearchParams }) => {
                 </li>
               </ul>
               {/* Created the middle things for extra things like sort filter etc */}
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0" >
                 <li className="nav-item dropdown">
                   <p
                     className="nav-link dropdown-toggle text-light m-0"
@@ -145,10 +151,11 @@ export const Navbar = ({ passerSearchParams }) => {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    <p
+                    <p 
                       role="button"
                       onClick={() => {
                         setSortBy("mostRecents");
+                        closeNavbar()
                       }}
                       className="dropdown-item m-0 "
                       aria-disabled="true"
@@ -160,6 +167,7 @@ export const Navbar = ({ passerSearchParams }) => {
                         role="button"
                         onClick={() => {
                           setSortBy("mostViewedPosts");
+                          closeNavbar()
                         }}
                         className="dropdown-item m-0"
                       >
@@ -171,6 +179,7 @@ export const Navbar = ({ passerSearchParams }) => {
                       className="dropdown-item"
                       onClick={() => {
                         setSortBy("mostLikedPosts");
+                        closeNavbar()
                       }}
                     >
                       Most liked posts
@@ -195,6 +204,7 @@ export const Navbar = ({ passerSearchParams }) => {
                         role="button"
                         onClick={() => {
                           setFilterBy("jobs");
+                          closeNavbar()
                         }}
                         className="dropdown-item m-0"
                       >
@@ -206,6 +216,7 @@ export const Navbar = ({ passerSearchParams }) => {
                         role="button"
                         onClick={() => {
                           setFilterBy("techInfo");
+                          closeNavbar()
                         }}
                         className="dropdown-item m-0 "
                         aria-disabled="true"
@@ -218,6 +229,7 @@ export const Navbar = ({ passerSearchParams }) => {
                         role="button"
                         onClick={() => {
                           setFilterBy("jokes");
+                          closeNavbar()
                         }}
                         className="dropdown-item m-0"
                       >
@@ -230,6 +242,7 @@ export const Navbar = ({ passerSearchParams }) => {
                       className="dropdown-item"
                       onClick={() => {
                         setFilterBy("motivational");
+                        closeNavbar()
                       }}
                     >
                       Motivational
@@ -241,6 +254,7 @@ export const Navbar = ({ passerSearchParams }) => {
                     className="nav-link btn-outline-danger border-0 px-4"
                     onClick={() => {
                       reset();
+                      closeNavbar()
                     }}
                   >
                     Reset
@@ -258,12 +272,15 @@ export const Navbar = ({ passerSearchParams }) => {
                   placeholder="Search"
                   aria-label="Search"
                 />
-                <button onClick={searchCall} className="btn btn-success">
+                <button onClick={()=>{
+                  searchCall()
+                  closeNavbar()
+                  }} className="btn btn-success">
                   Search
                 </button>
               </div>
             </div>
-          </div>
+         
         </nav>
       )}
     </>

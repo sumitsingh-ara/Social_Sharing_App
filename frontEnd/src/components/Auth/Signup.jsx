@@ -88,7 +88,6 @@ export const Signup = () => {
                       <div className="form-outline mb-2">
                         <input
                           value={formData.username}
-                          
                           onChange={handleChange}
                           pattern="[^\s]+"
                           required
