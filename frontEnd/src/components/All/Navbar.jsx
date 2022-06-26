@@ -38,7 +38,7 @@ export const Navbar = ({ passerSearchParams }) => {
         <nav
           className="navbar navbar-expand-lg navbar-light bg-primary bg-gradient"
           style={{
-            justifyContent: "space-evenly",
+            justifyContent:"space-around",
             position: "fixed",
             top: 0,
             left: 0,
@@ -137,8 +137,9 @@ export const Navbar = ({ passerSearchParams }) => {
                 </li>
               </ul>
               {/* Created the middle things for extra things like sort filter etc */}
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0" >
-                <li className="nav-item dropdown">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0 " >
+                <li className="nav-item dropdown"
+                   >
                   <p
                     className="nav-link dropdown-toggle text-light m-0"
                     id="navbarDropdown"
@@ -148,16 +149,17 @@ export const Navbar = ({ passerSearchParams }) => {
                     Sort By
                   </p>
                   <ul
-                    className="dropdown-menu"
+                    className="dropdown-menu text-center"
                     aria-labelledby="navbarDropdown"
+                    style={{background:"#9999ff"}}
                   >
-                    <p 
+                    <p  
                       role="button"
                       onClick={() => {
                         setSortBy("mostRecents");
                         closeNavbar()
                       }}
-                      className="dropdown-item m-0 "
+                      className="dropdown-item m-0 text-light"
                       aria-disabled="true"
                     >
                       Recent Posts
@@ -169,14 +171,14 @@ export const Navbar = ({ passerSearchParams }) => {
                           setSortBy("mostViewedPosts");
                           closeNavbar()
                         }}
-                        className="dropdown-item m-0"
+                        className="dropdown-item m-0 text-light"
                       >
                         Most Viewed Posts
                       </p>
                     </li>
                     <li></li>
                     <button
-                      className="dropdown-item"
+                      className="dropdown-item text-light"
                       onClick={() => {
                         setSortBy("mostLikedPosts");
                         closeNavbar()
@@ -196,8 +198,9 @@ export const Navbar = ({ passerSearchParams }) => {
                     Filter By
                   </p>
                   <ul
-                    className="dropdown-menu"
+                    className="dropdown-menu text-center text-light"
                     aria-labelledby="navbarDropdown"
+                    style={{background:"#9999ff"}}
                   >
                     <li>
                       <p
@@ -206,7 +209,7 @@ export const Navbar = ({ passerSearchParams }) => {
                           setFilterBy("jobs");
                           closeNavbar()
                         }}
-                        className="dropdown-item m-0"
+                        className="dropdown-item m-0 text-light"
                       >
                         Jobs
                       </p>
@@ -218,7 +221,7 @@ export const Navbar = ({ passerSearchParams }) => {
                           setFilterBy("techInfo");
                           closeNavbar()
                         }}
-                        className="dropdown-item m-0 "
+                        className="dropdown-item m-0 text-light"
                         aria-disabled="true"
                       >
                         Tech Info
@@ -231,7 +234,7 @@ export const Navbar = ({ passerSearchParams }) => {
                           setFilterBy("jokes");
                           closeNavbar()
                         }}
-                        className="dropdown-item m-0"
+                        className="dropdown-item m-0 text-light"
                       >
                         Jokes
                       </p>
@@ -239,7 +242,7 @@ export const Navbar = ({ passerSearchParams }) => {
 
                     <li></li>
                     <button
-                      className="dropdown-item"
+                      className="dropdown-item text-light"
                       onClick={() => {
                         setFilterBy("motivational");
                         closeNavbar()
