@@ -51,7 +51,7 @@ export const Signup = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(formData.password <8 || formData.password > 20)return alert("Please choose a password between 8 to 20 characters");
+    if(formData.password.length <=7  || formData.password.length >=21)return alert("Please choose a password between 8 to 20 characters");
     var formdata = new FormData();
     formdata.append("username", formData.username);
     formdata.append("email", formData.email);

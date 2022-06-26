@@ -122,7 +122,7 @@ const userNameFailure = () => {
 export const checkUsername = (payload)=>(dispatch)=>{
   dispatch(userNameLoading());
   // dispatch(setMessage("Checking availability"))
-  console.log("yhn ayay ah")
+ // console.log("yhn ayay ah")
   return Axios.post("https://socialsharekaro.herokuapp.com/social/checkUsername",payload)
   .then(function (response) {
     if (response.data.status){
