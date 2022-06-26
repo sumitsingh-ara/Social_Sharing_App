@@ -155,10 +155,10 @@ router.post("/resetpassword", async (req, res) => {
     //console.log(process.env.JWT_SECRET_KEY)
     const payload = {
       email: user.email,
-      id: user.id,
+      id: user._id,
     };
-    const token = jwt.sign(payload, secret, { expiresIn: "5m" }); //creating token with the expire time of 5 minutes
-    const link = `https://socialsharekaro.herokuapp.com/social/reset-password/${user.id}/${token}`;
+    const token = jwt.sign(payload, secret, { expiresIn: "10m" }); //creating token with the expire time of 5 minutes
+    const link = `https://socialsharekaro.herokuapp.com/social/reset-password/${user._id}/${token}`;
     const mailOptions = {
       from: process.env.USER, // sender address
       to: user.email, // list of receivers
@@ -173,7 +173,7 @@ router.post("/resetpassword", async (req, res) => {
     });
     return res
       .status(200)
-      .send({ message: "Password link sent to your mail successfully" });
+      .send({message:"Please check your mail to reset the password" });
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -182,11 +182,11 @@ router.post("/resetpassword", async (req, res) => {
 router.get("/reset-password/:id/:token", async (req, res) => {
   try {
     const { id, token } = req.params;
-    const user = await User.findOne({ id: id });
+    const user = await User.findOne({ _id: id });
     if (!user) return res.status(400).send("Something went wrong");
     //If user exits means valid id with valid user;
+  
     const secret = process.env.JWT_SECRET_KEY + user.password; //since this here we havent change the password yet;
-
     const payload = jwt.verify(token, secret);
     if (!payload) return res.status(400).send("Token Invalid");
     res.redirect(`https://sharekaro-one.vercel.app/resetPassword/${id}/${token}`);

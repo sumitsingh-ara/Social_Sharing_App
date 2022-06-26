@@ -21,7 +21,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server"
+    "start": "nodemon src/server"
   },
   "author": "",
   "license": "ISC",
