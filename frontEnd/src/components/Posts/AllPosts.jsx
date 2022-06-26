@@ -46,7 +46,7 @@ export const TodosLists = ({passerSearchParams}) => {
               </div>
               <div className="card-body ">
                 <h5 className="card-title">{item.title}</h5>
-                <p className="card-text text-truncate"style={{maxHeight:"5vh"}} dangerouslySetInnerHTML={{__html:item.description}} />
+                <p className="card-text text-truncate"style={{maxHeight:"4vh"}} dangerouslySetInnerHTML={{__html:item.description}} />
                 <Link
                   to={`/todoSingle/${item._id}`}
                   className="btn btn-primary m-1"

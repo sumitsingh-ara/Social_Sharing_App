@@ -94,7 +94,7 @@ router.post("/register", upload.single("image"), async (req, res) => {
       from: process.env.USER, // sender address
       to: user.email, // list of receivers
       subject: `Welcome ${req.body.name} on Sharekaro.com`, // Subject line
-          html: `<div><div> <h3>Hello ${req.body.name}</h3></div>
+      html: `<div><div> <h3>Hello ${req.body.name}</h3></div>
           <br/>
          <p>You have successfully created your site on Sharekaro.com</p>
           <br/>  <div>Welcome to the fast growing social service, please feel free to share your thoughts, spread the love of knowledge</div></div>`, // plain text body
@@ -123,11 +123,13 @@ router.post("/login", async (req, res) => {
     // console.log(req.body,username)
     if (!user && !username) return res.status(400).send("Wrong Credentials");
     // if it exists then we match the password
-    let match = user?user.checkPassword(req.body.password):username.checkPassword(req.body.password);
+    let match = user
+      ? user.checkPassword(req.body.password)
+      : username.checkPassword(req.body.password);
     // if not match then we throw an error
     if (!match) return res.status(400).send({ message: "Wrong Credentials" });
     //we dont want to show password to user , so hiding the password using spread operator
-    user = user?user:username
+    user = user ? user : username;
     const { password, ...others } = user._doc;
 
     const token = newToken(user); //if everything ok, sending json web token for the user;
@@ -174,7 +176,7 @@ router.post("/resetpassword", async (req, res) => {
     });
     return res
       .status(200)
-      .send({message:"Please check your mail to reset the password" });
+      .send({ message: "Please check your mail to reset the password" });
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -186,11 +188,13 @@ router.get("/reset-password/:id/:token", async (req, res) => {
     const user = await User.findOne({ _id: id });
     if (!user) return res.status(400).send("Something went wrong");
     //If user exits means valid id with valid user;
-  
+
     const secret = process.env.JWT_SECRET_KEY + user.password; //since this here we havent change the password yet;
     const payload = jwt.verify(token, secret);
     if (!payload) return res.status(400).send("Token Invalid");
-    res.redirect(`https://sharekaro-one.vercel.app/resetPassword/${id}/${token}`);
+    res.redirect(
+      `https://sharekaro-one.vercel.app/resetPassword/${id}/${token}`
+    );
   } catch (err) {
     return res.status(500).send(err.message);
   }
@@ -222,25 +226,29 @@ router.post("/reset-password/:id/:token", async (req, res) => {
   }
 });
 
-
 ///------------------------------------------Banning a user -------------------------------------------------///////////
 
-router.patch('/banuser/:username',authenticate,async(req,res)=>{
-  try{  
-   // console.log(req.user);
-    if(req.user.admin ===false) return res.status(400).send({message:"You are not allowed for this"});
+router.patch("/banuser/:username", authenticate, async (req, res) => {
+  try {
+    // console.log(req.user);
+    if (req.user.admin === false)
+      return res.status(400).send({ message: "You are not allowed for this" });
 
-    let user = await User.findOne({username:req.params.username})
-    
-    const deta = req.body.deta;
-    if(!user) return res.status(400).send({message:"User not available"});
+    let user = await User.findOne({ username: req.params.username });
 
-    user = await User.findByIdAndUpdate(user._id,{accountStatus:{active:deta}},{new:true});
+    if (!user) return res.status(400).send({ message: "User not available" });
 
-    return res.status(200).send({message:"Banned / unbanned user",user:user})
-    
-  }catch(err){
-    return res.status(404).send("Bhag sala");
+    const newUser = await User.findByIdAndUpdate(
+      user._id,
+      { accountStatus:{active:user.accountStatus.active==true?false:true,verified:false} },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .send({ message: "Banned / unbanned user", user: newUser });
+  } catch (err) {
+    return res.status(404).send({ message:err.message });
   }
-})
+});
 module.exports = router;
