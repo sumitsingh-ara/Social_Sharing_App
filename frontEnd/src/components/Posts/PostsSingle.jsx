@@ -40,7 +40,7 @@ export const PostSingle = () => {
   useEffect(() => {
    let timerId = setTimeout(() =>{
     dispatch(viewCounter(postId))
-   },1000 * 60)
+   },1000 * 40)
    //cleanup function so , if someone wants to just visist instead of reading the entire post,views will not be counted;
    return()=>{
     if(timerId)clearTimeout(timerId)
@@ -126,11 +126,15 @@ export const PostSingle = () => {
           <span>{isAuth ?likeStatus? <i onClick={dislikePost}
                 className="fa fa-light fa-heart floatRight mx-1 text-success p-1"
                 style={{ fontSize: "30px" }}
-              ></i>:
+              ><small>{postData.likes.length >= 1000
+                ? `${(postData.likes.length / 1000).toFixed(2)}K`
+                : postData.likes.length}</small></i>:
               <i onClick={likePost}
                 className="fa fa-thin fa-heart floatRight mx-1  p-1"
                 style={{ fontSize: "30px" }}
-              ></i>:""
+              ><small>{postData.likes.length >= 1000
+                ? `${(postData.likes.length / 1000).toFixed(2)}K`
+                : postData.likes.length}</small></i>:""
            }
            </span>
          <span> {postData.user.username === userName ? (

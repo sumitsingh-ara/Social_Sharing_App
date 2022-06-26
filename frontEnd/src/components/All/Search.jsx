@@ -1,9 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Link,useParams } from "react-router-dom";
+import { Link,useParams,useNavigate } from "react-router-dom";
 import { useEffect,useState } from "react";
 import {deletePost } from "../../Redux/Todo/action";
+import {dateManager} from "../../utils/dateManager";
 import axios from "axios";
 export const Search = ({passerSearchParams}) => {
+  const navigate = useNavigate();
     const {search} = useParams();
   const {page,setPage,limit,setSearchParams,setSearch} =passerSearchParams
    const dispatch = useDispatch();
@@ -38,6 +40,7 @@ export const Search = ({passerSearchParams}) => {
     }
     getSearchResults()
   }, [dispatch,limit,page,search,setSearchParams,setSearch]);
+  
   return (
     <>
       <h1>{data?"Your Search results are here":"Sorry,no matchings found"}</h1>
@@ -62,7 +65,7 @@ export const Search = ({passerSearchParams}) => {
               </div>
               <div className="card-body">
                 <h5 className="card-title">{item.title}</h5>
-                <p className="card-text  text-truncate">{item.description}</p>
+                <p className="card-text text-truncate"style={{maxHeight:"5vh"}} dangerouslySetInnerHTML={{__html:item.description}} />
                 <Link
                   to={`/todoSingle/${item._id}`}
                   className="btn btn-primary m-1"
@@ -78,12 +81,16 @@ export const Search = ({passerSearchParams}) => {
                         "Delete post confirmation"
                       );
                       if (!confirmBox) return;
+                      
                       dispatch(
                         deletePost({
                           id: item._id,
                           token: token,
                         })
                       );
+                      
+                      navigate(-1)
+                      
                     }}
                   >
                     Delete Post
@@ -94,7 +101,7 @@ export const Search = ({passerSearchParams}) => {
               </div>
               <div className="card-footer text-muted">
                 Created on{" "}
-                {item.createdAt.split("T")[0].split("-").reverse().join("-")} by{" "}
+                {dateManager(item.createdAt)} by{" "}
                 <Link to={`/user/${item.user.username}`}>
                   {item.user.username === userName ? "You" : item.user.username}
                 </Link>

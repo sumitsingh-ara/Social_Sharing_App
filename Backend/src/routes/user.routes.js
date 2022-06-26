@@ -2,7 +2,6 @@ const router = require("express").Router();
 const User = require("../models/users.models");
 const Post = require("../models/posts.models");
 const Comment = require("../models/comments.models");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authenticate = require("../middlewares/authenticate");
 const upload = require("../middlewares/fileuploads.middleware");
@@ -204,6 +203,7 @@ router.get("/specificuser/:username", async (req, res) => {
       sum += item.likes.length;
       views += item.views;
     });
+
     return res
       .status(200)
       .send({ ...others, postCount: postCount, likesCount: sum, views: views });

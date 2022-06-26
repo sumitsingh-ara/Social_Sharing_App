@@ -140,7 +140,7 @@ export const SingleUser = () => {
                     ? `${(userDetails.postCount / 1000).toFixed(2)}K`
                     : userDetails.postCount}
                 </h4>
-                <p>Posts</p>
+                <p>Total Posts</p>
               </div>
               <div className="icon">
                 <a href={userDetails.socialLinks.instagram}>
@@ -151,18 +151,16 @@ export const SingleUser = () => {
                     ? `${(userDetails.likesCount / 1000).toFixed(2)}K`
                     : userDetails.likesCount}
                 </h4>
-                <p>Likes</p>
+                <p>Total Likes</p>
               </div>
               <div className="icon">
                 <a href={userDetails.socialLinks.linkedin}>
                 <i class="fab fa-brands fa-linkedin"></i>
                 </a>
                 <h4>
-                  {userDetails.postCount >= 1000
-                    ? `${(userDetails.postCount / 1000).toFixed(2)}K`
-                    : userDetails.postCount}
+                  { userDetails.likesCount * userDetails.views/userDetails.postCount}
                 </h4>
-                <p>Extra wala poster</p>
+                <p>Popularity</p>
               </div>
               
               <div className="icon">
@@ -174,7 +172,7 @@ export const SingleUser = () => {
                     ? `${(userDetails.views / 1000).toFixed(2)}K`
                     : userDetails.views}
                 </h4>
-                <p>Views</p>
+                <p>Total Views</p>
               </div>
             </div>
           </div>

@@ -5,7 +5,7 @@ import { serverLogout } from "../../Redux/Auth/action";
 import { fetchUserDetails } from "../../Redux/User/action";
 export const Navbar = ({ passerSearchParams }) => {
   const [flag,setFlag] = useState(true)
-  const { setSortBy, setFilterBy, setLimit, search, setSearch } =
+  const { setSortBy, setFilterBy,searchCall, setLimit, search, setSearch } =
     passerSearchParams;
   const { isAuth, token } = useSelector((store) => store.auth);
   const navigate = useNavigate();
@@ -23,12 +23,7 @@ export const Navbar = ({ passerSearchParams }) => {
     navigate("/allPosts");
   };
 
-  const searchCall = () => {
-    if (search.trim() <= 3)
-      return alert("Please give some more hint atleast 3 chars");
-    navigate(`search/${search}`);
-    setSearch("");
-  };
+  
   const closeNavbar = () => {
     setFlag(!flag)
   }
@@ -252,9 +247,9 @@ export const Navbar = ({ passerSearchParams }) => {
                     </button>
                   </ul>
                 </li>
-                <li className="nav-item text-center border m-auto">
+                <li className="nav-item text-center m-auto">
                   <button
-                    className="nav-link btn-outline-danger border-0 px-4"
+                    className="nav-link btn-danger px-4"
                     onClick={() => {
                       reset();
                       closeNavbar()

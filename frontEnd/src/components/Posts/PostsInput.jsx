@@ -136,7 +136,7 @@ export const PostsInput = () => {
                 data={formData.description}
                 onChange={(event, editor) => {
                   const data = editor.getData();
-                  console.log(data);
+                
                   setFormData({
                     ...formData,
                     description: data,

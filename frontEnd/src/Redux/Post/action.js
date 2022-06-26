@@ -108,12 +108,13 @@ export const singlePostLike = (payload) => (dispatch) => {
   };
 
   return Axios(config)
-    .then((res) => {
+    .then(() => {
       let payloads = {
         postId: payload.postId,
         token: payload.token,
       };
       dispatch(checkPostLikeOrNot(payloads));
+      dispatch(fetchSinglePost(payloads))
     })
     .catch((err) => {
       dispatch(getSinglePostFailure());
@@ -138,6 +139,7 @@ export const singlePostDislike = (payload) => (dispatch) => {
         token: payload.token,
       };
       dispatch(checkPostLikeOrNot(payloads));
+      dispatch(fetchSinglePost(payloads))
     })
     .catch((err) => {
       dispatch(getSinglePostFailure());
