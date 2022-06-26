@@ -36,5 +36,6 @@ export const fetchUserDetails = (token) => (dispatch) => {
   }).catch(()=>{
     dispatch(userDetailsFailure())
     dispatch(destroyUserData())
+    window.location.reload();
   })
 };

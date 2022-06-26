@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const User = require("../models/users.models");
+const authenticate = require("../middlewares/authenticate");
 const bcrypt = require("bcrypt");
 const upload = require("../middlewares/fileuploads.middleware");
 const dotenv = require("dotenv");
@@ -221,4 +222,25 @@ router.post("/reset-password/:id/:token", async (req, res) => {
   }
 });
 
+
+///------------------------------------------Banning a user -------------------------------------------------///////////
+
+router.patch('/banuser/:username',authenticate,async(req,res)=>{
+  try{  
+   // console.log(req.user);
+    if(req.user.admin ===false) return res.status(400).send({message:"You are not allowed for this"});
+
+    let user = await User.findOne({username:req.params.username})
+    
+    const deta = req.body.deta;
+    if(!user) return res.status(400).send({message:"User not available"});
+
+    user = await User.findByIdAndUpdate(user._id,{accountStatus:{active:deta}},{new:true});
+
+    return res.status(200).send({message:"Banned / unbanned user",user:user})
+    
+  }catch(err){
+    return res.status(404).send("Bhag sala");
+  }
+})
 module.exports = router;

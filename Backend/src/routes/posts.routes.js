@@ -10,9 +10,8 @@ router.post("/newPost", async (req, res) => {
     let user = await Users.findById(req.body.user);
     //check that user trying to post is present or not in our database;
     if (!user) return res.status(400).send({ message: "User not found" });
-
     //if user is present proceed to create post
-
+    if(user.accountStatus.active === false) return res.status(400).send({message:"You are not allowed"})
     let post = await Post.create(req.body);
 
     let msg = "Post successfully created";
@@ -188,7 +187,7 @@ router.delete("/deletePost/:id", authenticate, async (req, res) => {
       return res.status(400).send({
         message: "You are not the authorized person to delete the post",
       });
-
+      
     post = await Post.findByIdAndDelete(req.params.id);
     const comment = await Comment.deleteMany({ post: req.params.id })
       .lean()

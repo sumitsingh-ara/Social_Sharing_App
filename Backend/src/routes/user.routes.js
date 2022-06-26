@@ -42,7 +42,7 @@ router.post(
         if (req.body.admin)
           return res.status(400).send("You are not authorsied for this");
         
-
+        
         if (!userCheck)
           return res
             .status(400)
@@ -162,7 +162,7 @@ router.post(
 
 //-------------------------------------Get user from token ----------------------------------;
 
-router.get("/one", authenticate, async (req, res) => {
+router.get("/one",authenticate, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) return res.status(400).send({ message: "User not found" });
@@ -203,10 +203,20 @@ router.get("/specificuser/:username", async (req, res) => {
       sum += item.likes.length;
       views += item.views;
     });
+    let totals = await Post.find().lean().exec();
+    let totalPost = await Post.find().countDocuments().lean().exec();
+    let totalLikes =0
+    let totalViews =0
+    totals.forEach((item) => {
+      totalViews += item.views;
+      totalLikes += item.likes.length;
+    })
+    const popularity = Math.ceil(((sum+views) / (totalViews+totalLikes) * 100)/totalPost);
+    
 
     return res
       .status(200)
-      .send({ ...others, postCount: postCount, likesCount: sum, views: views });
+      .send({ ...others, postCount: postCount, likesCount: sum, views: views,popularity:popularity });
   } catch (err) {
     return res.status(500).send(err);
   }

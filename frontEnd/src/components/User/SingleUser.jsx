@@ -158,7 +158,7 @@ export const SingleUser = () => {
                 <i class="fab fa-brands fa-linkedin"></i>
                 </a>
                 <h4>
-                  { userDetails.likesCount * userDetails.views/userDetails.postCount}
+                  { userDetails.popularity}
                 </h4>
                 <p>Popularity</p>
               </div>

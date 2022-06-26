@@ -5,7 +5,7 @@ function verifyToken(token) {
     return new Promise(function (resolve, reject) {
         jwt.verify(token,process.env.JWT_SECRET_KEY,function (error, user) {
             if(error) return reject(error);
-
+          
             return resolve(user);
         })
     })
@@ -26,10 +26,12 @@ async function authenticate(req,res,next){
     const token = bearerToken.split(' ')[1];
         const {user} = await verifyToken(token)
 
+        //checking that user is banned or not
+        if(user.accountStatus.active === false) return res.status(400).send("Banned user");
         req.user = user
 
         //console.log(user);
-
+       
         return next();
 
     }catch(err){
@@ -37,5 +39,7 @@ async function authenticate(req,res,next){
         return res.status(400).send("Please provide a valid bearer token")
     }
 }
+
+
 
 module.exports = authenticate;

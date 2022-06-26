@@ -8,6 +8,7 @@ router.post("/newcomment", authenticate, async (req, res) => {
   if (req.user._id == req.body.user) {
     try {
       //if(!req.body.comment) return res.status(400).send({message:"You can't make an empty comment"});
+      if(req.user.accountStatus.active === false) return res.status(400).send({message:"You are not allowed"})
       let comment = await Comment.create(req.body);
       return res
         .status(200)
@@ -109,7 +110,7 @@ router.post(
         return res
           .status(404)
           .send({ message: "Please login before comment", status: false });
-          console.log(req.body)
+          if(req.user.accountStatus.active === false) return res.status(400).send({message:"You are not allowed"})
       let deta = {
         uniqueId: nanoid(8),
         realuser:req.body.realuser,
