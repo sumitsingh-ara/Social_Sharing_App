@@ -92,8 +92,11 @@ router.post("/register", upload.single("image"), async (req, res) => {
     const mailOptions = {
       from: process.env.USER, // sender address
       to: user.email, // list of receivers
-      subject: "Account Created Successfully", // Subject line
-      html: `<div> <h1>Hello ${user.name} Welcome to our Share Karo website</h1></br>Keep spreading the knowledge of your's.`, // plain text body
+      subject: `Welcome ${req.body.name} on Sharekaro.com`, // Subject line
+          html: `<div><div> <h3>Hello ${req.body.name}</h3></div>
+          <br/>
+         <p>You have successfully created your site on Sharekaro.com</p>
+          <br/>  <div>Welcome to the fast growing social service, please feel free to share your thoughts, spread the love of knowledge</div></div>`, // plain text body
     };
     transporter.sendMail(mailOptions, function (err, info) {
       if (err) console.log(err);
@@ -114,13 +117,16 @@ router.post("/login", async (req, res) => {
   try {
     // First we will check if user with same email already exists
     user = await User.findOne({ email: req.body.email });
+    let username = await User.findOne({ username: req.body.email });
     // if not exists we throw an error
-    if (!user) return res.status(400).send("Wrong Credentials");
+    // console.log(req.body,username)
+    if (!user && !username) return res.status(400).send("Wrong Credentials");
     // if it exists then we match the password
-    let match = user.checkPassword(req.body.password);
+    let match = user?user.checkPassword(req.body.password):username.checkPassword(req.body.password);
     // if not match then we throw an error
     if (!match) return res.status(400).send({ message: "Wrong Credentials" });
     //we dont want to show password to user , so hiding the password using spread operator
+    user = user?user:username
     const { password, ...others } = user._doc;
 
     const token = newToken(user); //if everything ok, sending json web token for the user;
@@ -156,8 +162,8 @@ router.post("/resetpassword", async (req, res) => {
     const mailOptions = {
       from: process.env.USER, // sender address
       to: user.email, // list of receivers
-      subject: "Here is the mail regarding password reset", // Subject line
-      html: `<div> <h1>Hey ${user.username} Please click on the given link below to reset the password</h1><a href=${link}>Click me</a></div>`, // plain text body
+      subject: `Hello ${user.name} , this is a mail regarding password change`, // Subject line
+      html: `<div> <h1>Hey ${user.username} Please click on the given link below to reset the password</h1></br><a href=${link}>Click on this link to reset your password</a></div>`, // plain text body
     };
     transporter.sendMail(mailOptions, function (err, info) {
       if (err) console.log(err);
@@ -183,7 +189,7 @@ router.get("/reset-password/:id/:token", async (req, res) => {
 
     const payload = jwt.verify(token, secret);
     if (!payload) return res.status(400).send("Token Invalid");
-    res.redirect(`http://localhost:3000/resetPassword/${id}/${token}`);
+    res.redirect(`https://sharekaro-one.vercel.app/resetPassword/${id}/${token}`);
   } catch (err) {
     return res.status(500).send(err.message);
   }

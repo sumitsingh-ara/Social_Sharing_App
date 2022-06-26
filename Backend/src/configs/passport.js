@@ -33,6 +33,7 @@ passport.use(new GoogleStrategy({
     const name = profile?._json?.given_name+" "+profile?._json?.family_name;
     const username = profile?._json?.name.split(" ")[0]+nanoid(3);
     const image = profile?._json?.picture;
+    const password = nanoid(10);
     let user;
     try { 
       user = await User.findOne({email}).lean().exec();
@@ -42,20 +43,27 @@ passport.use(new GoogleStrategy({
           username: username,
           email: email,
           name: name,
-          password: nanoid(8),
+          password: password,
           profilePic: {
             image:image
           },
           accountStatus: {
             active:true,
-            verified:profile?._json?.email_verified
+            verified:true,
           }
         })
         const mailOptions = {
           from: process.env.USER, // sender address
           to:email, // list of receivers
-          subject: 'Account Created Successfully', // Subject line
-          html: `<div> <h1>Hello ${name}</h1></div></br> <p>Welcome to our Share Karo website</>`// plain text body
+          subject: `Welcome ${name} on Sharekaro.com`, // Subject line
+          html: `<div><div> <h3>Hello ${name}</h3></div>
+          <br/>
+          <p>Please note down your username and password for your reference</p>
+          <h4>Username : ${username}</h4>
+          <h4>Password : ${password}</h4>
+          <br/>
+          <h5>You can change the password on logging page also</h4>
+          <br/><br/>  <div>Welcome to the fast growing social service, please feel free to share your thoughts, spread the love of knowledge</div></div>`// plain text body
         };
         transporter.sendMail(mailOptions, function (err, info) {
           if(err)

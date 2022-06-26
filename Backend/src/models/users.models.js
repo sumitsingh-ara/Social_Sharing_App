@@ -32,6 +32,7 @@ const UserSchema = new mongoose.Schema(
 //create and update the password hashing;
 
 UserSchema.pre("save", function (next) {
+  
   if (!this.isModified("password")) return next();
 
   const hash = bcryptjs.hashSync(this.password, 8);
@@ -41,8 +42,9 @@ UserSchema.pre("save", function (next) {
 });
 
 UserSchema.methods.checkPassword = function (password) {
+ // console.log(password,this.password,"upare",this.username);
   const match = bcryptjs.compareSync(password, this.password);
-
+//  console.log(match);
   return match;
 };
 

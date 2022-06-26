@@ -30,7 +30,8 @@ router.get("/allcomments/:postId", async (req, res) => {
       .populate("user", { password: 0, email: 0, _id: 0 }).populate({
         path:"nestedcomments",
         populate:[
-          {path:"realuser",profilePic:1}
+          {path:"realuser",select:{profilePic:1}}
+          
         ]
       }).lean().exec()
 
