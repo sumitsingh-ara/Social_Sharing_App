@@ -57,7 +57,7 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
             {userName === comment.user.username?"you":comment.user.username}
             </Link>
           </div>
-          <div className="commentSizeEnhancer">{dateManager(comment.updatedAt)===dateManager(comment.createdAt)?dateManager(comment.updatedAt):`edited ${dateManager(comment.updatedAt)}`}</div>
+          <div className="commentSizeEnhancer">{dateManager(comment.createdAt)}</div>
         </div>
         {/* comment view */}
         <div className="commentContainer mt-1 text-center">{comment.comment}</div>
