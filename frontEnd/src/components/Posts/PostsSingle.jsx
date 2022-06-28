@@ -18,7 +18,6 @@ export const PostSingle = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const [commentDisplay, setCommentDisplay] = useState(true);
-  const [nestedShow, setNestedShow] = useState(false);
   const [editPost, setEditPost] = useState(false);
   const [comment, setComment] = useState("");
   const [editPostDescription, setEditPostDescription] = useState(null);
@@ -267,8 +266,6 @@ export const PostSingle = () => {
           ) : commentDisplay ? (
             data.map((comment) => (
               <Comments
-                nestedShow={nestedShow}
-                setNestedShow={setNestedShow}
                 key={comment._id}
                 comment={comment}
               />

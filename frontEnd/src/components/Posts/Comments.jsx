@@ -7,10 +7,12 @@ import {
   makeNestedNewCommentOnReply,
   editComment
 } from "../../Redux/Comments/action";
+import {NestedCommentView} from "./NestedCommentView";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {NestedComments} from "./NestedComments";
 const Filter = require('bad-words');
-export const Comments = ({ comment,nestedShow,setNestedShow }) => {
+export const Comments = ({ comment }) => {
+  const [nestedShow, setNestedShow] = useState(false);
   const filter = new Filter({ regex: /\*|\.|$/gi });
   const navigate = useNavigate();
   const reply = useRef(null);
@@ -24,7 +26,6 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
   const [replyBox, setReplyBox] = useState(false);
   const [editBox, setEditBox] = useState(false);
  
-  
   const handleDeleteComment = (commentId) => {
     const confirmBox = window.confirm("Do you really want delete comment ?");
     if (!confirmBox) return;
@@ -114,25 +115,8 @@ export const Comments = ({ comment,nestedShow,setNestedShow }) => {
           </div>
           {/* see replies or not from here */}
           <div>
-          {comment.nestedcomments.length>0?<div className="badge align-items-center nestedDisplayChecker">
-            <span className="text-primary">
-              Load ({comment.nestedcomments.length}) Replies{" "}
-              {nestedShow ? "ON" : "OFF"}
-            </span>
-            <span className="form-check form-switch">
-              <input
-                disabled={comment.nestedcomments.length === 0}
-                className="form-check-input"
-                type="checkbox"
-                id="flexSwitchCheckChecked"
-                onClick={() => {
-                  setNestedShow(!nestedShow);
-                }}
-                defaultChecked={nestedShow}
-              />
-            </span>
-          </div>:""}
-          </div>
+         <NestedCommentView comment={comment} nestedShow={nestedShow} setNestedShow={setNestedShow}/>
+          </div> 
         </div>
         {/* reply or edit boxes */}
         {!editBox && !replyBox ? (
