@@ -19,7 +19,7 @@ export const PostsInput = () => {
     title: "",
     description: "",
     categories: "",
-    subCategory: "",
+    postaccess: "",
   });
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,12 +34,7 @@ export const PostsInput = () => {
     // if (x.includes("*") || y.includes("*"))
     //   return alert("OOPS, bad-words are no more supported here!");
     e.preventDefault();
-    if (formData.categories !== "Computer Science") {
-      setFormData({
-        ...formData,
-        subCategory: "",
-      });
-    }
+ 
     if (formData.description.trim().length <= 10)
       return alert("Please write some more about the post");
     dispatch(postTodos({ ...formData, user: id }));
@@ -47,7 +42,7 @@ export const PostsInput = () => {
       title: "",
       description: "",
       categories: "",
-      subCategory: "",
+      postaccess: "",
     });
     setTimeout(() => {
       navigate('/allPosts');
@@ -106,23 +101,18 @@ export const PostsInput = () => {
               <option value="Jokes">Jokes</option>
             </select>
             <select
-              value={formData.subCategory}
+              value={formData.postaccess}
               onChange={handleChange}
-              id="subCategory"
+              id="postaccess"
               className="custom-select form-control  col-sm mb-3"
-              style={{
-                display:
-                  formData.categories === "Computer Science" ? "block" : "none",
-              }}
+              required
             >
               <option value="" disabled>
-                Select Sub Category
+                Select Post View type
               </option>
-              <option value="html">Html</option>
-              <option value="css">CSS</option>
-              <option value="js">JavaScript</option>
-              <option value="react">React</option>
-              <option value="redux">Redux</option>
+              <option value="all">All</option>
+              <option value="friends">Friends</option>
+              <option value="followers">Followers & Friends</option>
             </select>
 
             <div className="mb-4" style={{ minHeight: "40vh" }}>

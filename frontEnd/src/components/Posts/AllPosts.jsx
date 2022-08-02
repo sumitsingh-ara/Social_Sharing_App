@@ -10,7 +10,7 @@ export const TodosLists = ({passerSearchParams}) => {
   const { loading, error, data, totalPosts } = useSelector(
     (store) => store.allPosts
   );
-  const { userName,admin } = useSelector((store) => store.users);
+  const {id,userName,admin } = useSelector((store) => store.users);
   const { token } = useSelector((store) => store.auth);
   useEffect(() => {
     let params = {
@@ -21,8 +21,8 @@ export const TodosLists = ({passerSearchParams}) => {
     }
     
     setSearchParams(params, { replace: true });
-    dispatch(fetchTodos(params));
-  }, [dispatch,limit,filterBy,page,setSearchParams,sortBy]);
+    dispatch(fetchTodos({params,token}));
+  }, [dispatch,limit,filterBy,page,setSearchParams,sortBy,id,token]);
   return (
     <>
       {loading ? (

@@ -11,7 +11,8 @@ router.post("/newPost", async (req, res) => {
     //check that user trying to post is present or not in our database;
     if (!user) return res.status(400).send({ message: "User not found" });
     //if user is present proceed to create post
-    if(user.accountStatus.active === false) return res.status(400).send({message:"You are not allowed"})
+    if (user.accountStatus.active === false)
+      return res.status(400).send({ message: "You are not allowed" });
     let post = await Post.create(req.body);
 
     let msg = "Post successfully created";
@@ -22,21 +23,43 @@ router.post("/newPost", async (req, res) => {
   }
 });
 //get single post details
-router.get("/singlePost/:id", async (req, res) => {
+router.get("/singlePost/:id",authenticate, async (req, res) => {
   try {
     let post = await Post.findById(req.params.id).populate("user", {
       password: 0,
       _id: 0,
       email: 0,
     }); //getting the post alongwith userdata by using populate;
+   //console.log(post.user,req.user,post.user.username === req.user.username,post.user.username==req.user.username,"lambada");
+    if(post.user.username === req.user.username) return res.status(200).send({ post: post });
+   
+    if(post.postaccess === 'all') return res.status(200).send({ post: post });
+    let allowed = false;
+    if(post.postaccess === 'friends'){
+      for(let i=0;i<post.user.friends.length; i++){
+        if(post.user.friends[i].user == req.user._id){
+          allowed = true;
+          break
+        }
+      }
+    }
+    if(post.postaccess === 'followers'){
+      for(let i=0;i<post.user.followers.length; i++){
+        if(post.user.followers[i].user == req.user._id){
+          allowed = true;
+          break
+        }
+      }
+    }
 
-    if (post) return res.status(200).send({ post: post }); //if post present sending data to frontend
+    if (post && allowed) return res.status(200).send({ post: post }); //if post present sending data to frontend
+    throw new Error()
   } catch (err) {
     return res.status(500).send(err);
   }
 });
 //get all posts
-router.get("/allPosts", async (req, res) => {
+router.get("/allPosts", authenticate, async (req, res) => {
   try {
     const page = +req.query.page || 1; //creating a query for user endpoints and converting string into number using plus sign & setting default to page 1 is no user input given;
     const limit = +req.query.limit || 6; //creating a query for user endpoints and converting string into number using plus sign & setting default to size 10 is no user input given;
@@ -44,23 +67,46 @@ router.get("/allPosts", async (req, res) => {
     const offset = (page - 1) * limit; //creating a formula to get the search results in pagination according to user input given which page he wants to see the list
     let sortBy = req.query.sortBy; //getting the values from frontend;
     const filterBy = req.query.filterBy; //getting the values from frontend;
-    let posts ;
-    let postTotalCount = await Post.find().countDocuments().lean().exec(); //calculating the total no of posts collection.
-     //if only search results are to be provided;
-     if(req.query.search){
+    let posts;
+    let postTotalCount; //calculating the total no of posts collection.
+    //if only search results are to be provided;
+    function filteringPosts(posts) {
+      //this function filters the posts that should be shown to the user or not like in that;
+      posts = posts.filter((item) => {
+        console.log("Filtering posts...")
+        console.log('item',item)
+        if (item.user.username == req.user.username) return item;
+        if (item.postaccess === "all") return item;
+        if (item.postaccess === "friends") {
+          for (let i = 0; i < item.user.friends.length; i++) {
+            if (item.user.friends[i].user == req.user._id) return item;
+          }
+        }
+        if (item.postaccess === "followers") {
+          for (let i = 0; i < item.user.followers.length; i++) {
+            if (item.user.followers[i].user == req.user._id) return item;
+          }
+        }
+      });
+      return posts;
+    }
+    if (req.query.search) {
       let posts = await Post.find({
-        $or: [ {description : { $regex: req.query.search, $options: 'i' }}, { title: { $regex: req.query.search, $options: 'i' } } ]
-    }).skip(offset)
-    .limit(limit)
-    .populate("user", { password: 0, _id: 0, email: 0 })
-    .lean()
-    .exec();;
-      
-      postTotalCount = await Post.find({
-        $or: [ {description : { $regex: req.query.search, $options: 'i' }}, { title: { $regex: req.query.search, $options: 'i' } } ]
-    }).countDocuments();
-      if(postTotalCount > 0) return res.status(200).send({posts,postTotalCount})
-     else return res.status(400).send(err);
+        $or: [
+          { description: { $regex: req.query.search, $options: "i" } },
+          { title: { $regex: req.query.search, $options: "i" } },
+        ],
+      })
+        .populate("user", { password: 0, _id: 0, email: 0 })
+        .lean()
+        .exec();
+
+        posts = req.user.admin?posts:  filteringPosts(posts)
+        postTotalCount = posts.length;
+        posts =posts.slice(offset,offset+limit)
+      if (postTotalCount > 0)
+        return res.status(200).send({ posts, postTotalCount });
+      else return res.status(400).send(err);
     }
     //--------------------------------------------------------if users query only sorting at a time -----------------------------------------------------------
     if (sortBy && !filterBy) {
@@ -68,112 +114,161 @@ router.get("/allPosts", async (req, res) => {
         case "mostRecents": {
           posts = await Post.find()
             .sort({ createdAt: -1 })
-            .skip(offset)
-            .limit(limit)
             .populate("user", { password: 0, _id: 0, email: 0 })
             .lean()
             .exec();
+          posts = req.user.admin?posts:  filteringPosts(posts);
+          postTotalCount = posts.length;
+          posts = posts.slice(offset, offset + limit);
           return res.status(200).send({ posts, postTotalCount });
         }
         case "mostViewedPosts": {
-          posts = await Post.find().sort({ views: -1 }).skip(offset)
-          .limit(limit)
-          .populate("user", {
-            password: 0,
-            _id: 0,
-            email: 0,
-          })
-          .lean()
-          .exec();
-        
+          posts = await Post.find()
+            .sort({ views: -1 })
+            .populate("user", {
+              password: 0,
+              _id: 0,
+              email: 0,
+            })
+            .lean()
+            .exec();
+          posts = req.user.admin?posts:  filteringPosts(posts);
+          postTotalCount = posts.length;
+          posts = posts.slice(offset, offset + limit);
           return res.status(200).send({ posts, postTotalCount });
         }
         case "mostLikedPosts": {
-          posts = await Post.find().sort({ likes: -1 }).skip(offset)
-          .limit(limit)
-          .populate("user", {
-            password: 0,
-            _id: 0,
-            email: 0,
-          })
-          .lean()
-          .exec();
+          posts = await Post.find()
+            .sort({ likes: -1 })
+            .populate("user", {
+              password: 0,
+              _id: 0,
+              email: 0,
+            })
+            .lean()
+            .exec();
+          posts = req.user.admin?posts:  filteringPosts(posts);
+          postTotalCount = posts.length;
+          posts = posts.slice(offset, offset + limit);
           return res.status(200).send({ posts, postTotalCount });
         }
       }
     }
     //--------------------------------------------------------if users query only filter at a time-------------------------------------------------------------
-    if(filterBy && !sortBy){
-      switch(filterBy){
-        case "techInfo":
-          {
-            posts = await Post.find({categories:"Computer Science"}).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
-            postTotalCount = await Post.find({categories:"Computer Science"}).countDocuments().lean().exec()
-            return res.status(200).send({ posts, postTotalCount });
-          }
-          case "jokes":
-            {
-              posts = await Post.find({categories:"Jokes"}).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
-              postTotalCount = await Post.find({categories:"Jokes"}).countDocuments().lean().exec()
-              return res.status(200).send({ posts, postTotalCount });
-            }
-            case "motivational":
-            {
-              posts = await Post.find({categories:"Motivational"}).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
-              postTotalCount = await Post.find({categories:"Motivational"}).countDocuments().lean().exec()
-              return res.status(200).send({ posts, postTotalCount });
-            }
-            case "jobs":
-              {
-                posts = await Post.find({categories:"Jobs"}).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
-                postTotalCount = await Post.find({categories:"Jobs"}).countDocuments().lean().exec()
-                return res.status(200).send({ posts, postTotalCount });
-              }
+    if (filterBy && !sortBy) {
+      switch (filterBy) {
+        case "techInfo": {
+          posts = await Post.find({ categories: "Computer Science" })
+            .populate("user", { password: 0, _id: 0, email: 0 })
+            .lean()
+            .exec();
+          posts = req.user.admin?posts:  filteringPosts(posts);
+          postTotalCount = posts.length;
+          posts = posts.slice(offset, offset + limit);
+          return res.status(200).send({ posts, postTotalCount });
+        }
+        case "jokes": {
+          posts = await Post.find({ categories: "Jokes" })
+            .populate("user", { password: 0, _id: 0, email: 0 })
+            .lean()
+            .exec();
+          posts = req.user.admin?posts:  filteringPosts(posts);
+          postTotalCount = posts.length;
+          posts = posts.slice(offset, offset + limit);
+          return res.status(200).send({ posts, postTotalCount });
+        }
+        case "motivational": {
+          posts = await Post.find({ categories: "Motivational" })
+            .populate("user", { password: 0, _id: 0, email: 0 })
+            .lean()
+            .exec();
+          posts = req.user.admin?posts:  filteringPosts(posts);
+          postTotalCount = posts.length;
+          posts = posts.slice(offset, offset + limit);
+          return res.status(200).send({ posts, postTotalCount });
+        }
+        case "jobs": {
+          posts = await Post.find({ categories: "Jobs" })
+            .populate("user", { password: 0, _id: 0, email: 0 })
+            .lean()
+            .exec();
+            posts = req.user.admin?posts:  filteringPosts(posts)
+            postTotalCount = posts.length;
+            posts =posts.slice(offset,offset+limit)
+          return res.status(200).send({ posts, postTotalCount });
+        }
       }
     }
     //--------------------------------------------------------if users query both filter and sorting at ame time------------------------------------------------
 
-    if(filterBy &&sortBy){
-      sortBy = sortBy==="mostRecents"?{ createdAt: -1 }:sortBy==="mostViewedPosts"?{ views: -1 }:sortBy==="mostLikedPosts"?{ likes: -1 }:"";
-      switch(filterBy){
-        case "techInfo":
-          {
-            posts = await Post.find({categories:"Computer Science"}).sort(sortBy).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
-            postTotalCount = await Post.find({categories:"Computer Science"}).countDocuments().lean().exec()
-            return res.status(200).send({ posts, postTotalCount });
-          }
-          case "jokes":
-            {
-              posts = await Post.find({categories:"Jokes"}).sort(sortBy).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
-              postTotalCount = await Post.find({categories:"Jokes"}).countDocuments().lean().exec()
-              return res.status(200).send({ posts, postTotalCount });
-            }
-            case "motivational":
-            {
-              posts = await Post.find({categories:"Motivational"}).sort(sortBy).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
-              postTotalCount = await Post.find({categories:"Motivational"}).countDocuments().lean().exec()
-              return res.status(200).send({ posts, postTotalCount });
-            }
-            case "jobs":
-              {
-                posts = await Post.find({categories:"Jobs"}).sort(sortBy).skip(offset).limit(limit).populate('user',{ password: 0, _id: 0, email: 0 }).lean().exec()
-                postTotalCount = await Post.find({categories:"Jobs"}).countDocuments().lean().exec()
-                return res.status(200).send({ posts, postTotalCount });
-              }
+    if (filterBy && sortBy) {
+      sortBy =
+        sortBy === "mostRecents"
+          ? { createdAt: -1 }
+          : sortBy === "mostViewedPosts"
+          ? { views: -1 }
+          : sortBy === "mostLikedPosts"
+          ? { likes: -1 }
+          : "";
+      switch (filterBy) {
+        case "techInfo": {
+          posts = await Post.find({ categories: "Computer Science" })
+            .sort(sortBy)
+            .populate("user", { password: 0, _id: 0, email: 0 })
+            .lean()
+            .exec();
+            posts = req.user.admin?posts:  filteringPosts(posts)
+            postTotalCount = posts.length;
+            posts =posts.slice(offset,offset+limit)
+          return res.status(200).send({ posts, postTotalCount });
+        }
+        case "jokes": {
+          posts = await Post.find({ categories: "Jokes" })
+            .sort(sortBy)
+            .populate("user", { password: 0, _id: 0, email: 0 })
+            .lean()
+            .exec();
+            posts = req.user.admin?posts:  filteringPosts(posts)
+            postTotalCount = posts.length;
+            posts =posts.slice(offset,offset+limit)
+          return res.status(200).send({ posts, postTotalCount });
+        }
+        case "motivational": {
+          posts = await Post.find({ categories: "Motivational" })
+            .sort(sortBy)
+            .populate("user", { password: 0, _id: 0, email: 0 })
+            .lean()
+            .exec();
+            posts = req.user.admin?posts:  filteringPosts(posts)
+            postTotalCount = posts.length;
+            posts =posts.slice(offset,offset+limit)
+          return res.status(200).send({ posts, postTotalCount });
+        }
+        case "jobs": {
+          posts = await Post.find({ categories: "Jobs" })
+            .sort(sortBy)
+            .populate("user", { password: 0, _id: 0, email: 0 })
+            .lean()
+            .exec();
+            posts = req.user.admin?posts:  filteringPosts(posts)
+            postTotalCount = posts.length;
+            posts =posts.slice(offset,offset+limit)
+          return res.status(200).send({ posts, postTotalCount });
+        }
       }
     }
 
-    posts = await Post.find()
-      .skip(offset)
-      .limit(limit)
-      .populate("user", {
-        password: 0,
-        _id: 0,
-        email: 0,
-      })
-      .lean()
-      .exec();
-    postTotalCount = await Post.find().countDocuments().lean().exec(); //calculating the total no of posts collection.
+    posts = await Post.find().populate("user", {
+      password: 0,
+      _id: 0,
+      email: 0,
+    });
+
+    posts = req.user.admin?posts: filteringPosts(posts);
+    postTotalCount = posts.length; //calculating the total no of posts collection.
+    posts = posts.slice(offset, offset + limit);
+    //will looop and check whether the user can have the post or not based on the status of filtering;
+
     return res.status(200).send({ posts, postTotalCount });
   } catch (err) {
     return res.status(500).send(err);
@@ -187,7 +282,7 @@ router.delete("/deletePost/:id", authenticate, async (req, res) => {
       return res.status(400).send({
         message: "You are not the authorized person to delete the post",
       });
-      
+
     post = await Post.findByIdAndDelete(req.params.id);
     const comment = await Comment.deleteMany({ post: req.params.id })
       .lean()
@@ -260,7 +355,7 @@ router.patch(
       )
         .lean()
         .exec();
-     // console.log(dislikedPost);
+      // console.log(dislikedPost);
       return res.status(200).send({ message: "Post disliked successfully" });
     } catch (err) {
       return res.status(500).send(err);

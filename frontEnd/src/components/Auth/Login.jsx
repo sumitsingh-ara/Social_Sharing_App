@@ -41,7 +41,7 @@ export const Login = () => {
         }),
       });
       data = await data.json();
-      setResetMessage(data.message);
+      setResetMessage("Mail sent");
     } catch (error) {
       //  console.log("Eror from sender",error)
       setResetMessage(error.message);

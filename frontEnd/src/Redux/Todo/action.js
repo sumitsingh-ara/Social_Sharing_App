@@ -20,10 +20,13 @@ const todoRequestSuccess =(payload) => {
 }
 export const fetchTodos = (payload) => (dispatch) => {
     dispatch(todogetRequest());
-    return Axios.get("https://socialsharekaro.herokuapp.com/social/post/allPosts",{
+    return Axios.get(`https://socialsharekaro.herokuapp.com/social/post/allPosts`,{
         params:{
-            ...payload
-          }
+            ...payload.params
+          },
+        headers:{
+            Authorization:`Bearer ${payload.token}`
+        }
     })
     .then((res)=>dispatch(todoRequestSuccess(res.data)))
     .catch((err)=> dispatch(todoRequestFailure()))

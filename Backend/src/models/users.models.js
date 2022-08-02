@@ -13,6 +13,15 @@ const UserSchema = new mongoose.Schema(
       github: { type: String, required: false,default:""},
       twitter: { type: String, required: false,default:""}
     },
+    followers:[{
+      user:{type:mongoose.Schema.Types.ObjectId,ref:"User"},
+  }],
+  friends:[{
+    user:{type:mongoose.Schema.Types.ObjectId,ref:"User"},
+  }],
+  pendingFriends:[{
+    user:{type:mongoose.Schema.Types.ObjectId,ref:"User"},
+  }],
     profilePic: {
       public_id: { type: String, required: false,default:null },
       image: { type: String, required: false,default:null },

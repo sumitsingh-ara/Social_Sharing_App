@@ -185,7 +185,7 @@ router.get("/all", async (req, res) => {
 });
 
 //--------------------------------------Get a specific user details to show on page post written by whom---?..------------------------;
-router.get("/specificuser/:username", async (req, res) => {
+router.get("/specificuser/:username",authenticate, async (req, res) => {
   try {
     let user = await User.findOne({ username: req.params.username }); //got the user profile details
     if (!user)
@@ -193,7 +193,7 @@ router.get("/specificuser/:username", async (req, res) => {
         .status(400)
         .send({ message: "User not available at the moment" });
 
-    const { password, _id, ...others } = user._doc; //destructuing to avoid sending password;
+    const { password, ...others } = user._doc; //destructuing to avoid sending password;
 
     const postCount = await Post.find({ user: user._id }).countDocuments();
     const likesCount = await Post.find({ user: user._id });
@@ -213,10 +213,33 @@ router.get("/specificuser/:username", async (req, res) => {
     })
     const popularity = Math.ceil(((sum+views) / (totalViews+totalLikes) * 100)/totalPost);
     
+    let followed = false;
+    let pending = 0;//if 0 means send friend req
+    for(let i=0; i<user.followers.length;i++) {
+      // console.log(user.followers[i].user)
+      if(user.followers[i].user == req.user._id){
+        followed=true;
+      }
+    } 
 
+    for(let i=0; i<user.pendingFriends.length;i++) {
+      if(user.pendingFriends[i].user == req.user._id){
+        pending =1;
+      }
+    } 
+    for(let i=0; i<user.friends.length;i++) {
+      if(user.friends[i].user == req.user._id){
+        pending =2;
+      }
+    } 
+   
+    //&&i<user.pendingFriends.length
+    // if(user.pendingFriends[i].user == req.user._id){
+    //     pending=true;
+    //   }
     return res
       .status(200)
-      .send({ ...others, postCount: postCount, likesCount: sum, views: views,popularity:popularity });
+      .send({ ...others, postCount: postCount, likesCount: sum, views: views,popularity:popularity,follower:followed,pending:pending});
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -284,4 +307,194 @@ router.get("/specificuser/emailverifypatch/:id/:token", async (req, res) => {
     return res.status(500).send(err);
   }
 });
+
+//----------------------------------------------Follow/Unfollow user--------------------------------------------------------;
+
+router.patch('/specificuser/follow/:followingId',authenticate,async(req, res)=>{
+  try{
+    let deta = {
+      user: req.user._id,
+    };
+    await User.updateOne(
+      { username: req.params.followingId },
+      { $push: { followers: deta } },
+      { new: true }
+    )
+      .lean()
+      .exec();
+      return res.status(200).send({ status: true});
+  }catch(err){
+    return res.status(400).send({status:false})
+  }
+})
+
+router.patch('/specificuser/unfollow/:followingId',authenticate,async(req, res)=>{
+  try{
+    let deta = {
+      user: req.user._id,
+    };
+    await User.updateOne(
+      { username: req.params.followingId },
+      { $pull: { followers: deta } },
+      { new: true }
+    )
+      .lean()
+      .exec();
+      return res.status(200).send({ status: true});
+  }catch(err){
+    return res.status(400).send({status:false})
+  }
+})
+
+//--------------------------------------------------Friend Request/Revoke friend request --------------------------------------------;
+
+router.patch('/specificuser/addfriend/:followingId',authenticate,async(req, res)=>{
+  try{
+    let deta = {
+      user: req.user._id,
+    };
+    await User.updateOne(
+      { username: req.params.followingId },
+      { $push: { pendingFriends: deta } },
+      { new: true }
+    )
+      .lean()
+      .exec();
+      return res.status(200).send({ status: true});
+  }catch(err){
+    return res.status(400).send({status:false})
+  }
+})
+
+router.patch('/specificuser/unfriend/:followingId',authenticate,async(req, res)=>{
+  try{
+    let deta = {
+      user: req.user._id,
+    };
+    await User.updateOne(
+      { username: req.params.followingId },
+      { $pull: { pendingFriends: deta } },
+      { new: true }
+    )
+      .lean()
+      .exec();
+      return res.status(200).send({ status: true});
+  }catch(err){
+    return res.status(400).send({status:false})
+  }
+})
+
+//------------------------------------------------------------Get all friends details alogn with new requests-------------------------;
+
+router.get('/specificuser/allFriends/pending',authenticate,async(req, res)=>{
+  try{
+    let user = await User.findById(req.user._id).populate({
+      path:"pendingFriends",
+      populate:[
+        {path:"user"}
+      ]
+    }).populate({
+      path:"friends",
+      populate:[
+        {path:"user"}
+      ]
+    }).lean().exec();
+
+    if(!user) return res.status(400).send({message:"Please login before using these such features"});
+
+    const {pendingFriends,friends} = user;
+    return res.status(200).send({pendingFriends,friends});
+  }catch(err){
+    return res.status(400).send({message:err.message})
+  }
+})
+
+
+//-----------------------------------------------------------Accept/Unaccept friend requests-------------------------------------------;
+
+router.patch('/specificuser/respondAccept/:senderId',authenticate,async(req, res)=>{
+
+  try{
+    let deta = {
+      user: req.params.senderId,
+    };
+    await User.updateOne(
+      { _id: req.user._id },
+      { $pull: { pendingFriends: deta } },
+      { new: true }
+    )
+      .lean()
+      .exec();
+
+      await User.updateOne(
+        { _id: req.user._id },
+        { $push: { friends: deta } },
+        { new: true }
+      )
+        .lean()
+        .exec();
+        await User.updateOne(
+          { _id: req.params.senderId },
+          { $push: { friends: {user: req.user._id} } },
+          { new: true }
+        )
+          .lean()
+          .exec();
+        
+      return res.status(200).send({ status: true});
+  }catch(err){
+    return res.status(400).send({status:false})
+  }
+})
+
+
+router.patch('/specificuser/declineAccept/:senderId',authenticate,async(req, res)=>{
+
+  try{
+    let deta = {
+      user: req.params.senderId,
+    };
+    await User.updateOne(
+      { _id: req.user._id },
+      { $pull: { pendingFriends: deta } },
+      { new: true }
+    )
+      .lean()
+      .exec();
+        
+      return res.status(200).send({ status: true});
+  }catch(err){
+    return res.status(400).send({status:false})
+  }
+})
+
+
+//---------------------------------------------------------------Unfriend------------------------------------------------------------;
+router.patch('/specificuser/unfriending/:friendId',authenticate,async(req, res)=>{
+  try{
+    let deta = {
+      user: req.params.friendId,
+    };
+    await User.updateOne(
+      { _id: req.user._id },
+      { $pull: { friends: deta } },
+      { new: true }
+    )
+      .lean()
+      .exec();
+
+      await User.updateOne(
+        { _id: req.params.friendId },
+        { $pull: { friends: {user: req.user._id} } },
+        { new: true }
+      )
+        .lean()
+        .exec();
+      
+      return res.status(200).send({ status: true});
+  }catch(err){
+    return res.status(400).send({status:false})
+  }
+})
+
 module.exports = router;

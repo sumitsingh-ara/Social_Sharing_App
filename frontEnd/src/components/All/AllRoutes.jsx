@@ -11,6 +11,7 @@ import { SingleUser } from "../User/SingleUser";
 import { PrivateComponents } from "./PrivateComponents";
 import {ContactAdmin} from "../Admin/ContactAdmin";
 import {Search} from "../All/Search";
+import {FriendsPending} from "../User/FriendsPending";
 export const AllRoutes = ({passerSearchParams}) => {
   return (
     <>
@@ -25,8 +26,8 @@ export const AllRoutes = ({passerSearchParams}) => {
           element={<ResetPassword />}
         ></Route>
         <Route path="/todosInput" element={<PostsInput />}></Route>
-        <Route path="/allPosts" element={<TodosLists passerSearchParams={passerSearchParams}/>}></Route>
-        <Route path="/todoSingle/:postId" element={<PostSingle />}></Route>
+        <Route path="/allPosts" element={<PrivateComponents><TodosLists passerSearchParams={passerSearchParams}/></PrivateComponents>}></Route>
+        <Route path="/todoSingle/:postId" element={<PrivateComponents><PostSingle /></PrivateComponents>}></Route>
         <Route path="/googleRedirect" element={<GoogleRedirect />}></Route>
         <Route
           path="/user/:ids"
@@ -36,6 +37,7 @@ export const AllRoutes = ({passerSearchParams}) => {
             </PrivateComponents>
           }
         ></Route>
+        <Route path="/friends" element={<FriendsPending/>}></Route>
       </Routes>
     </>
   );

@@ -77,6 +77,7 @@ export const UserProfile = ({ setEdit, edit, userDetails }) => {
    
     
   };
+
   return (
     <>
     {!loading?

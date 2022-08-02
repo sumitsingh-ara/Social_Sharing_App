@@ -1,0 +1,31 @@
+.container{
+    padding: 2vw;
+    width:90vw;
+    margin:auto;
+    font-size:1em;
+}
+.profiler{
+    width: 350px;
+    height: 150px;
+    display: flex;
+    align-items:center;
+    background-color:rgb(48, 48, 65);
+    color: white;
+    border-radius:5%;
+    cursor: pointer;
+    box-shadow: 10px 4px 50px 10px rgba(45, 0, 134, 0.07);
+    margin:10px auto;
+}
+
+
+.imager{
+    max-width:120px;
+    min-height: 120px;
+    object-fit: cover;
+    border-radius:50%;
+}
+.accept{
+    display: flex;
+    width: 200px;
+    justify-content: space-around;
+}

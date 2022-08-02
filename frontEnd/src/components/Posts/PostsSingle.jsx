@@ -14,7 +14,7 @@ export const PostSingle = () => {
   const { isAuth, token } = useSelector((store) => store.auth);
   const { id,userName,pic } = useSelector((store) => store.users);
   const { loading, data, count } = useSelector((store) => store.comments);
-  const {postloading,postData,likeStatus} = useSelector((store) => store.posts)
+  const {postloading,posterror,postData,likeStatus} = useSelector((store) => store.posts)
   const navigate = useNavigate();
   const { postId } = useParams();
   const [commentDisplay, setCommentDisplay] = useState(true);
@@ -25,7 +25,8 @@ export const PostSingle = () => {
   useEffect(() => {
    dispatch(fetchSinglePost({
     postId: postId,
-    id:id
+    id:id,
+    token
    }))
    dispatch(getAllComments(postId));
    dispatch(checkPostLikeOrNot({
@@ -110,7 +111,7 @@ export const PostSingle = () => {
         <div className="spinner-grow mt-5" role="status">
           <span className="sr-only">Loading...</span>
         </div>
-      ) : (
+      ) :posterror?<h1>You are not authorised to see this post</h1>: (
         <div className="container postViewSingle mt-5">
           <div className="firststPostGrid">
           <span className="floatRight">

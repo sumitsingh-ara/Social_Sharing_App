@@ -25,7 +25,11 @@ const getSinglePostFailure = () => {
 export const fetchSinglePost = (payload) => (dispatch) => {
   dispatch(getSinglePostRequest());
   return Axios.get(
-    `https://socialsharekaro.herokuapp.com/social/post/singlePost/${payload.postId}`
+    `https://socialsharekaro.herokuapp.com/social/post/singlePost/${payload.postId}`,{
+      headers: {
+        Authorization: `Bearer ${payload.token}`
+      }
+    }
   )
     .then((res) => {
       let payloads = {
@@ -33,10 +37,13 @@ export const fetchSinglePost = (payload) => (dispatch) => {
         status: false,
         id: payload.id,
       };
-
+      console.log("Res me aaya h");
       dispatch(getSinglePostSuccess(payloads));
     })
-    .catch(() => dispatch(getSinglePostFailure()));
+    .catch((err)=>{
+      console.log(err,"yahannse")
+      dispatch(getSinglePostFailure())
+    });
 };
 //edit singlepost call
 export const singlePostEdit = (payload) => (dispatch) => {

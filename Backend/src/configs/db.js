@@ -6,6 +6,6 @@ dotenv.config();
 const connect =()=>{
     return mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.bpl9j.mongodb.net/?retryWrites=true&w=majority`)
 }
-
+//mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.bpl9j.mongodb.net/?retryWrites=true&w=majority
 
 module.exports = connect;

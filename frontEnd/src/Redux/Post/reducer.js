@@ -28,7 +28,7 @@ export const postReducer = (state = initState, { type, payload }) => {
       return {
         ...state,
         postloading: false,
-        posterror: false,
+        posterror: true,
       };
     case types.SINGLE_POST_LIKER:
       return {

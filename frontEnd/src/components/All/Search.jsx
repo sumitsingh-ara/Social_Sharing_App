@@ -26,6 +26,9 @@ export const Search = ({passerSearchParams}) => {
     setSearchParams(params,{ replace: true});
     const getSearchResults=() => {
         axios.get("https://socialsharekaro.herokuapp.com/social/post/allPosts",{
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
             params:{
                 ...params
             }
@@ -39,7 +42,7 @@ export const Search = ({passerSearchParams}) => {
         })
     }
     getSearchResults()
-  }, [dispatch,limit,page,search,setSearchParams,setSearch]);
+  }, [dispatch,limit,page,search,setSearchParams,setSearch,token]);
   
   return (
     <>
