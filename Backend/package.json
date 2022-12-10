@@ -20,8 +20,8 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "engines":{
-    "node":"14.x"
+  "engines": {
+    "node": "19.2.0"
   },
   "scripts": {
     "start": "node src/server"
