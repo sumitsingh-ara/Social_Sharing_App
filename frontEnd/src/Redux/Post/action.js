@@ -25,10 +25,11 @@ const getSinglePostFailure = () => {
 export const fetchSinglePost = (payload) => (dispatch) => {
   dispatch(getSinglePostRequest());
   return Axios.get(
-    `https://socialsharekaro.herokuapp.com/social/post/singlePost/${payload.postId}`,{
+    `http://localhost:7448/social/post/singlePost/${payload.postId}`,
+    {
       headers: {
-        Authorization: `Bearer ${payload.token}`
-      }
+        Authorization: `Bearer ${payload.token}`,
+      },
     }
   )
     .then((res) => {
@@ -40,9 +41,9 @@ export const fetchSinglePost = (payload) => (dispatch) => {
       console.log("Res me aaya h");
       dispatch(getSinglePostSuccess(payloads));
     })
-    .catch((err)=>{
-      console.log(err,"yahannse")
-      dispatch(getSinglePostFailure())
+    .catch((err) => {
+      console.log(err, "yahannse");
+      dispatch(getSinglePostFailure());
     });
 };
 //edit singlepost call
@@ -54,7 +55,7 @@ export const singlePostEdit = (payload) => (dispatch) => {
 
   let config = {
     method: "patch",
-    url: `https://socialsharekaro.herokuapp.com/social/post/singlePost/edit/${payload.postId}`,
+    url: `http://localhost:7448/social/post/singlePost/edit/${payload.postId}`,
     headers: {
       Authorization: "Bearer " + payload.token,
       "Content-Type": "application/json",
@@ -86,7 +87,7 @@ const setPostLikes = (payload) => {
 export const checkPostLikeOrNot = (payload) => (dispatch) => {
   let config = {
     method: "get",
-    url: `https://socialsharekaro.herokuapp.com/social/post/singlePost/likedOrNot/${payload.postId}`,
+    url: `http://localhost:7448/social/post/singlePost/likedOrNot/${payload.postId}`,
     headers: {
       Authorization: "Bearer " + payload.token,
       "Content-Type": "application/json",
@@ -104,10 +105,9 @@ export const checkPostLikeOrNot = (payload) => (dispatch) => {
 };
 
 export const singlePostLike = (payload) => (dispatch) => {
-
   let config = {
     method: "patch",
-    url: `https://socialsharekaro.herokuapp.com/social/post/singlePost/like/${payload.postId}/${payload.id}`,
+    url: `http://localhost:7448/social/post/singlePost/like/${payload.postId}/${payload.id}`,
     headers: {
       Authorization: "Bearer " + payload.token,
       "Content-Type": "application/json",
@@ -121,7 +121,7 @@ export const singlePostLike = (payload) => (dispatch) => {
         token: payload.token,
       };
       dispatch(checkPostLikeOrNot(payloads));
-      dispatch(fetchSinglePost(payloads))
+      dispatch(fetchSinglePost(payloads));
     })
     .catch((err) => {
       dispatch(getSinglePostFailure());
@@ -129,10 +129,9 @@ export const singlePostLike = (payload) => (dispatch) => {
 };
 //dislike the liked post
 export const singlePostDislike = (payload) => (dispatch) => {
-
   let config = {
     method: "patch",
-    url: `https://socialsharekaro.herokuapp.com/social/post/singlePost/dislike/${payload.postId}/${payload.id}`,
+    url: `http://localhost:7448/social/post/singlePost/dislike/${payload.postId}/${payload.id}`,
     headers: {
       Authorization: "Bearer " + payload.token,
       "Content-Type": "application/json",
@@ -146,7 +145,7 @@ export const singlePostDislike = (payload) => (dispatch) => {
         token: payload.token,
       };
       dispatch(checkPostLikeOrNot(payloads));
-      dispatch(fetchSinglePost(payloads))
+      dispatch(fetchSinglePost(payloads));
     })
     .catch((err) => {
       dispatch(getSinglePostFailure());
@@ -156,7 +155,7 @@ export const singlePostDislike = (payload) => (dispatch) => {
 export const viewCounter = (payload) => (dispatch) => {
   let config = {
     method: "patch",
-    url: `https://socialsharekaro.herokuapp.com/social/post/singlePost/viewedTimes/${payload}`,
+    url: `http://localhost:7448/social/post/singlePost/viewedTimes/${payload}`,
   };
 
   return Axios(config);

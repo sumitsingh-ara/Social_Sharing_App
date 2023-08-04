@@ -47,7 +47,7 @@ export const ContactAdmin = () => {
               const ban = async () => {
                 try {
                   let data = await fetch(
-                    `https://socialsharekaro.herokuapp.com/social/banuser/${username}`,
+                    `http://localhost:7448/social/banuser/${username}`,
                     {
                       method: "POST",
                       headers: {

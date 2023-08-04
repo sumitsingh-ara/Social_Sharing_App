@@ -1,17 +1,17 @@
 import * as types from "./actionTypes";
 import Axios from "axios";
-import {destroyUserData} from "../User/action";
+import { destroyUserData } from "../User/action";
 export const setMessage = (payload) => {
   return {
-    type:types.SET_MESSAGE,
-    payload:payload
-  }
-}
-export const resetMessage =()=>{
+    type: types.SET_MESSAGE,
+    payload: payload,
+  };
+};
+export const resetMessage = () => {
   return {
-    type:types.RESET_MESSAGE
-  }
-}
+    type: types.RESET_MESSAGE,
+  };
+};
 export const logout = () => {
   localStorage.clear();
   return {
@@ -21,8 +21,8 @@ export const logout = () => {
 export const serverLogout = () => (dispatch) => {
   dispatch(logout());
   dispatch(destroyUserData());
-  return Axios.get("https://socialsharekaro.herokuapp.com/social/logout")
-    .then((res) =>"logout Successfull")
+  return Axios.get("http://localhost:7448/social/logout")
+    .then((res) => "logout Successfull")
     .catch((error) => console.log(error));
 };
 
@@ -45,7 +45,7 @@ const registerError = (payload) => {
 };
 export const registerNew = (payload) => (dispatch) => {
   dispatch(registerLoading());
-  return Axios.post("https://socialsharekaro.herokuapp.com/social/register",payload.body)
+  return Axios.post("http://localhost:7448/social/register", payload.body)
     .then((response) => {
       localStorage.setItem("isAuth", true);
       localStorage.setItem("token", JSON.stringify(response.data.token));
@@ -57,120 +57,121 @@ export const registerNew = (payload) => (dispatch) => {
 };
 
 const loginLoading = () => {
-  return{
-    type:types.LOGIN_LOADING
-  }
-}
+  return {
+    type: types.LOGIN_LOADING,
+  };
+};
 const loginSuccess = (payload) => {
-  return{
-    type:types.LOGIN_SUCCESS,
-    payload
-  }
-}
+  return {
+    type: types.LOGIN_SUCCESS,
+    payload,
+  };
+};
 const loginFailure = () => {
   return {
-    type:types.LOGIN_FAILURE,
-  }
-}
-export const tryLogin = (payload) =>(dispatch)=> {
- // console.log(payload,"from reset password")
-  dispatch(loginLoading())
-  return Axios.post("https://socialsharekaro.herokuapp.com/social/login", payload)
+    type: types.LOGIN_FAILURE,
+  };
+};
+export const tryLogin = (payload) => (dispatch) => {
+  // console.log(payload,"from reset password")
+  dispatch(loginLoading());
+  return Axios.post("http://localhost:7448/social/login", payload)
     .then((response) => {
-        // console.log(response.data,"eho success")
+      // console.log(response.data,"eho success")
       localStorage.setItem("isAuth", true);
       localStorage.setItem("token", JSON.stringify(response.data.token));
       dispatch(loginSuccess(response.data));
       // window.location.href="https://localhost:3000/"
     })
     .catch((err) => {
-        // console.log(err,"error")
+      // console.log(err,"error")
       dispatch(loginFailure());
     });
-
-}
+};
 
 export const googleLoginSuccess = (token) => {
   localStorage.setItem("isAuth", true);
-  localStorage.setItem("token",JSON.stringify(token));
-  return{
-    type:types.GOOGLE_LOGIN_SUCCESS,
-    payload:token
-  }
-}
+  localStorage.setItem("token", JSON.stringify(token));
+  return {
+    type: types.GOOGLE_LOGIN_SUCCESS,
+    payload: token,
+  };
+};
 
 //username actions;
 
 const userNameLoading = () => {
-  return{
-    type:types.USERNAME_LOADING
-  }
-}
+  return {
+    type: types.USERNAME_LOADING,
+  };
+};
 const userNameSuccess = (payload) => {
   return {
-    type:types.USERNAME_SUCCESS,
-    payload
-  }
-}
+    type: types.USERNAME_SUCCESS,
+    payload,
+  };
+};
 const userNameFailure = () => {
   return {
-    type:types.USERNAME_FAILURE,
-    payload:false
-  }
-}
+    type: types.USERNAME_FAILURE,
+    payload: false,
+  };
+};
 
-export const checkUsername = (payload)=>(dispatch)=>{
+export const checkUsername = (payload) => (dispatch) => {
   dispatch(userNameLoading());
   // dispatch(setMessage("Checking availability"))
-  console.log("yhn ayay ah")
-  return Axios.post("https://socialsharekaro.herokuapp.com/social/checkUsername",payload)
-  .then(function (response) {
-    if (response.data.status){
-      dispatch(userNameSuccess(true))
-      dispatch(setMessage("available"))
-    }
-    else{
-      dispatch(userNameSuccess(false));
-    dispatch(setMessage("oops already taken"))
-    } 
-  })
-  .catch(function () {
-    dispatch(userNameFailure())
-  });
-}
+  console.log("yhn ayay ah");
+  return Axios.post("http://localhost:7448/social/checkUsername", payload)
+    .then(function (response) {
+      if (response.data.status) {
+        dispatch(userNameSuccess(true));
+        dispatch(setMessage("available"));
+      } else {
+        dispatch(userNameSuccess(false));
+        dispatch(setMessage("oops already taken"));
+      }
+    })
+    .catch(function () {
+      dispatch(userNameFailure());
+    });
+};
 
 //reset password
 
-const resetPasswordLoading =() => {
-  return{
-    type:types.RESET_PASSWORD_LOADING
-  }
-}
-export const resetPasswordSuccess=() => {
-  return{
-    type:types.RESET_PASSWORD_SUCCESS
-  }
-}
-const resetPasswordFailure=() => {
-  return{
-    type:types.RESET_PASSWORD_FAILURE
-  }
-}
+const resetPasswordLoading = () => {
+  return {
+    type: types.RESET_PASSWORD_LOADING,
+  };
+};
+export const resetPasswordSuccess = () => {
+  return {
+    type: types.RESET_PASSWORD_SUCCESS,
+  };
+};
+const resetPasswordFailure = () => {
+  return {
+    type: types.RESET_PASSWORD_FAILURE,
+  };
+};
 
-export const resetPasswordCall =(payload) => (dispatch) => {
+export const resetPasswordCall = (payload) => (dispatch) => {
   dispatch(resetPasswordLoading());
-  return Axios.post(`https://socialsharekaro.herokuapp.com/social/reset-password/${payload.user.id}/${payload.user.token}`,payload.body)
-  .then((response) => {
-   // console.log(response);
-    dispatch(resetPasswordSuccess())
-    const payloa={
-      email:response.data.email,
-      password:payload.body.password
-    }
-    dispatch(tryLogin(payloa))
-  })
-  .catch((error) => {
-    //console.log(error)
-    dispatch(resetPasswordFailure())
-  })
-}
+  return Axios.post(
+    `http://localhost:7448/social/reset-password/${payload.user.id}/${payload.user.token}`,
+    payload.body
+  )
+    .then((response) => {
+      // console.log(response);
+      dispatch(resetPasswordSuccess());
+      const payloa = {
+        email: response.data.email,
+        password: payload.body.password,
+      };
+      dispatch(tryLogin(payloa));
+    })
+    .catch((error) => {
+      //console.log(error)
+      dispatch(resetPasswordFailure());
+    });
+};

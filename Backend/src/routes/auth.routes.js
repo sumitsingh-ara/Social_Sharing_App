@@ -114,11 +114,13 @@ router.post("/register", upload.single("image"), async (req, res) => {
 });
 //Login
 router.post("/login", async (req, res) => {
-  let user;
   try {
     // First we will check if user with same email already exists
-    user = await User.findOne({ email: req.body.email });
-    let username = await User.findOne({ username: req.body.email });
+    const [user, username] = await Promise.all([
+      User.findOne({ email: req.body.email }),
+      User.findOne({ username: req.body.email }),
+    ]);
+
     // if not exists we throw an error
     // console.log(req.body,username)
     if (!user && !username) return res.status(400).send("Wrong Credentials");
@@ -161,7 +163,7 @@ router.post("/resetpassword", async (req, res) => {
       id: user._id,
     };
     const token = jwt.sign(payload, secret, { expiresIn: "10m" }); //creating token with the expire time of 5 minutes
-    const link = `https://socialsharekaro.herokuapp.com/social/reset-password/${user._id}/${token}`;
+    const link = `http://localhost:3000/social/reset-password/${user._id}/${token}`;
     const mailOptions = {
       from: process.env.USER, // sender address
       to: user.email, // list of receivers
@@ -240,7 +242,12 @@ router.patch("/banuser/:username", authenticate, async (req, res) => {
 
     const newUser = await User.findByIdAndUpdate(
       user._id,
-      { accountStatus:{active:user.accountStatus.active==true?false:true,verified:false} },
+      {
+        accountStatus: {
+          active: user.accountStatus.active == true ? false : true,
+          verified: false,
+        },
+      },
       { new: true }
     );
 
@@ -248,7 +255,7 @@ router.patch("/banuser/:username", authenticate, async (req, res) => {
       .status(200)
       .send({ message: "Banned / unbanned user", user: newUser });
   } catch (err) {
-    return res.status(404).send({ message:err.message });
+    return res.status(404).send({ message: err.message });
   }
 });
 module.exports = router;

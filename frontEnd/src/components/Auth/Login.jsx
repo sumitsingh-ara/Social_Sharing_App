@@ -31,7 +31,7 @@ export const Login = () => {
     //console.log("sendo",resetEmail)
     let data;
     try {
-      data = await fetch("https://socialsharekaro.herokuapp.com/social/resetpassword", {
+      data = await fetch("http://localhost:7448/social/resetpassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export const Login = () => {
           email: resetEmail,
         }),
       });
-      data = await data.json();
+      await data.json();
       setResetMessage("Mail sent");
     } catch (error) {
       //  console.log("Eror from sender",error)
@@ -48,7 +48,7 @@ export const Login = () => {
     }
   };
   const googleLogin = () => {
-    window.location.href = "https://socialsharekaro.herokuapp.com/auth/google";
+    window.location.href = "http://localhost:7448/auth/google";
   };
   return (
     <>
@@ -99,7 +99,10 @@ export const Login = () => {
                                 href=" "
                                 target="_blank"
                                 onClick={() => {
-                                  window.open('https://mail.google.com/mail/u/0/#inbox', '_blank');
+                                  window.open(
+                                    "https://mail.google.com/mail/u/0/#inbox",
+                                    "_blank"
+                                  );
                                   setResetMessage(false);
                                 }}
                               >
@@ -215,9 +218,8 @@ export const Login = () => {
                         />
                         Login with google
                       </button>
-                      <br/>
+                      <br />
                     </div>
-                    
                   </div>
                 </div>
               </div>

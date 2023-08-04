@@ -19,7 +19,7 @@ export const SingleUser = () => {
     const getData = async () => {
       try {
         let data = await fetch(
-          `https://socialsharekaro.herokuapp.com/social/user/specificuser/${ids}`,
+          `http://localhost:7448/social/user/specificuser/${ids}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ export const SingleUser = () => {
     setLoading(true);
     try {
       let data = await fetch(
-        `https://socialsharekaro.herokuapp.com/social/user//specificuser/emailverify/${id}`,
+        `http://localhost:7448/social/user//specificuser/emailverify/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ export const SingleUser = () => {
       setError(false);
       setLoading(true);
       let follow = await fetch(
-        `https://socialsharekaro.herokuapp.com/social/user/specificuser/follow/${ids}`,
+        `http://localhost:7448/social/user/specificuser/follow/${ids}`,
         {
           method: "PATCH",
           headers: {
@@ -89,7 +89,7 @@ export const SingleUser = () => {
       setError(false);
       setLoading(true);
       let unfollow = await fetch(
-        `https://socialsharekaro.herokuapp.com/social/user/specificuser/unfollow/${ids}`,
+        `http://localhost:7448/social/user/specificuser/unfollow/${ids}`,
         {
           method: "PATCH",
           headers: {
@@ -110,7 +110,7 @@ export const SingleUser = () => {
       setError(false);
       setLoading(true);
       let unfollow = await fetch(
-        `https://socialsharekaro.herokuapp.com/social/user/specificuser/addfriend/${ids}`,
+        `http://localhost:7448/social/user/specificuser/addfriend/${ids}`,
         {
           method: "PATCH",
           headers: {
@@ -131,7 +131,7 @@ export const SingleUser = () => {
       setError(false);
       setLoading(true);
       let unfollow = await fetch(
-        `https://socialsharekaro.herokuapp.com/social/user/specificuser/unfriend/${ids}`,
+        `http://localhost:7448/social/user/specificuser/unfriend/${ids}`,
         {
           method: "PATCH",
           headers: {

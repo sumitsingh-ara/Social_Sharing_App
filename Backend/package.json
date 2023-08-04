@@ -24,7 +24,7 @@
     "node": "18.x"
   },
   "scripts": {
-    "start": "node src/server"
+    "start": "nodemon src/server"
   },
   "author": "",
   "license": "ISC",

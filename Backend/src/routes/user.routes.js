@@ -30,19 +30,17 @@ router.post(
   upload.single("image"),
   authenticate,
   async (req, res) => {
-    if (
-      req.user._id === req.headers.id 
-    ) {
+    if (req.user._id === req.headers.id) {
       //check the authenticated person email is same as the email received in body or not
       try {
         const userCheck = await User.findById(req.headers.id);
         let match = userCheck.checkPassword(req.body.password);
         // if not match then we throw an error
-        if (!match) return res.status(400).send({ message: "Wrong Credentials" });
+        if (!match)
+          return res.status(400).send({ message: "Wrong Credentials" });
         if (req.body.admin)
           return res.status(400).send("You are not authorsied for this");
-        
-        
+
         if (!userCheck)
           return res
             .status(400)
@@ -58,7 +56,6 @@ router.post(
         let result;
         let updateData;
         if (req.file) {
-           
           if (userCheck.profilePic.public_id) {
             await cloudinary.uploader.destroy(userCheck.profilePic.public_id);
           }
@@ -88,39 +85,42 @@ router.post(
               verified: true,
             },
           };
-        }else{
-           
-            updateData = {
-                username:userCheck.username,
-                name: req.body.name,
-                email: userCheck.email,
-                aboutme: req.body.aboutme,
-                password: userCheck.password,
-                socialLinks: {
-                  linkedin: req.body.linkedin,
-                  instagram: req.body.instagram,
-                  github: req.body.github,
-                  twitter: req.body.twitter,
-                },
-                profilePic: {
-                  public_id: userCheck.profilePic.public_id,
-                  image: userCheck.profilePic.image,
-                },
-                admin: false,
-                accountStatus: {
-                  active: true,
-                  verified: true,
-                },
-              };
+        } else {
+          updateData = {
+            username: userCheck.username,
+            name: req.body.name,
+            email: userCheck.email,
+            aboutme: req.body.aboutme,
+            password: userCheck.password,
+            socialLinks: {
+              linkedin: req.body.linkedin,
+              instagram: req.body.instagram,
+              github: req.body.github,
+              twitter: req.body.twitter,
+            },
+            profilePic: {
+              public_id: userCheck.profilePic.public_id,
+              image: userCheck.profilePic.image,
+            },
+            admin: false,
+            accountStatus: {
+              active: true,
+              verified: true,
+            },
+          };
         }
-       
-        const user = await User.findByIdAndUpdate(userCheck._id,{...updateData},{new:true});
+
+        const user = await User.findByIdAndUpdate(
+          userCheck._id,
+          { ...updateData },
+          { new: true }
+        );
 
         const { password, ...others } = user._doc; //avoid sending password
 
-        return res.status(200).send({status:true});
+        return res.status(200).send({ status: true });
       } catch (err) {
-        return res.status(500).send(err)
+        return res.status(500).send(err);
       }
     } else {
       return res
@@ -162,7 +162,7 @@ router.post(
 
 //-------------------------------------Get user from token ----------------------------------;
 
-router.get("/one",authenticate, async (req, res) => {
+router.get("/one", authenticate, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) return res.status(400).send({ message: "User not found" });
@@ -185,7 +185,7 @@ router.get("/all", async (req, res) => {
 });
 
 //--------------------------------------Get a specific user details to show on page post written by whom---?..------------------------;
-router.get("/specificuser/:username",authenticate, async (req, res) => {
+router.get("/specificuser/:username", authenticate, async (req, res) => {
   try {
     let user = await User.findOne({ username: req.params.username }); //got the user profile details
     if (!user)
@@ -205,41 +205,51 @@ router.get("/specificuser/:username",authenticate, async (req, res) => {
     });
     let totals = await Post.find().lean().exec();
     let totalPost = await Post.find().countDocuments().lean().exec();
-    let totalLikes =0
-    let totalViews =0
+    let totalLikes = 0;
+    let totalViews = 0;
     totals.forEach((item) => {
       totalViews += item.views;
       totalLikes += item.likes.length;
-    })
-    const popularity = Math.ceil(((sum+views) / (totalViews+totalLikes) * 100)/totalPost);
-    
-    let followed = false;
-    let pending = 0;//if 0 means send friend req
-    for(let i=0; i<user.followers.length;i++) {
-      // console.log(user.followers[i].user)
-      if(user.followers[i].user == req.user._id){
-        followed=true;
-      }
-    } 
+    });
+    const popularity = Math.ceil(
+      (((sum + views) / (totalViews + totalLikes)) * 100) / totalPost
+    );
 
-    for(let i=0; i<user.pendingFriends.length;i++) {
-      if(user.pendingFriends[i].user == req.user._id){
-        pending =1;
+    let followed = false;
+    let pending = 0; //if 0 means send friend req
+    for (let i = 0; i < user.followers.length; i++) {
+      // console.log(user.followers[i].user)
+      if (user.followers[i].user == req.user._id) {
+        followed = true;
       }
-    } 
-    for(let i=0; i<user.friends.length;i++) {
-      if(user.friends[i].user == req.user._id){
-        pending =2;
+    }
+
+    for (let i = 0; i < user.pendingFriends.length; i++) {
+      if (user.pendingFriends[i].user == req.user._id) {
+        pending = 1;
       }
-    } 
-   
+    }
+    for (let i = 0; i < user.friends.length; i++) {
+      if (user.friends[i].user == req.user._id) {
+        pending = 2;
+      }
+    }
+
     //&&i<user.pendingFriends.length
     // if(user.pendingFriends[i].user == req.user._id){
     //     pending=true;
     //   }
     return res
       .status(200)
-      .send({ ...others, postCount: postCount, likesCount: sum, views: views,popularity:popularity,follower:followed,pending:pending});
+      .send({
+        ...others,
+        postCount: postCount,
+        likesCount: sum,
+        views: views,
+        popularity: popularity,
+        follower: followed,
+        pending: pending,
+      });
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -263,7 +273,7 @@ router.get("/specificuser/emailverify/:id", authenticate, async (req, res) => {
       id: user.id,
     };
     const token = jwt.sign(payload, secret, { expiresIn: "5m" }); //creating token with the expire time of 5 minutes
-    const link = `https://socialsharekaro.herokuapp.com/social/user/specificuser/emailverifypatch/${user.id}/${token}`;
+    const link = `http://localhost:3000/social/user/specificuser/emailverifypatch/${user.id}/${token}`;
     const mailOptions = {
       from: process.env.USER, // sender address
       to: user.email, // list of receivers
@@ -276,12 +286,10 @@ router.get("/specificuser/emailverify/:id", authenticate, async (req, res) => {
         //console.log(info);
       }
     });
-    return res
-      .status(200)
-      .send({
-        message: "Password link sent to your mail successfully",
-        status: true,
-      });
+    return res.status(200).send({
+      message: "Password link sent to your mail successfully",
+      status: true,
+    });
   } catch (err) {
     return res.status(500).send(err.message);
   }
@@ -310,121 +318,145 @@ router.get("/specificuser/emailverifypatch/:id/:token", async (req, res) => {
 
 //----------------------------------------------Follow/Unfollow user--------------------------------------------------------;
 
-router.patch('/specificuser/follow/:followingId',authenticate,async(req, res)=>{
-  try{
-    let deta = {
-      user: req.user._id,
-    };
-    await User.updateOne(
-      { username: req.params.followingId },
-      { $push: { followers: deta } },
-      { new: true }
-    )
-      .lean()
-      .exec();
-      return res.status(200).send({ status: true});
-  }catch(err){
-    return res.status(400).send({status:false})
+router.patch(
+  "/specificuser/follow/:followingId",
+  authenticate,
+  async (req, res) => {
+    try {
+      let deta = {
+        user: req.user._id,
+      };
+      await User.updateOne(
+        { username: req.params.followingId },
+        { $push: { followers: deta } },
+        { new: true }
+      )
+        .lean()
+        .exec();
+      return res.status(200).send({ status: true });
+    } catch (err) {
+      return res.status(400).send({ status: false });
+    }
   }
-})
+);
 
-router.patch('/specificuser/unfollow/:followingId',authenticate,async(req, res)=>{
-  try{
-    let deta = {
-      user: req.user._id,
-    };
-    await User.updateOne(
-      { username: req.params.followingId },
-      { $pull: { followers: deta } },
-      { new: true }
-    )
-      .lean()
-      .exec();
-      return res.status(200).send({ status: true});
-  }catch(err){
-    return res.status(400).send({status:false})
+router.patch(
+  "/specificuser/unfollow/:followingId",
+  authenticate,
+  async (req, res) => {
+    try {
+      let deta = {
+        user: req.user._id,
+      };
+      await User.updateOne(
+        { username: req.params.followingId },
+        { $pull: { followers: deta } },
+        { new: true }
+      )
+        .lean()
+        .exec();
+      return res.status(200).send({ status: true });
+    } catch (err) {
+      return res.status(400).send({ status: false });
+    }
   }
-})
+);
 
 //--------------------------------------------------Friend Request/Revoke friend request --------------------------------------------;
 
-router.patch('/specificuser/addfriend/:followingId',authenticate,async(req, res)=>{
-  try{
-    let deta = {
-      user: req.user._id,
-    };
-    await User.updateOne(
-      { username: req.params.followingId },
-      { $push: { pendingFriends: deta } },
-      { new: true }
-    )
-      .lean()
-      .exec();
-      return res.status(200).send({ status: true});
-  }catch(err){
-    return res.status(400).send({status:false})
+router.patch(
+  "/specificuser/addfriend/:followingId",
+  authenticate,
+  async (req, res) => {
+    try {
+      let deta = {
+        user: req.user._id,
+      };
+      await User.updateOne(
+        { username: req.params.followingId },
+        { $push: { pendingFriends: deta } },
+        { new: true }
+      )
+        .lean()
+        .exec();
+      return res.status(200).send({ status: true });
+    } catch (err) {
+      return res.status(400).send({ status: false });
+    }
   }
-})
+);
 
-router.patch('/specificuser/unfriend/:followingId',authenticate,async(req, res)=>{
-  try{
-    let deta = {
-      user: req.user._id,
-    };
-    await User.updateOne(
-      { username: req.params.followingId },
-      { $pull: { pendingFriends: deta } },
-      { new: true }
-    )
-      .lean()
-      .exec();
-      return res.status(200).send({ status: true});
-  }catch(err){
-    return res.status(400).send({status:false})
+router.patch(
+  "/specificuser/unfriend/:followingId",
+  authenticate,
+  async (req, res) => {
+    try {
+      let deta = {
+        user: req.user._id,
+      };
+      await User.updateOne(
+        { username: req.params.followingId },
+        { $pull: { pendingFriends: deta } },
+        { new: true }
+      )
+        .lean()
+        .exec();
+      return res.status(200).send({ status: true });
+    } catch (err) {
+      return res.status(400).send({ status: false });
+    }
   }
-})
+);
 
 //------------------------------------------------------------Get all friends details alogn with new requests-------------------------;
 
-router.get('/specificuser/allFriends/pending',authenticate,async(req, res)=>{
-  try{
-    let user = await User.findById(req.user._id).populate({
-      path:"pendingFriends",
-      populate:[
-        {path:"user"}
-      ]
-    }).populate({
-      path:"friends",
-      populate:[
-        {path:"user"}
-      ]
-    }).lean().exec();
+router.get(
+  "/specificuser/allFriends/pending",
+  authenticate,
+  async (req, res) => {
+    try {
+      let user = await User.findById(req.user._id)
+        .populate({
+          path: "pendingFriends",
+          populate: [{ path: "user" }],
+        })
+        .populate({
+          path: "friends",
+          populate: [{ path: "user" }],
+        })
+        .lean()
+        .exec();
 
-    if(!user) return res.status(400).send({message:"Please login before using these such features"});
+      if (!user)
+        return res
+          .status(400)
+          .send({ message: "Please login before using these such features" });
 
-    const {pendingFriends,friends} = user;
-    return res.status(200).send({pendingFriends,friends});
-  }catch(err){
-    return res.status(400).send({message:err.message})
+      const { pendingFriends, friends } = user;
+      return res.status(200).send({ pendingFriends, friends });
+    } catch (err) {
+      return res.status(400).send({ message: err.message });
+    }
   }
-})
-
+);
 
 //-----------------------------------------------------------Accept/Unaccept friend requests-------------------------------------------;
 
-router.patch('/specificuser/respondAccept/:senderId',authenticate,async(req, res)=>{
-
-  try{
-    let deta = {
-      user: req.params.senderId,
-    };
-    await User.updateOne(
-      { _id: req.user._id },
-      { $pull: { pendingFriends: deta } },
-      { new: true }
-    )
-      .lean()
-      .exec();
+router.patch(
+  "/specificuser/respondAccept/:senderId",
+  authenticate,
+  async (req, res) => {
+    try {
+      let deta = {
+        user: req.params.senderId,
+      };
+      await User.updateOne(
+        { _id: req.user._id },
+        { $pull: { pendingFriends: deta } },
+        { new: true }
+      )
+        .lean()
+        .exec();
 
       await User.updateOne(
         { _id: req.user._id },
@@ -433,68 +465,74 @@ router.patch('/specificuser/respondAccept/:senderId',authenticate,async(req, res
       )
         .lean()
         .exec();
-        await User.updateOne(
-          { _id: req.params.senderId },
-          { $push: { friends: {user: req.user._id} } },
-          { new: true }
-        )
-          .lean()
-          .exec();
-        
-      return res.status(200).send({ status: true});
-  }catch(err){
-    return res.status(400).send({status:false})
-  }
-})
-
-
-router.patch('/specificuser/declineAccept/:senderId',authenticate,async(req, res)=>{
-
-  try{
-    let deta = {
-      user: req.params.senderId,
-    };
-    await User.updateOne(
-      { _id: req.user._id },
-      { $pull: { pendingFriends: deta } },
-      { new: true }
-    )
-      .lean()
-      .exec();
-        
-      return res.status(200).send({ status: true});
-  }catch(err){
-    return res.status(400).send({status:false})
-  }
-})
-
-
-//---------------------------------------------------------------Unfriend------------------------------------------------------------;
-router.patch('/specificuser/unfriending/:friendId',authenticate,async(req, res)=>{
-  try{
-    let deta = {
-      user: req.params.friendId,
-    };
-    await User.updateOne(
-      { _id: req.user._id },
-      { $pull: { friends: deta } },
-      { new: true }
-    )
-      .lean()
-      .exec();
-
       await User.updateOne(
-        { _id: req.params.friendId },
-        { $pull: { friends: {user: req.user._id} } },
+        { _id: req.params.senderId },
+        { $push: { friends: { user: req.user._id } } },
         { new: true }
       )
         .lean()
         .exec();
-      
-      return res.status(200).send({ status: true});
-  }catch(err){
-    return res.status(400).send({status:false})
+
+      return res.status(200).send({ status: true });
+    } catch (err) {
+      return res.status(400).send({ status: false });
+    }
   }
-})
+);
+
+router.patch(
+  "/specificuser/declineAccept/:senderId",
+  authenticate,
+  async (req, res) => {
+    try {
+      let deta = {
+        user: req.params.senderId,
+      };
+      await User.updateOne(
+        { _id: req.user._id },
+        { $pull: { pendingFriends: deta } },
+        { new: true }
+      )
+        .lean()
+        .exec();
+
+      return res.status(200).send({ status: true });
+    } catch (err) {
+      return res.status(400).send({ status: false });
+    }
+  }
+);
+
+//---------------------------------------------------------------Unfriend------------------------------------------------------------;
+router.patch(
+  "/specificuser/unfriending/:friendId",
+  authenticate,
+  async (req, res) => {
+    try {
+      let deta = {
+        user: req.params.friendId,
+      };
+      await User.updateOne(
+        { _id: req.user._id },
+        { $pull: { friends: deta } },
+        { new: true }
+      )
+        .lean()
+        .exec();
+
+      await User.updateOne(
+        { _id: req.params.friendId },
+        { $pull: { friends: { user: req.user._id } } },
+        { new: true }
+      )
+        .lean()
+        .exec();
+
+      return res.status(200).send({ status: true });
+    } catch (err) {
+      return res.status(400).send({ status: false });
+    }
+  }
+);
 
 module.exports = router;
